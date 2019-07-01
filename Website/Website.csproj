@@ -22,14 +22,14 @@
 
 
   <ItemGroup>
-    <Folder Include="wwwroot\lib\" />
+    <Content Update="applicationSecrets.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 
   <ItemGroup>
-    <Content Update="applicationSecrets.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <Folder Include="wwwroot\lib\" />
   </ItemGroup>
 
 </Project>
