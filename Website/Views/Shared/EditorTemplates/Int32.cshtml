@@ -1,0 +1,23 @@
+﻿@model int?
+@{
+    IDictionary<String, Object> attributes = HtmlHelper.AnonymousObjectToHtmlAttributes(ViewData["htmlAttributes"]);
+    if (attributes.ContainsKey("class")) {
+        attributes["class"] += " form-control";
+    } else {
+        attributes.Add("class", "form-control");
+    }
+
+    String displayText = String.Empty;
+    if (Model != 0) {
+        displayText = Model.ToString();
+    }
+    if (!attributes.ContainsKey("Value")) {
+        attributes.Add("Value", displayText);
+    }
+
+    if (!attributes.ContainsKey("autocomplete")) {
+        attributes.Add("autocomplete", "off");
+    }
+}
+
+@Html.TextBoxFor(x => x, attributes)

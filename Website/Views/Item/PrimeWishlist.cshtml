@@ -1,0 +1,76 @@
+﻿@model PrimeWishlistViewModel
+@{
+    string missingImageUrl = Url.Content("~/images") + "/missingImage.jpg";
+}
+
+<div>
+    <h5>
+        Prime Wishlist
+    </h5>
+
+    <div class="row mb-3">
+        @foreach (WarframeItem item in Model.PrimeWishlist) {
+            <div class="col-md-4 col-lg-3">
+                <div class="row border border-secondary h-100 py-2 position-relative">
+
+                    <a href="#" class="open-item-modal d-inline-block position-absolute" style="top:0;right:5px;z-index:20;"
+                       data-url="@Url.Action("Form", "Item", new { itemID = item.UniqueName.Replace("/", "|") })">
+                        <span class="mdi mdi-square-edit-outline"></span>
+                    </a>
+
+                    <a href="#" class="open-item-details-modal d-inline-block position-absolute" style="top:0;left:5px;z-index:20;"
+                       data-url="@Url.Action("Details", "Item", new { itemID = item.UniqueName.Replace("/", "|") })">
+                        <span class="mdi mdi-information"></span>
+                    </a>
+
+                    <div class="col-6">
+                        <img class="img-fluid" src="https://cdn.warframestat.us/img/@item.ImageName"
+                             onerror="this.onerror=null;this.src='@missingImageUrl';" />
+                        @Html.DisplayFor(x => item.Name)
+
+
+                    </div>
+                    <div class="col-6">
+                        @if (item.Components != null && item.Components.Any()) {
+                            foreach (Component comp in item.Components) {
+                                ComponentAcquisition ca = Model.ComponentAcquisitions
+                                    .SingleOrDefault(x => x.ComponentUniqueName == comp.UniqueName && x.ItemUniqueName == item.UniqueName);
+                                <div>
+                                    @if (ca != null && ca.IsAcquired) {
+                                        <del class="text-muted">
+                                            @Html.DisplayFor(x => comp.Name)
+                                            @if (comp.ItemCount > 1) {
+                                                @:x@(comp.ItemCount)
+                                            }
+                                        </del>
+                                    } else {
+                                        <span>
+                                            @Html.DisplayFor(x => comp.Name)
+                                            @if (comp.ItemCount > 1) {
+                                                @:x@(comp.ItemCount)
+                                            }
+                                        </span>
+                                    }
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    @if (Model.NeededRelics.Any()) {
+        <a href="#" class="btn btn-link" data-toggle="collapse" data-target="#needed-relics">Show Needed Relics</a>
+        <ul id="needed-relics" class="collapse p-2">
+            @foreach (var relicGroup in Model.NeededRelics.GroupBy(x => x.Name.Substring(0, 4))) {
+                <li>
+                    @string.Join(", ", relicGroup.Select(x => x.Name.Substring(0, 7).Trim()))
+                </li>
+            }
+        </ul>
+    }
+</div>
+
+<partial name="_ItemModal" />
+<partial name="_ItemDetailsModal" />

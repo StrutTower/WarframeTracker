@@ -1,0 +1,42 @@
+﻿///<reference path="_variables.scss" />
+
+:-ms-input-placeholder { /* IE 10+ */
+    color: #6c757d;
+}
+
+.field-validation-error, .validation-summary-errors {
+    color: red;
+}
+
+.form-control.input-validation-error {
+    border-color: red;
+
+    &:focus {
+        box-shadow: inset 0px 1px 1px rgba(0,0,0,0.075), 0px 0px 8px rgba(255,0,0,0.6);
+    }
+}
+
+.form-check {
+    input, label {
+        cursor: pointer;
+    }
+}
+
+.form-help-text {
+    opacity: 0.7;
+    padding-left: 10px;
+    font-size: 0.8rem;
+}
+
+.form-check ~ .form-help-text {
+    transform: translateY(-7px);
+    padding-left: 25px;
+    
+}
+
+@supports(-moz-appearance:none) {
+    select:focus {
+        background:white !important;
+        color:black !important;
+    }
+}

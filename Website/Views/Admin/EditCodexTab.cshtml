@@ -1,0 +1,42 @@
+﻿@model CodexTab
+@{
+    Boolean editing = false;
+    if (Model == null || Model.ID == 0) {
+        ViewBag.Title = "New Codex Tab";
+    } else {
+        ViewBag.Title = "Edit Codex Tab";
+        editing = true;
+    }
+}
+
+<h3>@ViewBag.Title</h3>
+<hr />
+
+<form action="" method="post" class="row">
+    <div class="col-md-6">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        @if (editing) {
+            @Html.HiddenFor(x => x.ID)
+        }
+
+        @Html.FormGroupEditorFor(x => x.Name)
+
+        <div class="form-group">
+            @Html.LabelFor(x => x.CodexSectionID)
+            @Html.DropDownListFor(x => x.CodexSectionID, Html.GetEnumSelectList<CodexSection>(), "", new { @class = "form-control" })
+            @Html.HelpTextFor(x => x.CodexSectionID)
+            @Html.ValidationMessageFor(x => x.CodexSectionID)
+        </div>
+
+        @Html.FormGroupEditorFor(x => x.ImageName)
+
+        @Html.FormGroupEditorFor(x => x.SortingPriority)
+
+        @Html.FormGroupEditorFor(x => x.GroupItemsByItemCategory)
+
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+    </div>
+</form>

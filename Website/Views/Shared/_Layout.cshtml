@@ -1,0 +1,156 @@
+﻿@inject IOptions<AppSettings> AppSettings
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en-US">
+<head>
+    <title>
+        @if (ViewBag.Title == null) {
+            @AppSettings.Value.AppName
+        } else {
+            @ViewBag.Title @: - @AppSettings.Value.AppName
+        }
+    </title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-Language" content="en">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="MVC Template" />
+    <meta name="theme-color" content="#282828">
+    <meta name="robots" content="noodp" />
+    <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+    <meta http-equiv="content-language" content="en" />
+    <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+
+    <link rel="stylesheet" href="~/lib/bundle.min.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Audiowide|Exo+2">
+    <link rel="stylesheet" href="//cdn.materialdesignicons.com/3.6.95/css/materialdesignicons.min.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-3">
+        <div class="container">
+            <a asp-action="Index" asp-controller="Home" class="navbar-brand audiowide">
+                @AppSettings.Value.AppName
+            </a>
+
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-navmenu">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="navbar-collapse collapse text-light" id="navbar-navmenu">
+                <span class="navbar-text mr-auto">
+                    <environment include="Development">
+                        <span class="text-warning">Development Server</span>
+                    </environment>
+                </span>
+                <ul class="navbar-nav">
+                    @if (User.Identity.IsAuthenticated) {
+                        <li class="nav-item dropdown d-none d-lg-inline-block">
+                            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Navigation</a>
+                            <div class="dropdown-menu dropdown-menu-right">
+                                <div class="dropdown-item-text text-info">@User.Identity.Name</div>
+                                <a asp-action="PrimeWishlist" asp-controller="Item" class="dropdown-item">
+                                    <span class="mdi mdi-lg mdi-fw mdi-playlist-star"></span>Prime Wishlist
+                                </a>
+                                <a asp-action="Index" asp-controller="Codex" class="dropdown-item">
+                                    <span class="mdi mdi-lg mdi-fw mdi-view-grid"></span>Codex
+                                </a>
+                                <a asp-action="PrimePrediction" asp-controller="Item" class="dropdown-item">
+                                    <span class="mdi mdi-lg mdi-fw mdi-timelapse"></span>Prime Release Predictions
+                                </a>
+                                <a asp-action="ModularItemInfo" asp-controller="Item" class="dropdown-item">
+                                    <span class="mdi mdi-fw mdi-blank"></span>Modular Item Info
+                                </a>
+                                <a asp-action="Index" asp-controller="Admin" class="dropdown-item">
+                                    <span class="mdi mdi-lg mdi-fw mdi-settings-outline"></span>Site Management
+                                </a>
+                            </div>
+                        </li>
+                        if (User.IsInRole(RoleTypes.Administrator)) {
+                            <li class="nav-item d-none d-lg-inline-block">
+                                <a asp-action="Index" asp-controller="Admin" class="nav-link">
+                                    <span class="mdi mdi-lg mdi-settings-outline"></span>
+                                </a>
+                            </li>
+                        }
+                        <li class="nav-item d-block d-lg-none">
+                            <a asp-action="PrimeWishlist" asp-controller="Item" class="nav-link">
+                                <span class="mdi mdi-lg mdi-fw mdi-playlist-star"></span>Prime Wishlist
+                            </a>
+                        </li>
+                        <li class="nav-item d-block d-lg-none">
+                            <a asp-action="Index" asp-controller="Codex" class="nav-link">
+                                <span class="mdi mdi-lg mdi-fw mdi-view-grid"></span>Codex
+                            </a>
+                        </li>
+                        <li class="nav-item d-block d-lg-none">
+                            <a asp-action="PrimePrediction" asp-controller="Item" class="nav-link">
+                                <span class="mdi mdi-lg mdi-fw mdi-timelapse"></span>Prime Release Predictions
+                            </a>
+                        </li>
+                        <li class="nav-item d-block d-lg-none">
+                            <a asp-action="ModularItemInfo" asp-controller="Item" class="nav-link">
+                                <span class="mdi mdi-fw mdi-blank"></span>Modular Item Info
+                            </a>
+                        </li>
+                        <li class="nav-item d-block d-lg-none">
+                            <a asp-action="Index" asp-Controller="Admin" class="nav-link">
+                                <span class="mdi mdi-lg mdi-fw mdi-settings-outline"></span>Site Management
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-action="Logout" asp-controller="Account" class="nav-link">
+                                <span class="mdi mdi-fw mdi-logout"></span>Logout <span class="d-inline d-lg-none">as @User.Identity.Name</span>
+                            </a>
+                        </li>
+                    } else {
+                        <li class="nav-item">
+                            <a asp-action="Login" asp-controller="Account" class="nav-link">
+                                <span class="mdi mdi-fw mdi-login"></span>Login
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <noscript class="noscript">
+        JavaScript is disabled in your browser.
+        <br />
+        Most of this site will not function properly without JavaScript enabled.
+    </noscript>
+
+    <main class="container">
+        @RenderBody()
+
+        <footer>
+            <hr />
+            <p class="text-center">
+                <environment include="Development">
+                    <span class="text-danger font-weight-bold">Development Server</span>
+                </environment>
+                <a href="@AppSettings.Value.DevHomepage" rel="noopener noreferrer">@AppSettings.Value.DevName</a>
+                <span title="Developed by StrutTower">
+                    @AppSettings.Value.AppName &copy; @DateTime.Now.Year -
+                </span>
+                <a asp-action="ReleaseNotes" asp-controller="Home">
+                    Version @Html.WebsiteVersion()
+                </a>
+            </p>
+        </footer>
+
+        <div class="hidden">@Html.AntiForgeryToken()</div>
+        @if (TempData["message"] != null) {
+            <input type="hidden" id="tempDataMessage" value="@TempData["message"]" />
+        }
+    </main>
+
+    <environment include="Development">
+        <script src="~/lib/lib.js"></script>
+        <script asp-src-include="~/js/*"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/lib/bundle.min.js" asp-append-version="true"></script>
+    </environment>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

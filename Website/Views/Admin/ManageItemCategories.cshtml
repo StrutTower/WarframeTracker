@@ -1,0 +1,74 @@
+﻿@model IEnumerable<ItemCategory>
+
+@{
+    ViewBag.Title = "Manage Item Categories";
+}
+
+<a href="@Url.Action("EditItemCategory")" class="btn btn-link float-right">
+    <span class="mdi mdi-fw mdi-plus-box-outline"></span>Add New Item Category
+</a>
+
+<h3>@ViewBag.Title</h3>
+<hr />
+
+<div class="table-responsive">
+    <table class="table table-sm table-mobile table-lg-mobile">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(x => x.Name)
+                </th>
+                <th>
+                    Codex Tab
+                </th>
+                <th>
+                    @Html.DisplayNameFor(x => x.WarframeApiCategoryName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(x => x.AllowAcquisition)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(x => x.CanBeMastered)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(x => x.MaxRankExperience)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(x => x.SortingPriority)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td data-label="@Html.DisplayNameFor(x => x.Name)">
+                        @Html.DisplayFor(x => item.Name)
+                    </td>
+                    <td data-label="Codex Tab">
+                        @Html.DisplayFor(x => item.CodexTab_Object.Name)
+                    </td>
+                    <td data-label="@Html.DisplayNameFor(x => x.WarframeApiCategoryName)">
+                        @Html.DisplayFor(x => item.WarframeApiCategoryName)
+                    </td>
+                    <td data-label="@Html.DisplayNameFor(x => x.AllowAcquisition)">
+                        @Html.DisplayFor(x => item.AllowAcquisition)
+                    </td>
+                    <td data-label="@Html.DisplayNameFor(x => x.CanBeMastered)">
+                        @Html.DisplayFor(x => item.CanBeMastered)
+                    </td>
+                    <td data-label="@Html.DisplayNameFor(x => x.MaxRankExperience)">
+                        @Html.DisplayFor(x => item.MaxRankExperience)
+                    </td>
+                    <td data-label="@Html.DisplayNameFor(x => x.SortingPriority)">
+                        @Html.DisplayFor(x => item.SortingPriority)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Edit", "EditItemCategory", new { id = item.ID })
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

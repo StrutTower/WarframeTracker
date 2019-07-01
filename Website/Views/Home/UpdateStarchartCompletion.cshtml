@@ -1,0 +1,18 @@
+﻿@model UserData
+@{
+    ViewBag.Title = "Update Mastery";
+}
+
+<h3>@ViewBag.Title</h3>
+<hr />
+
+<form action="" method="post" class="row">
+    <div class="col-md-6">
+        @Html.FormGroupEditorFor(x => x.MissionNodesCompleted)
+        @Html.FormGroupEditorFor(x => x.JunctionsCompleted)
+
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+    </div>
+</form>

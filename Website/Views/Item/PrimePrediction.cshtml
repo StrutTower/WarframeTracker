@@ -1,0 +1,63 @@
+﻿@model PrimePredictionViewModel
+@{
+    ViewBag.Title = "Prime Release Predictions";
+    int maleIndex = 0;
+    int femaleIndex = 0;
+}
+
+<h3>@ViewBag.Title</h3>
+<hr />
+<div class="table-responsive">
+    <table class="table table-sm w-auto">
+        <thead>
+            <tr>
+                <th>Warframe</th>
+                <th>Gender</th>
+                <th>Original Release</th>
+                <th>Estimated Prime Release</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < Model.StandardWithoutPrimeWarframes.Count; i++) {
+                WarframeItem warframe = null;
+                if (Model.Gender == "Male") {
+                    warframe = Model.StandardWithoutPrimeWarframes.Where(x => x.Sex == Model.Gender).Skip(maleIndex).First();
+                } else if (Model.Gender == "Female") {
+                    warframe = Model.StandardWithoutPrimeWarframes.Where(x => x.Sex == Model.Gender).Skip(femaleIndex).First();
+                }
+                Model.LastPrimeReleaseDate = Model.LastPrimeReleaseDate.AddDays(90);
+                if (warframe == null) {
+                    <tr><td colspan="4">Unreleased @Model.Gender Warframe</td></tr>
+                } else {
+                    <tr>
+                        <td>@Html.DisplayFor(x => warframe.Name)</td>
+                        <td>@Html.DisplayFor(x => warframe.Sex)</td>
+                        <td>
+                            @if (DateTime.TryParse(warframe.ReleaseDate, out DateTime releaseDate)) {
+                                @Html.DisplayFor(x => releaseDate, "ShortDate")
+                            } else if (string.IsNullOrWhiteSpace(warframe.ReleaseDate)) {
+                                @:<span class="text-warning">No Release Date</span>
+                            } else {
+                                @:Unable to parse date: @Html.DisplayFor(x => warframe.ReleaseDate)
+                            }
+                        </td>
+                        <td>@Html.DisplayFor(x => Model.LastPrimeReleaseDate, "ShortDate")</td>
+                    </tr>
+                }
+
+                if (Model.Gender == "Male") {
+                    maleIndex++;
+                } else if (Model.Gender == "Female") {
+                    femaleIndex++;
+                }
+
+                Model.PrimeIndex++;
+                if (Model.PrimeIndex % 4 == 0) {
+                    Model.Gender = "Male";
+                } else if (Model.PrimeIndex % 4 == 2) {
+                    Model.Gender = "Female";
+                }
+            }
+        </tbody>
+    </table>
+</div>

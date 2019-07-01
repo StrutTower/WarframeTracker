@@ -1,0 +1,34 @@
+﻿@model EditInvasionRewardViewModel
+@{
+    bool editing = false;
+    if (Model != null && Model.InvasionReward != null && Model.InvasionReward.ID != 0) {
+        editing = true;
+        ViewData["Title"] = "Edit Invasion Reward";
+    } else {
+        ViewData["Title"] = "New Invasion Reward";
+    }
+}
+
+<h3>@ViewData["message"]</h3>
+
+<form action="" method="post" class="row">
+    @if (editing) {
+        @Html.HiddenFor(x => x.InvasionReward.ID)
+    }
+    <div class="col-md-6">
+        <div class="form-group">
+            <label asp-for="InvasionReward.UniqueName"></label>
+            <select asp-for="InvasionReward.UniqueName" asp-items="Model.UniqueNameSelectList" class="form-control"></select>
+            @Html.HelpTextFor(x => x.InvasionReward)
+            <span asp-validation-for="InvasionReward.UniqueName"></span>
+        </div>
+
+        @Html.FormGroupEditorFor(x => x.InvasionReward.Name)
+
+        @Html.FormGroupEditorFor(x => x.InvasionReward.ShowOnHomeView)
+
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+    </div>
+</form>

@@ -1,0 +1,14 @@
+﻿@{
+    ViewBag.Title = "Codex Index";
+}
+
+<h3>@ViewBag.Title</h3>
+<hr />
+
+@foreach(CodexSection codexSection in Enum.GetValues(typeof(CodexSection))) {
+    <p>
+        <a asp-action="View" asp-route-id="@codexSection">
+            @codexSection.ToString()
+        </a>
+    </p>
+}

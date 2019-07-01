@@ -1,0 +1,5 @@
+﻿@model double?
+@if (Model.HasValue) {
+    double percent = Model.Value * 100;
+    @Math.Round(percent, 1)@:%
+}

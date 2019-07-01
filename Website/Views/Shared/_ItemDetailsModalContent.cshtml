@@ -1,0 +1,45 @@
+﻿@model ItemDetailsModelViewModel
+
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+    <span class="mdi mdi-close"></span>
+</button>
+
+<h3 class="text-center">@Html.DisplayFor(x => x.WarframeItem.Name)</h3>
+<p>
+    @Html.DisplayFor(x => x.WarframeItem.UniqueName)
+</p>
+
+@if (Model.WarframeItem.Components != null && Model.WarframeItem.Components.Any()) {
+    foreach (Component comp in Model.WarframeItem.Components) {
+        ComponentAcquisition ca = Model.ComponentAcquisitions.SingleOrDefault(x => x.ComponentUniqueName == comp.UniqueName);
+
+        if (ca != null && ca.IsAcquired) {
+            <div style="font-size:1.2rem;" class="text-muted">
+                <del>@Html.DisplayFor(x => comp.Name)</del>
+            </div>
+        } else {
+            <div style="font-size:1.2rem;">
+                @Html.DisplayFor(x => comp.Name)
+            </div>
+        }
+        <div class="pl-3 mb-2">
+            @if (comp.Drops != null && comp.Drops.Any()) {
+                foreach (var group in comp.Drops.Where(x => x.RelicLevel == "Intact").GroupBy(x => x.RelicEra)) {
+                    if (ca != null && ca.IsAcquired) {
+                        <div>
+                            <del class="text-muted">
+                                @group.Key
+                                @string.Join(", ", group.Select(x => x.RelicType + " " + x.Rarity).Distinct())
+                            </del>
+                        </div>
+                    } else {
+                    <div>
+                        @group.Key
+                        @string.Join(", ", group.Select(x => x.RelicType + " " + x.Rarity).Distinct())
+                    </div>
+                    }
+                }
+            }
+        </div>
+    }
+}

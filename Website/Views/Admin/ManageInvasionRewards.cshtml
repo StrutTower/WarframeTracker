@@ -1,0 +1,42 @@
+﻿@model List<InvasionReward>
+@{
+    ViewData["Title"] = "Manage Invasion Rewards";
+}
+
+<a asp-action="EditInvasionReward" class="btn btn-link float-right">
+    <span class="mdi mdi-fw mdi-plus-box-outline"></span>Add Invasion Reward
+</a>
+
+<h3>@ViewData["Title"]</h3>
+<hr />
+
+@if (Model != null && Model.Any()) {
+    <div class="table-responsive">
+        <table class="table table-sm">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Show on Home</th>
+                    <th>Unique Name</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach(InvasionReward reward in Model.OrderBy(x => x.Name)) {
+                    <tr>
+                        <td>
+                            <a asp-action="EditInvasionReward" asp-route-id="@reward.ID">
+                                @Html.DisplayFor(x => reward.Name)
+                            </a>
+                        </td>
+                        <td>
+                            @Html.BooleanIcon(reward.ShowOnHomeView)
+                        </td>
+                        <td class="small">
+                            @reward.UniqueName.Replace("/Lotus/Types/Recipes/", "").Replace("/Lotus/Types/Items", "")
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

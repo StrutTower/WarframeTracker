@@ -1,0 +1,64 @@
+﻿@model CodexViewModel
+@{
+    ViewData["Title"] = "Mods";
+    string missingImageUrl = Url.Content("~/images") + "/missingImage.jpg";
+}
+
+
+
+@*<div class="row">
+    <div class="col-md-6">
+        <select class="form-control form-control-sm" id="codex-filter-dropdown">
+            <option value="all">Show All Items</option>
+            <option value="prime" data-show="True" data-hide="False">Prime</option>
+            <option value="prime" data-show="False" data-hide="True">Non-Prime</option>
+            <option value="acquired" data-show="True" data-hide="False">Acquired</option>
+            <option value="acquired" data-show="False" data-hide="True">Not Acquired</option>
+        </select>
+    </div>
+    <div class="col-md-6">
+    </div>
+</div>
+
+@if (Model.CodexTabs != null && Model.CodexTabs.Any()) {
+    <ul class="nav nav-tabs mb-2 justify-content-around" id="codex-tab-list" role="tablist"
+        style="margin-left:-12px;margin-right:-12px;">
+        @foreach (CodexTab tab in Model.CodexTabs) {
+            <li class="nav-item" title="@tab.Name" data-toggle="tooltip">
+                <a class="nav-link px-1 px-md-2 py-1 @(tab.ID == Model.CurrentCodexTab.ID ? "active" : "")"
+                   href="@Url.Action("ModsTab", new { tab = tab.ID })">
+                    <img src="~/images/@tab.ImageName" style="max-height:40px" />
+                </a>
+            </li>
+            index++;
+        }
+    </ul>
+
+    <div>
+        @if (Model.WarframeItems.Any()) {
+            if (Model.CurrentCodexTab.GroupItemsByItemCategory) {
+                foreach (var group in Model.WarframeItems.GroupBy(x => x.ItemCategoryID).OrderBy(x => Model.ItemCategories.Select(y => y.ID).ToList().IndexOf(x.Key))) {
+                    ItemCategory cat = Model.ItemCategories.SingleOrDefault(x => x.ID == group.Key);
+                    <h5 class="mt-3">@Html.DisplayFor(x => cat.Name)<span>s</span></h5>
+                    <div class="row gutter-5">
+                        @foreach (WarframeItem item in group) {
+                            ViewData["itemAcquisition"] = Model.ItemAcquisitions.SingleOrDefault(x => x.ItemUniqueName == item.UniqueName);
+                            <partial name="_ModItem" for="@item" view-data="@ViewData" />
+                        }
+                    </div>
+                }
+            } else {
+                <div class="row gutter-5">
+                    @foreach (WarframeItem item in Model.WarframeItems) {
+                        ViewData["itemAcquisition"] = Model.ItemAcquisitions.SingleOrDefault(x => x.ItemUniqueName == item.UniqueName);
+                        <partial name="_ModItem" for="@item" view-data="@ViewData" />
+                    }
+                </div>
+            }
+        }
+    </div>
+} else {
+    <h6 class="text-center">Nothing has been added to this page yet</h6>
+}
+
+<partial name="_ItemModal" />*@

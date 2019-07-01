@@ -1,0 +1,30 @@
+﻿@model Invasion
+@{
+    int total = Model.Goal * 2;
+    int current = Model.Count + Model.Goal;
+    double percent1 = (double)current / (double)total;
+    double width = percent1 * 100;
+    double oppositeWidth = (1 - percent1) * 100;
+}
+
+@if (Model != null) {
+    <div class="row mb-3">
+        <div class="col-12">
+            @Html.DisplayFor(x => x.SolNode.Name) <small class="text-muted">@Html.DisplayFor(x => x.ActivateDateUtc)</small>
+        </div>
+        <div class="col-md-6">
+            @Html.DisplayFor(x => x.AttackerFaction) -
+            @Html.DisplayFor(x => x.AttackerRewardItems)
+        </div>
+        <div class="col-12 order-md-last">
+            <div class="progress" style="border-radius:0;height:12px;">
+                <div class="progress-bar bg-faction-@Model.AttackerFaction.ToLower()" role="progressbar" style="width:@width%;"></div>
+                <div class="progress-bar bg-faction-@Model.DefenderFaction.ToLower()" role="progressbar" style="width:@oppositeWidth%;"></div>
+            </div>
+        </div>
+        <div class="col-md-6 text-right">
+            @Html.DisplayFor(x => x.DefenderRewardItems) -
+            @Html.DisplayFor(x => x.DefenderFaction)
+        </div>
+    </div>
+}

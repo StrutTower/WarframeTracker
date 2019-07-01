@@ -1,0 +1,191 @@
+﻿///<reference path="_variables.scss" />
+///<reference path="../node_modules/bootstrap/scss/_variables.scss" />
+
+table.table-vertical {
+    th, td {
+        padding: 7px;
+    }
+
+    th {
+        text-align: right;
+        font-weight: 600;
+        min-width: 100px;
+    }
+}
+
+table.table-auto-width {
+    width: auto;
+}
+
+@media screen and (max-width: 768px) {
+    table.table-auto-width {
+        width: 100%;
+    }
+}
+
+
+table.table-mobile {
+    width: 100%;
+
+    thead {
+        display: none;
+    }
+
+    tbody {
+        tr {
+            display: block;
+            margin-bottom: 10px;
+            border: 1px solid #888;
+
+            th, td {
+                display: block;
+                text-align: right;
+                border-bottom: 1px dotted #888;
+
+                &:last-child {
+                    border-bottom: none;
+                }
+
+                &:before {
+                    content: attr(data-label);
+                    float: left;
+                    font-size: 0.8rem;
+                    line-height: 2;
+                }
+            }
+        }
+    }
+}
+
+@each $breakpoint-key, $breakpoint-value in $grid-breakpoints {
+    @media screen and (min-width:$breakpoint-value) {
+        table.table-#{$breakpoint-key}-mobile {
+
+            thead {
+                display: table-header-group;
+            }
+
+            tbody tr {
+                display: table-row;
+                border: none;
+
+                th, td {
+                    display: table-cell;
+
+                    &:before {
+                        display: none;
+                    }
+                }
+            }
+        }
+    }
+}
+
+/*@media screen and (min-width:768px) {
+    table.table-mobile {
+        thead {
+            display:table-header-group;
+        }
+
+        tbody tr {
+            display:table-row;
+            border:none;
+
+            th,td {
+                display:table-cell;
+
+                &:before {
+                    display:none;
+                }
+            }
+        }
+    }
+}*/
+
+/*table.table-mobile {
+    border: 0;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    border-collapse: collapse;
+    border-spacing: 0;
+
+    thead {
+        height: 60px !important;
+
+        tr {
+            th:first-child {
+                padding-left: 45px;
+            }
+
+            th {
+                text-transform: uppercase;
+                line-height: 60px !important;
+                text-align: left;
+                font-size: 11px;
+                padding-top: 0px !important;
+                padding-bottom: 0px !important;
+            }
+        }
+    }
+
+    tbody {
+        tr {
+            border-top: 1px solid #e5e5e5;
+            height: 60px;
+
+            td:first-child {
+                padding-left: 45px;
+            }
+
+            td {
+                height: 60px;
+                line-height: 60px !important;
+                text-align: left;
+                padding: 0 10px;
+                font-size: 14px;
+
+                i {
+                    margin-right: 8px;
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 800px) {
+    table.table-mobile {
+        border: 1px solid transparent;
+        box-shadow: none;
+
+        thead {
+            display: none;
+        }
+
+        tbody {
+            tr {
+                margin-bottom:10px;
+
+                td:first-child {
+                    padding-left: 10px;
+                }
+
+                td:before {
+                    content: attr(data-label);
+                    float: left;
+                    font-size: 10px;
+                    text-transform: uppercase;
+                    font-weight: bold;
+                }
+
+                td {
+                    display: block;
+                    text-align: right;
+                    font-size: 14px;
+                    padding: 0px 10px !important;
+                    box-shadow: 0 1px 1px rgba(0,0,0,.3);
+                }
+            }
+        }
+    }
+}*/

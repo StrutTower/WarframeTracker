@@ -1,0 +1,41 @@
+﻿///<reference path="_variables.scss" />
+.audiowide {
+    font-family: 'Audiowide', cursive;
+}
+
+body {
+    font-family: 'Exo 2', sans-serif;
+}
+
+.noscript {
+    display: block;
+    text-align: center;
+    color: #f04124;
+    font-size: 20px;
+    font-weight: bold;
+    padding: 20px;
+}
+
+.hidden {
+    display: none;
+}
+
+.text-faded {
+    opacity: 0.7;
+}
+
+/* FIREFOX FIX OF UGLY SELECT BOXES */
+@supports (-moz-appearance:none) {
+    select {
+        -moz-appearance: none !important;
+        background: transparent url('data:image/gif;base64,R0lGODlhBgAGAKEDAFVVVX9/f9TU1CgmNyH5BAEKAAMALAAAAAAGAAYAAAIODA4hCDKWxlhNvmCnGwUAOw==') right center no-repeat !important;
+        background-position: calc(100% - 5px) center !important;
+    }
+}
+
+
+@media print {
+    header, footer, nav {
+        display: none;
+    }
+}

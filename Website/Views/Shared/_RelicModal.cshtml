@@ -1,0 +1,21 @@
+﻿@model WarframeItem
+
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+</button>
+
+<h4 class="text-center">@Html.DisplayFor(x => x.Name)</h4>
+
+<p>@Html.DisplayFor(x => x.Description)</p>
+
+@if (Model.Drops != null && Model.Drops.Any()) {
+    <h5>Drop Locations</h5>
+    foreach (Drop drop in Model.Drops.OrderByDescending(x => x.Chance)) {
+        <div>
+            @Html.DisplayFor(x => drop.Chance, "Percentage") - @Html.DisplayFor(x => drop.Location)
+            @if (drop.Rotation != null) {
+                <small> Rotation: @Html.DisplayFor(x => drop.Rotation)</small>
+            }
+        </div>
+    }
+}

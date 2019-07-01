@@ -1,0 +1,48 @@
+﻿@model EditItemCategoryViewModel
+@{
+    Boolean editing = false;
+    if (Model != null && Model.ItemCategory != null && Model.ItemCategory.ID != 0) {
+        ViewBag.Title = "Edit Item Category";
+        editing = true;
+    } else {
+        ViewBag.Title = "New Item Category";
+    }
+}
+
+<h3>@ViewBag.Title</h3>
+<hr />
+
+<form action="" method="post" class="row">
+    <div class="col-md-6">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        @if (editing) {
+            @Html.HiddenFor(x => x.ItemCategory.ID)
+        }
+
+        @Html.FormGroupEditorFor(x => x.ItemCategory.Name)
+
+        <div class="form-group">
+            @Html.LabelFor(x => x.ItemCategory.CodexTabID)
+            @Html.DropDownListFor(x => x.ItemCategory.CodexTabID, Model.CodexTabSelectList, "", new { @class = "form-control"})
+            @Html.HelpTextFor(x => x.ItemCategory.CodexTabID)
+            @Html.ValidationMessageFor(x => x.ItemCategory.CodexTabID)
+        </div>
+
+        @Html.FormGroupEditorFor(x => x.ItemCategory.WarframeApiCategoryName)
+
+        @Html.FormGroupEditorFor(x => x.ItemCategory.WarframeApiUniqueNameRegexFilter)
+
+        @Html.FormGroupEditorFor(x => x.ItemCategory.AllowAcquisition)
+
+        @Html.FormGroupEditorFor(x => x.ItemCategory.CanBeMastered)
+
+        @Html.FormGroupEditorFor(x => x.ItemCategory.MaxRankExperience)
+
+        @Html.FormGroupEditorFor(x => x.ItemCategory.SortingPriority)
+
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+    </div>
+</form>

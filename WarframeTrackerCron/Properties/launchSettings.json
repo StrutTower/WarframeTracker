@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "WarframeTrackerCron": {
+      "commandName": "Project",
+      "commandLineArgs": "-invasionRewardNotification"
+    }
+  }
+}

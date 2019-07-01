@@ -1,0 +1,33 @@
+﻿@model WarframeItem
+@{ 
+    string missingImageUrl = Url.Content("~/images") + "/missingImage.jpg";
+    ItemAcquisition ia = null;
+    if (ViewData["itemAcquisition"] != null && ViewData["itemAcquisition"] is ItemAcquisition) {
+        ia = (ItemAcquisition)ViewData["itemAcquisition"];
+    } else {
+        ia = new ItemAcquisition();
+    }
+}
+
+<div class="col-xl-2 col-lg-3 col-md-4 col-6 mb-1 codex-item-container" 
+     data-prime="@Model.IsPrime" data-acquired="@ia.IsAcquired" data-mastered="@ia.IsMastered" data-vaulted="@Model.IsVaulted">
+    <div class="codex-image-container @(ia.IsMastered ? "" : "not-mastered")" data-item-name="@Model.UniqueName">
+
+        @if (Model.IsVaulted) {
+            <span class="codex-vaulted-text" title="Vaulted">V</span>
+        }
+
+        <span class="acquisition-symbol">
+            <partial name="AcquisitionIcon" for="@ia" />
+        </span>
+
+        <img class="img-fluid" src="https://cdn.warframestat.us/img/@Model.ImageName"
+             onerror="this.onerror=null;this.src='@missingImageUrl';" />
+        <a href="#" class="codex-text stretched-link open-item-modal"
+           data-url="@Url.Action("Form", "Item", new { itemID = Model.UniqueName.Replace("/", "|") })">
+
+            @Html.DisplayFor(x => Model.Name)
+
+        </a>
+    </div>
+</div>

@@ -1,0 +1,48 @@
+﻿@model IEnumerable<ManualItemData>
+@{
+    ViewBag.Title = "ManageManualItemData";
+}
+
+<a href="@Url.Action("EditManualItemData")" class="btn btn-link float-right">
+    <span class="mdi mdi-fw mdi-plus-box-outline"></span>Add New ManualItemData
+</a>
+
+<h3>ManageManualItemData</h3>
+<hr />
+
+<div class="table-responsive">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(x => x.ItemUniqueName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(x => x.PropertyName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(x => x.Value)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model) {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(x => item.ItemUniqueName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(x => item.PropertyName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(x => item.Value)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Edit", "EditManualItemData", new { id = item.ID })
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

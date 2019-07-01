@@ -1,0 +1,8 @@
+﻿@model ItemAcquisition
+@if (Model != null && Model.IsAcquired && Model.IsMastered) {
+    <span class="mdi mdi-check-all ml-1" title="Acquired and Mastered"></span>
+} else if (Model != null && Model.IsAcquired) {
+    <span class="mdi mdi-check ml-1" title="Acquired"></span>
+} else if (Model != null && Model.IsMastered) {
+    <span class="mdi mdi-checkbox-marked-circle-outline ml-1" title="Mastered"></span>
+}

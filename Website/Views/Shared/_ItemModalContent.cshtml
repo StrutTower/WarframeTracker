@@ -1,0 +1,75 @@
+﻿@model ItemModalViewModel
+@{
+    string missingImageUrl = Url.Content("~/images") + "/missingImage.jpg";
+}
+
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+</button>
+
+<h3 class="text-center">@Html.DisplayFor(x => x.WarframeItem.Name)</h3>
+
+<form action="@Url.Action("UpdateItemAcquisition", "Item")" method="post" id="item-acquisition-form" class="row">
+    <div class="col-6">
+        <img class="img-fluid mb-2" src="https://cdn.warframestat.us/img/@Model.WarframeItem.ImageName"
+             onerror="this.onerror=null;this.src='@missingImageUrl';" />
+        @Html.HiddenFor(x => x.ItemAcquisition.UserID)
+        @Html.HiddenFor(x => x.ItemAcquisition.ItemUniqueName)
+        @if (Model.ItemCategory.AllowAcquisition) {
+            <div class="form-check">
+                <label>
+                    @Html.CheckBoxFor(x => x.ItemAcquisition.IsAcquired)
+                    Acquired
+                </label>
+            </div>
+        }
+        @if (Model.ItemCategory.CanBeMastered) {
+            <div class="form-check">
+                <label>
+                    @Html.CheckBoxFor(x => x.ItemAcquisition.IsMastered)
+                    Mastered
+                </label>
+            </div>
+        }
+        @if (Model.ItemCategory.AllowAcquisition || Model.ItemCategory.CanBeMastered) {
+            <button type="submit" class="btn btn-primary">Update</button>
+        }
+    </div>
+
+    <div class="col-6">
+        <hr class="d-md-none" />
+        @if (Model.ComponentAcquisitions != null && Model.ComponentAcquisitions.Any()) {
+            <h6>Components</h6>
+            for (int i = 0; i < Model.ComponentAcquisitions.Count; i++) {
+                Component comp = Model.WarframeItem.Components.Where(x => x.UniqueName == Model.ComponentAcquisitions[i].ComponentUniqueName).FirstOrDefault();
+                @Html.HiddenFor(x => x.ComponentAcquisitions[i].UserID)
+                @Html.HiddenFor(x => x.ComponentAcquisitions[i].ComponentUniqueName)
+                @Html.HiddenFor(x => x.ComponentAcquisitions[i].ItemUniqueName)
+
+                <div class="media">
+                    <div style="height:45px;width:55px;overflow:hidden;position:relative;">
+                        <img class="mr-2" src="https://cdn.warframestat.us/img/@comp.ImageName"
+                             style="position:absolute;max-height:55px;left:50%;transform:translateX(-50%)" />
+                    </div>
+                    <div class="media-body">
+                        @Html.DisplayFor(x => comp.Name)
+                        @if (comp.ItemCount > 1) {
+                            <span>x@(comp.ItemCount)</span>
+                        }
+
+                        @if (Model.WarframeItem.IsPrime) {
+                            <div class="form-check">
+                                <label>
+                                    @Html.CheckBoxFor(x => x.ComponentAcquisitions[i].IsAcquired)
+                                    Acquired
+                                </label>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+        }
+
+        @Html.DisplayFor(x => x.WarframeItem.Description)
+    </div>
+</form>

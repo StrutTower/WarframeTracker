@@ -1,0 +1,85 @@
+﻿
+
+.codex-image-container {
+    position: relative;
+    border: 1px solid #444;
+    height: 100%;
+    display:block;
+    background-size: 20px 20px !important;
+    background:
+        linear-gradient(to right, #444 1px, transparent 1px),
+        linear-gradient(to bottom, #444 1px, transparent 1px);
+
+    .codex-text {
+        display: block;
+        color: black;
+        background: white;
+        font-weight: 600;
+        padding-left: 7px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+    }
+
+    .mod-text {
+        position:absolute;
+        bottom:0;
+        left:0;right:0;
+        display: block;
+        color: white;
+        text-shadow:0 0 5px #000;
+        font-weight: 600;
+        padding-left: 7px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+        transition: text-shadow .4s ease;
+    }
+
+    .codex-vaulted-text {
+        position: absolute;
+        top: 0;
+        left: 0;
+        font-size: 0.7rem;
+        text-transform: uppercase;
+    }
+
+    .acquisition-symbol {
+        position: absolute;
+        top: 0;
+        right: 3px;
+        color:white;
+    }
+
+    img {
+        border-bottom: 1px solid #444;
+    }
+}
+
+.mod-image-container {
+    border-radius:7.5px !important;
+    overflow:hidden;
+
+    &:hover {
+        .mod-text {
+            text-shadow:2px 2px 10px #000;
+        }
+    }
+}
+
+$rarityBorderType: 2px solid;
+.rarity-common {
+    border: $rarityBorderType #b06641;
+}
+
+.rarity-uncommon {
+    border: $rarityBorderType #8a8a8a;
+}
+
+.rarity-rare {
+    border: $rarityBorderType gold;
+}
+
+.rarity-legendary {
+    border:3px groove white;
+}
