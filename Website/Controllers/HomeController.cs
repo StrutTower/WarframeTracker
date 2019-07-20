@@ -50,9 +50,5 @@ namespace Website.Controllers {
         public IActionResult ReleaseNotes() {
             return View();
         }
-
-        public IActionResult Error() {
-            return View();
-        }
     }
 }

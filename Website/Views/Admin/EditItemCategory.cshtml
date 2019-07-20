@@ -39,6 +39,8 @@
 
         @Html.FormGroupEditorFor(x => x.ItemCategory.MaxRankExperience)
 
+        @Html.FormGroupEditorFor(x => x.ItemCategory.ManuallyExcludedUniqueNames, null, "TextArea")
+
         @Html.FormGroupEditorFor(x => x.ItemCategory.SortingPriority)
 
         <div class="form-group">

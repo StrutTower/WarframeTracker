@@ -1,15 +1,43 @@
 ﻿$(document).ready(function () {
 
-    $('#codex-filter-dropdown').on('change', function (e) {
-        var value = $(this).val();
-        var option = $(this).find(':selected');
-        if (value === 'all') {
-            $('.codex-item-container').show();
-        } else {
-            var showSelector = '.codex-item-container[data-' + value + '="' + option.data('show') + '"]';
-            var hideSelector = '.codex-item-container[data-' + value + '="' + option.data('hide') + '"]';
-            $(showSelector).show();
-            $(hideSelector).hide();
+    var codexDropdown = $('#codex-filter-dropdown');
+
+    if (codexDropdown.length) {
+        var section = codexDropdown.data('codex-section');
+        var filter = sessionStorage.getItem('codexFilter' + section);
+        codexDropdown.val(filter);
+        filterChange(filter);
+
+        $('#codex-filter-dropdown').on('change', function (e) {
+            var value = $(this).val();
+            sessionStorage.setItem('codexFilter' + section, value);
+            filterChange(value);
+        });
+    }
+
+
+    function filterChange(filterType) {
+        var hideSelector;
+        var showSelector = '.codex-item-container';
+        switch (filterType) {
+            case 'showMastered':
+                showSelector = '.codex-item-container[data-mastered="True"]';
+                hideSelector = '.codex-item-container[data-mastered="False"]';
+                break;
+            case 'showNotMastered':
+                showSelector = '.codex-item-container[data-mastered="False"]';
+                hideSelector = '.codex-item-container[data-mastered="True"]';
+                break;
+            case 'showAcquired':
+                showSelector = '.codex-item-container[data-acquired="True"]';
+                hideSelector = '.codex-item-container[data-acquired="False"]';
+                break;
+            case 'showNotAcquired':
+                showSelector = '.codex-item-container[data-mastered="False"]';
+                hideSelector = '.codex-item-container[data-mastered="True"]';
+                break;
         }
-    });
+        $(showSelector).show();
+        $(hideSelector).hide();
+    }
 });

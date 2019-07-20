@@ -141,6 +141,9 @@ namespace WarframeTrackerLib.WarframeApi {
                 }
 
                 foreach (WarframeItem item in matchingItems) {
+                    if (itemCategory.ManuallyExcludedUniqueNamesList.Contains(item.UniqueName))
+                        continue;
+
                     item.ItemCategoryID = itemCategory.ID;
                     if (itemCategory.CodexTab_Object.CodexSectionID == CodexSection.Relics) {
                         // Mark the relic as vaulted if it does not have any drop locations

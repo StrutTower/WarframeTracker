@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "name": "asp.net",
+  "name": "warframe.tracker",
   "private": true,
   "dependencies": {
     "jquery": "~3.4.1",

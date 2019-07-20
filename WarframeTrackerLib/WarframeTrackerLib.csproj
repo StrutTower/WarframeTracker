@@ -10,11 +10,7 @@
     <PackageReference Include="MySql.Data" Version="8.0.16" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="4.5.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\TowerSoft.Repository\TowerSoft.Repository.MySql\TowerSoft.Repository.MySql.csproj" />
-    <ProjectReference Include="..\..\TowerSoft.Repository\TowerSoft.Repository\TowerSoft.Repository.csproj" />
+    <PackageReference Include="TowerSoft.Repository.MySql" Version="0.1.0" />
   </ItemGroup>
 
   <ItemGroup>

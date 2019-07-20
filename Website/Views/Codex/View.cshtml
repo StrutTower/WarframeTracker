@@ -6,17 +6,28 @@
 
 <div class="row">
     <div class="col-md-6">
-        <select class="form-control form-control-sm" id="codex-filter-dropdown">
-            <option value="all">Show All Items</option>
-            <option value="prime" data-show="True" data-hide="False">Prime</option>
-            <option value="prime" data-show="False" data-hide="True">Non-Prime</option>
-            <option value="acquired" data-show="True" data-hide="False">Acquired</option>
-            <option value="acquired" data-show="False" data-hide="True">Not Acquired</option>
-            <option value="mastered" data-show="True" data-hide="False">Mastered</option>
-            <option value="mastered" data-show="False" data-hide="True">Not Mastered</option>
-            <option value="vaulted" data-show="True" data-hide="False">Vaulted</option>
-            <option value="vaulted" data-show="False" data-hide="True">Not Vaulted</option>
-        </select>
+        @if (Model.CodexSection != CodexSection.Relics) {
+            <div class="form-group">
+                <select class="form-control form-control-sm" id="codex-filter-dropdown" data-codex-section="@Model.CodexSection">
+                    <option value="">Show All Items</option>
+                    @if (Model.CodexSection == CodexSection.Equipment) {
+                        <option value="showMastered">Mastered</option>
+                        <option value="showNotMastered">Not Mastered</option>
+                    }
+                    @if (Model.CodexSection == CodexSection.Equipment ||
+                         Model.CodexSection == CodexSection.Mods) {
+                <option value="showAcquired">Acquired</option>
+                <option value="showNotAcquired">Not Acquired</option>
+            }
+            @*<option value="prime" data-show="True" data-hide="False">Prime</option>
+                <option value="prime" data-show="False" data-hide="True">Non-Prime</option>
+                <option value="mastered" data-show="True" data-hide="False">Mastered</option>
+                <option value="mastered" data-show="False" data-hide="True">Not Mastered</option>
+                <option value="vaulted" data-show="True" data-hide="False">Vaulted</option>
+                <option value="vaulted" data-show="False" data-hide="True">Not Vaulted</option>*@
+                </select>
+            </div>
+        }
     </div>
     <div class="col-md-6">
     </div>

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using TowerSoft.Repository.Attributes;
 
 namespace WarframeTrackerLib.Domain {
@@ -6,8 +7,6 @@ namespace WarframeTrackerLib.Domain {
         [Autonumber]
         public int ID { get; set; }
 
-        //[Display(Name = "Category Type")]
-        //public CategoryType? CategoryTypeID { get; set; }
         [Display(Name = "Codex Tab")]
         public int CodexTabID { get; set; }
 
@@ -33,6 +32,23 @@ namespace WarframeTrackerLib.Domain {
         public int SortingPriority { get; set; }
 
 
+        [Display(Name = "Manually Excluded Unique Item Names", Description = "Comma separated list of unique item names")]
+        public string ManuallyExcludedUniqueNames { get; set; }
+
         public virtual CodexTab CodexTab_Object { get; set; }
+
+
+        public List<string> ManuallyExcludedUniqueNamesList {
+            get {
+                List<string> list = new List<string>();
+                if (!string.IsNullOrWhiteSpace(ManuallyExcludedUniqueNames)) {
+                    string[] array = ManuallyExcludedUniqueNames.Split(new[] { "," }, System.StringSplitOptions.RemoveEmptyEntries);
+                    foreach (string str in array) {
+                        list.Add(str.Trim());
+                    }
+                }
+                return list;
+            }
+        }
     }
 }
