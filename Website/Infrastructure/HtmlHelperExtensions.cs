@@ -58,9 +58,13 @@ namespace Website.Infrastructure {
                 );
             }
 
+            TagBuilder twrInput = new TagBuilder("div");
+            twrInput.AddCssClass("twr-input");
+
+            twrInput.InnerHtml.AppendHtml(html.EditorFor(expression, editorTemplateName, new { htmlAttributes }).ToRawString() + html.LabelFor(expression, labelDisplay).ToRawString());
+
             return new HtmlString(
-                html.LabelFor(expression, labelDisplay).ToRawString() +
-                html.EditorFor(expression, editorTemplateName, new { htmlAttributes }).ToRawString() +
+                twrInput.ToRawString() +
                 html.HelpTextFor(expression).ToRawString() +
                 html.ValidationMessageFor(expression).ToRawString());
         }

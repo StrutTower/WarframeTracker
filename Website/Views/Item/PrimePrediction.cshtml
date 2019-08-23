@@ -30,18 +30,18 @@
                     <tr><td colspan="4">Unreleased @Model.Gender Warframe</td></tr>
                 } else {
                     <tr>
-                        <td>@Html.DisplayFor(x => warframe.Name)</td>
-                        <td>@Html.DisplayFor(x => warframe.Sex)</td>
+                        <td display-for="@warframe.Name"></td>
+                        <td display-for="@warframe.Sex"></td>
                         <td>
                             @if (DateTime.TryParse(warframe.ReleaseDate, out DateTime releaseDate)) {
-                                @Html.DisplayFor(x => releaseDate, "ShortDate")
+                                <span display-for="@releaseDate" display-template="ShortDate"></span>
                             } else if (string.IsNullOrWhiteSpace(warframe.ReleaseDate)) {
                                 @:<span class="text-warning">No Release Date</span>
                             } else {
-                                @:Unable to parse date: @Html.DisplayFor(x => warframe.ReleaseDate)
+                                @:Unable to parse date:<span display-for="@warframe.ReleaseDate"></span>
                             }
                         </td>
-                        <td>@Html.DisplayFor(x => Model.LastPrimeReleaseDate, "ShortDate")</td>
+                        <td display-for="LastPrimeReleaseDate" display-template="ShortDate"></td>
                     </tr>
                 }
 

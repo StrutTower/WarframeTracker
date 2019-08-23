@@ -24,6 +24,10 @@ body {
     opacity: 0.7;
 }
 
+select option {
+    color: black;
+}
+
 /* FIREFOX FIX OF UGLY SELECT BOXES */
 @supports (-moz-appearance:none) {
     select {

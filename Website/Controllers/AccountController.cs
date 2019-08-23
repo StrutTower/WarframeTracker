@@ -16,8 +16,22 @@ using Website.ViewModels;
 namespace Website.Controllers {
     public class AccountController : CustomController {
         //TODO Add Account Management
+        [Authorize]
+        public IActionResult Management() {
+            return View();
+        }
 
         //TODO Add Registration
+        [HttpGet]
+        public IActionResult Register() {
+            return View();
+        }
+
+        [HttpPost, ValidateAntiForgeryToken]
+        public IActionResult Register(RegistrationViewModel model) {
+
+            throw new NotImplementedException();
+        }
 
         [HttpGet]
         public IActionResult Login() {

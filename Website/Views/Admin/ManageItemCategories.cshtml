@@ -19,7 +19,7 @@
                     @Html.DisplayNameFor(x => x.Name)
                 </th>
                 <th>
-                    Codex Tab
+                    @Html.DisplayNameFor(x => x.CodexTabID)
                 </th>
                 <th>
                     @Html.DisplayNameFor(x => x.WarframeApiCategoryName)
@@ -40,8 +40,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model)
-            {
+            @foreach (var item in Model) {
                 <tr>
                     <td data-label="@Html.DisplayNameFor(x => x.Name)">
                         @Html.DisplayFor(x => item.Name)
@@ -65,7 +64,9 @@
                         @Html.DisplayFor(x => item.SortingPriority)
                     </td>
                     <td>
-                        @Html.ActionLink("Edit", "EditItemCategory", new { id = item.ID })
+                        <a asp-action="EditItemCategory" asp-route-id="@item.ID">
+                            Edit
+                        </a>
                     </td>
                 </tr>
             }

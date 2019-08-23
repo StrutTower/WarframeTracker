@@ -30,48 +30,52 @@ namespace Website.ViewModels {
 
                 #region Mastery
                 int masteryExp = 0;
-                List<ItemCategory> ics = new ItemCategoryRepository(uow).GetAll();
-                List<WarframeItem> allItems = new WarframeItemUtilities(uow).GetAll();
+                try {
+                    List<ItemCategory> ics = new ItemCategoryRepository(uow).GetAll();
+                    List<WarframeItem> allItems = new WarframeItemUtilities(uow).GetAll();
 
-                foreach (ItemAcquisition ia in ias) {
-                    if (ia.IsMastered) {
-                        WarframeItem item = allItems.SingleOrDefault(x => x.UniqueName == ia.ItemUniqueName);
-                        if (item == null) {
-                            string name = ia.ItemUniqueName;//TODO add check for missing UniqueName
-                            Console.WriteLine();
+                    foreach (ItemAcquisition ia in ias) {
+                        if (ia.IsMastered) {
+                            WarframeItem item = allItems.SingleOrDefault(x => x.UniqueName.Equals(ia.ItemUniqueName, StringComparison.InvariantCultureIgnoreCase));
+                            if (item == null) {
+                                string name = ia.ItemUniqueName;//TODO add check for missing UniqueName
+                                Console.WriteLine();
+                            }
+                            ItemCategory ic = ics.SingleOrDefault(x => x.ID == item.ItemCategoryID);
+                            if (ic.CanBeMastered && ic.MaxRankExperience.HasValue)
+                                masteryExp += ic.MaxRankExperience.Value;
                         }
-                        ItemCategory ic = ics.SingleOrDefault(x => x.ID == item.ItemCategoryID);
-                        if (ic.CanBeMastered && ic.MaxRankExperience.HasValue)
-                            masteryExp += ic.MaxRankExperience.Value;
                     }
-                }
 
-                UserData userData = new UserDataRepository(uow).GetByUserID(userID);
-                if (userData != null) {
-                    if (appSettings.JunctionMasteryExperience.HasValue) {
-                        int junctionExp = userData.JunctionsCompleted * appSettings.JunctionMasteryExperience.Value;
-                        masteryExp += junctionExp;
+                    UserData userData = new UserDataRepository(uow).GetByUserID(userID);
+                    if (userData != null) {
+                        if (appSettings.JunctionMasteryExperience.HasValue) {
+                            int junctionExp = userData.JunctionsCompleted * appSettings.JunctionMasteryExperience.Value;
+                            masteryExp += junctionExp;
+                        }
+                        if (appSettings.MissionNodeMasteryExperience.HasValue) {
+                            double nodeExp = (double)userData.MissionNodesCompleted * appSettings.MissionNodeMasteryExperience.Value;
+                            masteryExp += (int)Math.Ceiling(nodeExp);
+                        }
                     }
-                    if (appSettings.MissionNodeMasteryExperience.HasValue) {
-                        double nodeExp = (double)userData.MissionNodesCompleted * appSettings.MissionNodeMasteryExperience.Value;
-                        masteryExp += (int)Math.Ceiling(nodeExp);
-                    }
-                }
 
-                List<MasteryRank> ranks = new MasteryRankRepository(uow).GetAll();
-                ranks = ranks.OrderBy(x => x.Number).ToList();
+                    List<MasteryRank> ranks = new MasteryRankRepository(uow).GetAll();
+                    ranks = ranks.OrderBy(x => x.Number).ToList();
 
-                MasteryRank current = null;
-                foreach (MasteryRank rank in ranks) {
-                    if (rank.ExperienceRequired < masteryExp)
-                        current = rank;
-                    if (rank.ExperienceRequired > masteryExp) {
-                        current.NextRankExperience_ = rank.ExperienceRequired;
-                        break;
+                    MasteryRank current = null;
+                    foreach (MasteryRank rank in ranks) {
+                        if (rank.ExperienceRequired < masteryExp)
+                            current = rank;
+                        if (rank.ExperienceRequired > masteryExp) {
+                            current.NextRankExperience_ = rank.ExperienceRequired;
+                            break;
+                        }
                     }
+                    MasteryRank = current;
+                    CurrentMasteryExperience = masteryExp;
+                } catch {
+
                 }
-                MasteryRank = current;
-                CurrentMasteryExperience = masteryExp;
                 #endregion
 
                 WorldStateHelper worldStateHelper = new WorldStateHelper();

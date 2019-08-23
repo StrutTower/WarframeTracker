@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using TowerSoft.Repository;
 using WarframeTrackerLib.Domain;
 
@@ -12,6 +13,10 @@ namespace WarframeTrackerLib.Repository {
 
         public List<SentNotification> GetByType(string type) {
             return GetEntities(new WhereCondition("Type", type));
+        }
+
+        public object GetByDataID(string oid) {
+            return GetSingleEntity(WhereEqual(x => x.DataID, oid)); ;
         }
     }
 }

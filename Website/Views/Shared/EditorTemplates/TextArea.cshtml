@@ -1,2 +1,14 @@
 ﻿@model string
-@Html.TextAreaFor(x => x, new { @class = "form-control" })
+@{
+    IDictionary<String, Object> attributes = HtmlHelper.AnonymousObjectToHtmlAttributes(ViewData["htmlAttributes"]);
+    if (attributes.ContainsKey("class")) {
+        attributes["class"] += " twr-input";
+    } else {
+        attributes.Add("class", "twr-input");
+    }
+
+    if (!attributes.ContainsKey("autocomplete")) {
+        attributes.Add("autocomplete", "off");
+    }
+}
+@Html.TextAreaFor(x => x, attributes)

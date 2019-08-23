@@ -23,11 +23,7 @@
 
         <img class="img-fluid" src="https://cdn.warframestat.us/img/@Model.ImageName"
              onerror="this.onerror=null;this.src='@missingImageUrl';" />
-        <a href="#" class="codex-text stretched-link open-item-modal"
-           data-url="@Url.Action("Form", "Item", new { itemID = Model.UniqueName.Replace("/", "|") })">
-
-            @Html.DisplayFor(x => Model.Name)
-
-        </a>
+        <a href="#" display-for="Name" class="codex-text stretched-link open-item-modal"
+           data-url="@Url.Action("Form", "Item", new { itemID = Model.UniqueName.Replace("/", "|") })"></a>
     </div>
 </div>

@@ -103,6 +103,7 @@ namespace WarframeTrackerLib.WarframeApi {
         public List<Drop> Drops { get; set; }
         public DamageTypes DamageTypes { get; set; }
 
+
         public bool Equals(WarframeItem other) {
             return other != null && UniqueName == other.UniqueName;
         }

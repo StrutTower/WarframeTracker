@@ -1,0 +1,23 @@
+﻿@model RegistrationViewModel
+@{
+    ViewData["Title"] = "Register";
+}
+
+<h3>Register</h3>
+<hr />
+
+<form action="" method="post">
+    @Html.FormGroupEditorFor(x => x.Username)
+
+    @Html.FormGroupEditorFor(x => x.EmailAddress)
+
+    @Html.FormGroupEditorFor(x => x.Password)
+
+    @Html.FormGroupEditorFor(x => x.ConfirmPassword)
+
+    <div>
+        <button type="submit" class="btn btn-primary">
+            Create Account
+        </button>
+    </div>
+</form>

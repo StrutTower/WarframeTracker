@@ -9,7 +9,8 @@ namespace WarframeTrackerLib.Repository {
         public MasteryRankRepository(IUnitOfWork uow) : base(uow) { }
 
         public MasteryRank GetByID(int id) {
-            return GetSingleEntity(new WhereCondition("ID", id));
+            //return GetSingleEntity(new WhereCondition("ID", id));
+            return GetSingleEntity(WhereEqual(x => x.ID, id));
         }
     }
 }

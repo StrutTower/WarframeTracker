@@ -4,10 +4,8 @@
     <span class="mdi mdi-close"></span>
 </button>
 
-<h3 class="text-center">@Html.DisplayFor(x => x.WarframeItem.Name)</h3>
-<p>
-    @Html.DisplayFor(x => x.WarframeItem.UniqueName)
-</p>
+<h3 display-for="WarframeItem.Name" class="text-center"></h3>
+<p display-for="WarframeItem.UniqueName"></p>
 
 @if (Model.WarframeItem.Components != null && Model.WarframeItem.Components.Any()) {
     foreach (Component comp in Model.WarframeItem.Components) {
@@ -15,12 +13,10 @@
 
         if (ca != null && ca.IsAcquired) {
             <div style="font-size:1.2rem;" class="text-muted">
-                <del>@Html.DisplayFor(x => comp.Name)</del>
+                <del display-for="@comp.Name"></del>
             </div>
         } else {
-            <div style="font-size:1.2rem;">
-                @Html.DisplayFor(x => comp.Name)
-            </div>
+            <div display-for="@comp.Name" style="font-size:1.2rem;"></div>
         }
         <div class="pl-3 mb-2">
             @if (comp.Drops != null && comp.Drops.Any()) {
@@ -28,15 +24,15 @@
                     if (ca != null && ca.IsAcquired) {
                         <div>
                             <del class="text-muted">
-                                @group.Key
+                                <span display-for="@group.Key"></span>
                                 @string.Join(", ", group.Select(x => x.RelicType + " " + x.Rarity).Distinct())
                             </del>
                         </div>
                     } else {
-                    <div>
-                        @group.Key
-                        @string.Join(", ", group.Select(x => x.RelicType + " " + x.Rarity).Distinct())
-                    </div>
+                        <div>
+                            <span display-for="@group.Key"></span>
+                            @string.Join(", ", group.Select(x => x.RelicType + " " + x.Rarity).Distinct())
+                        </div>
                     }
                 }
             }

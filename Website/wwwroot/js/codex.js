@@ -36,7 +36,17 @@
                 showSelector = '.codex-item-container[data-mastered="False"]';
                 hideSelector = '.codex-item-container[data-mastered="True"]';
                 break;
+            case 'showVaulted':
+                showSelector = '.codex-item-container[data-vaulted="True"]';
+                hideSelector = '.codex-item-container[data-vaulted="False"]';
+                break;
+            case 'showNotVaulted':
+                showSelector = '.codex-item-container[data-vaulted="False"]';
+                hideSelector = '.codex-item-container[data-vaulted="True"]';
+                break;
         }
+        $('#codex-filter-text-group').hide();
+
         $(showSelector).show();
         $(hideSelector).hide();
     }

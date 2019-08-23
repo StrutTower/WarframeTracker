@@ -2,9 +2,9 @@
 @{
     IDictionary<String, Object> attributes = HtmlHelper.AnonymousObjectToHtmlAttributes(ViewData["htmlAttributes"]);
     if (attributes.ContainsKey("class")) {
-        attributes["class"] += " form-control";
+        attributes["class"] += " twr-input";
     } else {
-        attributes.Add("class", "form-control");
+        attributes.Add("class", "twr-input");
     }
 
     String displayText = String.Empty;

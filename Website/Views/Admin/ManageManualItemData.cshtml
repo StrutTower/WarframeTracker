@@ -1,13 +1,13 @@
 ﻿@model IEnumerable<ManualItemData>
 @{
-    ViewBag.Title = "ManageManualItemData";
+    ViewBag.Title = "Manage Manual Item Data";
 }
 
 <a href="@Url.Action("EditManualItemData")" class="btn btn-link float-right">
     <span class="mdi mdi-fw mdi-plus-box-outline"></span>Add New ManualItemData
 </a>
 
-<h3>ManageManualItemData</h3>
+<h3>@ViewBag.Title</h3>
 <hr />
 
 <div class="table-responsive">
@@ -29,17 +29,13 @@
         <tbody>
             @foreach (var item in Model) {
                 <tr>
+                    <td display-for="@item.ItemUniqueName"></td>
+                    <td display-for="@item.PropertyName"></td>
+                    <td display-for="@item.Value"></td>
                     <td>
-                        @Html.DisplayFor(x => item.ItemUniqueName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(x => item.PropertyName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(x => item.Value)
-                    </td>
-                    <td>
-                        @Html.ActionLink("Edit", "EditManualItemData", new { id = item.ID })
+                        <a asp-controller="EditManualItemData" asp-route-id="@item.ID">
+                            Edit
+                        </a>
                     </td>
                 </tr>
             }

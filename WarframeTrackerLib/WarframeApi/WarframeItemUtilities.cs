@@ -30,6 +30,17 @@ namespace WarframeTrackerLib.WarframeApi {
             return JsonConvert.DeserializeObject<WarframeItem>(itemCache.Data);
         }
 
+        internal List<WarframeItem> GetByCodexSection(CodexSection codexSection) {
+            List<ItemCache> caches = new ItemCacheRepository(_unitOfWork).GetByCodexSection(codexSection);
+
+            if (caches== null != !caches.Any() || caches.First().UpdatedTimestamp < DateTime.Now.AddDays(-2)) {
+                List<ItemCategory> itemCategories = new ItemCategoryRepository(_unitOfWork).GetByCodexSection(codexSection);
+                caches = RedownloadCache().Where(x => itemCategories.Select(y => y.ID).Contains(x.ItemCategoryID)).ToList();
+            }
+            string test = "[" + string.Join(",", caches.Select(x => x.Data)) + "]";
+            return JsonConvert.DeserializeObject<List<WarframeItem>>(test);
+        }
+
         public List<WarframeItem> GetByCategoryID(int categoryID) {
             List<ItemCache> ic = new ItemCacheRepository(_unitOfWork).GetByItemCategoryID(categoryID);
 
@@ -73,6 +84,13 @@ namespace WarframeTrackerLib.WarframeApi {
             string test = "[" + string.Join(",", ics.Select(x => x.Data)) + "]";
             return JsonConvert.DeserializeObject<List<WarframeItem>>(test);
         }
+
+        public List<WarframeItem> AdvancedSearch(AdvancedSearchModel model) {
+            List<ItemCache> ics = new ItemCacheRepository(_unitOfWork).AdvancedSearch(model);
+
+            string test = "[" + string.Join(",", ics.Select(x => x.Data)) + "]";
+            return JsonConvert.DeserializeObject<List<WarframeItem>>(test);
+        }
         #endregion
 
         public List<ItemCache> RedownloadCache() {
@@ -102,6 +120,7 @@ namespace WarframeTrackerLib.WarframeApi {
                             UniqueName = item.UniqueName,
                             ItemCategoryID = item.ItemCategoryID,
                             Name = item.Name,
+                            MasteryRequired = item.MasteryReq,
                             UpdatedTimestamp = DateTime.Now
                         };
                         itemCache.Data = JsonConvert.SerializeObject(item);

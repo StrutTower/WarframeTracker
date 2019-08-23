@@ -4,17 +4,18 @@
     <span aria-hidden="true">&times;</span>
 </button>
 
-<h4 class="text-center">@Html.DisplayFor(x => x.Name)</h4>
+<h4 display-for="Name" class="text-center"></h4>
 
-<p>@Html.DisplayFor(x => x.Description)</p>
+<p display-for="Description"></p>
 
 @if (Model.Drops != null && Model.Drops.Any()) {
     <h5>Drop Locations</h5>
     foreach (Drop drop in Model.Drops.OrderByDescending(x => x.Chance)) {
         <div>
-            @Html.DisplayFor(x => drop.Chance, "Percentage") - @Html.DisplayFor(x => drop.Location)
+            <span display-for="@drop.Chance" display-template="Percentage"></span> - <span display-for="@drop.Location"></span>
+            @*@Html.DisplayFor(x => drop.Chance, "Percentage") - @Html.DisplayFor(x => drop.Location)*@
             @if (drop.Rotation != null) {
-                <small> Rotation: @Html.DisplayFor(x => drop.Rotation)</small>
+                <small> Rotation: <span display-for="@drop.Rotation"></span></small>
             }
         </div>
     }

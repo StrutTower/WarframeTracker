@@ -13,5 +13,9 @@ namespace WarframeTrackerLib.Repository {
         public User GetByUsername(string userName) {
             return GetSingleEntity(new WhereCondition("Username", userName));
         }
+
+        public User GetByEmailAddress(string emailAddress) {
+            return GetSingleEntity(WhereEqual(x => x.EmailAddress, emailAddress));
+        }
     }
 }

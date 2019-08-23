@@ -17,15 +17,34 @@
     }
     <div class="col-md-6">
         <div class="form-group">
-            <label asp-for="InvasionReward.UniqueName"></label>
-            <select asp-for="InvasionReward.UniqueName" asp-items="Model.UniqueNameSelectList" class="form-control"></select>
-            @Html.HelpTextFor(x => x.InvasionReward)
-            <span asp-validation-for="InvasionReward.UniqueName"></span>
+            @if (editing) {
+                @Html.HiddenFor(x => x.InvasionReward.UniqueName)
+                @Html.DisplayFor(x => x.InvasionReward.UniqueName)
+            } else {
+                <label twr-for="InvasionReward.UniqueName"></label>
+                <select asp-for="InvasionReward.UniqueName" asp-items="Model.UniqueNameSelectList" class="twr-input">
+                    <option></option>
+                </select>
+                <help-text twr-for="InvasionReward.UniqueName"></help-text>
+                <span asp-validation-for="InvasionReward.UniqueName"></span>
+            }
         </div>
 
-        @Html.FormGroupEditorFor(x => x.InvasionReward.Name)
+        <div class="form-group">
+            <label twr-for="InvasionReward.Name"></label>
+            <input twr-for="InvasionReward.Name" />
+            <help-text twr-for="InvasionReward.Name"></help-text>
+            <span asp-validation-for="InvasionReward.Name"></span>
+        </div>
 
-        @Html.FormGroupEditorFor(x => x.InvasionReward.ShowOnHomeView)
+        <div class="form-group">
+            <div class="form-check">
+                <input twr-for="InvasionReward.ShowOnHomeView" />
+                <label twr-for="InvasionReward.ShowOnHomeView"></label>
+            </div>
+            <help-text twr-for="InvasionReward.ShowOnHomeView"></help-text>
+            <span asp-validation-for="InvasionReward.ShowOnHomeView"></span>
+        </div>
 
         <div class="form-group">
             <button type="submit" class="btn btn-primary">Save</button>

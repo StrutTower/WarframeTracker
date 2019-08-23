@@ -4,6 +4,7 @@ using System.Text;
 using TowerSoft.Repository;
 using WarframeTrackerLib.Domain;
 using WarframeTrackerLib.Repository;
+using WarframeTrackerLib.WarframeApi;
 
 namespace WarframeTrackerLib.Utilities {
     public class EagerLoader {
@@ -35,6 +36,12 @@ namespace WarframeTrackerLib.Utilities {
         public void Load(ItemCategory itemCategory) {
             CodexTabRepository repo = new CodexTabRepository(_uow);
             itemCategory.CodexTab_Object = repo.GetByID(itemCategory.CodexTabID);
+        }
+
+        public void Load(IEnumerable<WarframeItem> items) {
+            foreach(WarframeItem item in items) {
+                
+            }
         }
     }
 }

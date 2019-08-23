@@ -1,0 +1,21 @@
+﻿
+@{
+    ViewData["Title"] = "Management";
+}
+
+<h3>Account Management</h3>
+<hr />
+
+<div class="form-group">
+    <label>Account</label>
+    <div class="form-control-plaintext form-control-sm">
+        @User.Identity.Name
+    </div>
+</div>
+
+<div class="form-group">
+    <label>Email Address</label>
+    <div class="form-control-plaintext form-control-sm">
+        @User.FindFirst(System.Security.Claims.ClaimTypes.Email)
+    </div>
+</div>

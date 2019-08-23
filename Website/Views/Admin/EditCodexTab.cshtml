@@ -12,9 +12,10 @@
 <h3>@ViewBag.Title</h3>
 <hr />
 
+<div asp-validation-summary="All"></div>
+
 <form action="" method="post" class="row">
     <div class="col-md-6">
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
         @if (editing) {
             @Html.HiddenFor(x => x.ID)
@@ -23,17 +24,39 @@
         @Html.FormGroupEditorFor(x => x.Name)
 
         <div class="form-group">
-            @Html.LabelFor(x => x.CodexSectionID)
-            @Html.DropDownListFor(x => x.CodexSectionID, Html.GetEnumSelectList<CodexSection>(), "", new { @class = "form-control" })
-            @Html.HelpTextFor(x => x.CodexSectionID)
-            @Html.ValidationMessageFor(x => x.CodexSectionID)
+            <label twr-for="CodexSectionID"></label>
+            <select asp-for="CodexSectionID" asp-items="Html.GetEnumSelectList<CodexSection>()" class="twr-input">
+                <option></option>
+            </select>
+            <help-text twr-for="CodexSectionID"></help-text>
+            <span asp-validation-for="CodexSectionID"></span>
         </div>
 
         @Html.FormGroupEditorFor(x => x.ImageName)
+        <div class="form-group">
+            @*<label twr-for="ImageName"></label>
+            <input twr-for="ImageName" />
+            <help-text twr-for="ImageName"></help-text>
+            <span asp-validation-for="ImageName"></span>
+        </div>*@
 
         @Html.FormGroupEditorFor(x => x.SortingPriority)
+        @*<div class="form-group">
+            <label twr-for="SortingPriority"></label>
+            <input twr-for="SortingPriority" />
+            <help-text twr-for="SortingPriority"></help-text>
+            <span asp-validation-for="SortingPriority"></span>
+        </div>*@
 
         @Html.FormGroupEditorFor(x => x.GroupItemsByItemCategory)
+        @*<div class="form-group">
+            <div class="form-check">
+                <input twr-for="GroupItemsByItemCategory" />
+                <label twr-for="GroupItemsByItemCategory"></label>
+            </div>
+            <help-text twr-for="GroupItemsByItemCategory"></help-text>
+            <span asp-validation-for="GroupItemsByItemCategory"></span>
+        </div>*@
 
         <div class="form-group">
             <button type="submit" class="btn btn-primary">Save</button>

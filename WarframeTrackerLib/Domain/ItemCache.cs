@@ -10,6 +10,8 @@ namespace WarframeTrackerLib.Domain {
 
         public string Name { get; set; }
 
+        public int? MasteryRequired { get; set; }
+
         public string Data { get; set; }
 
         public DateTime? UpdatedTimestamp { get; set; }

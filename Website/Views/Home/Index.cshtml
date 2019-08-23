@@ -14,8 +14,8 @@
     </div>
     <div class="col-6 text-right">
         <div>Mastery Rank:</div>
-        <div>@Html.DisplayFor(x => x.MasteryRank.Name)</div>
-        <div>Total Exp: @Html.DisplayFor(x => x.CurrentMasteryExperience, "CommaNumber")</div>
+        <div display-for="MasteryRank.Name"></div>
+        <div>Total Exp: <span display-for="CurrentMasteryExperience" display-template="CommaNumber"></span></div>
         <div class="small">
             <a asp-action="UpdateStarchartCompletion">Update Starchart Completion</a>
         </div>
@@ -26,7 +26,7 @@
     <div>
         <h5>Invasions</h5>
         @foreach (Invasion invasion in Model.Invasions.OrderBy(x => x.ActivationEpochUtc)) {
-            @Html.DisplayFor(x => invasion)
+            <div display-for="@invasion"></div>
         }
     </div>
 }
@@ -40,7 +40,7 @@
             <span style="font-size:12px;"><em>Good for farming void traces and Orokin Cells</em></span>
         </h5>
         @foreach (ActiveMission activeMission in Model.VoidMissions.OrderBy(x => x.StartedOnLocalTime)) {
-            @Html.DisplayFor(x => activeMission)
+            <div display-for="@activeMission"></div>
         }
     </div>
 }  

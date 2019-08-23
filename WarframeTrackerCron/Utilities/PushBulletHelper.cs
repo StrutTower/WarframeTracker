@@ -12,10 +12,8 @@ namespace WarframeTrackerCron.Utilities {
 
             PushbulletClient pbCLient = new PushbulletClient(appSecrets.PushbulletApiKey);
 
-
-            var devices = pbCLient.CurrentUsersDevices();
             PushNoteRequest request = new PushNoteRequest {
-                DeviceIden = appSecrets.DefaultPushbulletDeviceIden,
+                ChannelTag = appSecrets.InvasionRewardChannel,
                 Title = "Warframe Tracker",
                 Body = message
             };

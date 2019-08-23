@@ -16,28 +16,28 @@ namespace Website.ViewModels {
 
         public List<ComponentAcquisition> ComponentAcquisitions { get; set; }
 
-        public ItemDetailsModelViewModel Load(WarframeItem item, IUnitOfWork uow) {
+        public ItemDetailsModelViewModel Load(WarframeItem item, ClaimsPrincipal user, IUnitOfWork uow) {
             WarframeItem = item;
 
-            //using (IUnitOfWork uow = new UnitOfWorkFactory().UnitOfWork) {
-                ComponentAcquisitions = new ComponentAcquisitionRepository(uow).GetByItemUniqueName(item.UniqueName);
+            int userID = int.Parse(user.FindFirstValue(ClaimTypes.NameIdentifier));
 
-                if (WarframeItem.Components != null && WarframeItem.Components.Any()) {
+            ComponentAcquisitions = new ComponentAcquisitionRepository(uow).GetByItemUniqueNameAndUserID(item.UniqueName, userID);
 
-                    ItemCategory cat = new ItemCategoryRepository(uow).GetByCodexSection(CodexSection.Relics).FirstOrDefault();
-                    Relics = new WarframeItemUtilities(uow).GetByCategoryID(cat.ID);
+            if (WarframeItem.Components != null && WarframeItem.Components.Any()) {
 
-                    foreach (Component comp in WarframeItem.Components) {
-                        if (comp.Drops != null && comp.Drops.Any()) {
-                            for (int i = comp.Drops.Count - 1; i >= 0; i--) {
-                                var relic = Relics.SingleOrDefault(x => x.Name == comp.Drops[i].Location);
-                                if (relic != null && relic.IsVaulted) {
-                                    comp.Drops.RemoveAt(i);
-                                }
+                ItemCategory cat = new ItemCategoryRepository(uow).GetByCodexSection(CodexSection.Relics).FirstOrDefault();
+                Relics = new WarframeItemUtilities(uow).GetByCategoryID(cat.ID);
+
+                foreach (Component comp in WarframeItem.Components) {
+                    if (comp.Drops != null && comp.Drops.Any()) {
+                        for (int i = comp.Drops.Count - 1; i >= 0; i--) {
+                            var relic = Relics.SingleOrDefault(x => x.Name == comp.Drops[i].Location);
+                            if (relic != null && relic.IsVaulted) {
+                                comp.Drops.RemoveAt(i);
                             }
                         }
                     }
-                //}
+                }
             }
             return this;
         }

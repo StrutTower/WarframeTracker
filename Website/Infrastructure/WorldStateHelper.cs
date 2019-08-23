@@ -36,20 +36,20 @@ namespace Website.Infrastructure {
                 if (items.Any()) {
                     foreach (InvasionRewardItem item in items) {
                         InvasionReward rewardName = invasionRewardNames.SingleOrDefault(x => x.UniqueName == item.ItemUniqueName);
-                        if (rewardName == null || rewardName.ShowOnHomeView) {
+                        //if (rewardName == null || rewardName.ShowOnHomeView) {
                             important = true;
                             if (rewardName != null)
                                 item.Name = rewardName.Name;
-                        }
+                        //}
                     }
                 }
 
                 if (important) {
-                    importantInavsions.Add(invasion);
-
                     invasion.AttackerFaction = _factions[invasion.AttackerFaction];
                     invasion.DefenderFaction = _factions[invasion.DefenderFaction];
                     invasion.SolNode = _solNodes[invasion.Node];
+
+                    importantInavsions.Add(invasion);
                 }
             }
             return importantInavsions;

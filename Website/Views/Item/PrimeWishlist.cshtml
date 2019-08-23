@@ -26,8 +26,7 @@
                     <div class="col-6">
                         <img class="img-fluid" src="https://cdn.warframestat.us/img/@item.ImageName"
                              onerror="this.onerror=null;this.src='@missingImageUrl';" />
-                        @Html.DisplayFor(x => item.Name)
-
+                        <span display-for="@item.Name"></span>
 
                     </div>
                     <div class="col-6">
@@ -38,14 +37,14 @@
                                 <div>
                                     @if (ca != null && ca.IsAcquired) {
                                         <del class="text-muted">
-                                            @Html.DisplayFor(x => comp.Name)
+                                            <span display-for="@comp.Name"></span>
                                             @if (comp.ItemCount > 1) {
                                                 @:x@(comp.ItemCount)
                                             }
                                         </del>
                                     } else {
                                         <span>
-                                            @Html.DisplayFor(x => comp.Name)
+                                            <span display-for="@comp.Name"></span>
                                             @if (comp.ItemCount > 1) {
                                                 @:x@(comp.ItemCount)
                                             }

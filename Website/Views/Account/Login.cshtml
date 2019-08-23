@@ -6,16 +6,20 @@
 <form action="" method="post" class="row">
     <div class="col-md-4 offset-md-4">
         <div class="form-group">
-            <input asp-for="UserName" class="form-control" placeholder="Username" />
+            <input twr-for="UserName" autocomplete="off" />
+            <help-text twr-for="UserName"></help-text>
             <span asp-validation-for="UserName"></span>
         </div>
+
         <div class="form-group">
-            <input asp-for="Password" class="form-control" placeholder="Password" />
+            <input twr-for="Password" autocomplete="off" />
+            <help-text twr-for="Password"></help-text>
             <span asp-validation-for="Password"></span>
         </div>
+
         <div class="form-group">
             <div class="form-check">
-                <input asp-for="RememberLogin" />
+                <input twr-for="RememberLogin" />
                 <label asp-for="RememberLogin"></label>
             </div>
             <span asp-validation-for="RememberLogin"></span>

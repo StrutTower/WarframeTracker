@@ -7,7 +7,7 @@
     <span aria-hidden="true">&times;</span>
 </button>
 
-<h3 class="text-center">@Html.DisplayFor(x => x.WarframeItem.Name)</h3>
+<h3 display-for="WarframeItem.Name" class="text-center"></h3>
 
 <form action="@Url.Action("UpdateItemAcquisition", "Item")" method="post" id="item-acquisition-form" class="row">
     <div class="col-6">
@@ -18,7 +18,8 @@
         @if (Model.ItemCategory.AllowAcquisition) {
             <div class="form-check">
                 <label>
-                    @Html.CheckBoxFor(x => x.ItemAcquisition.IsAcquired)
+                    @*@Html.CheckBoxFor(x => x.ItemAcquisition.IsAcquired)*@
+                    <input twr-for="ItemAcquisition.IsAcquired" />
                     Acquired
                 </label>
             </div>
@@ -26,7 +27,8 @@
         @if (Model.ItemCategory.CanBeMastered) {
             <div class="form-check">
                 <label>
-                    @Html.CheckBoxFor(x => x.ItemAcquisition.IsMastered)
+                    @*@Html.CheckBoxFor(x => x.ItemAcquisition.IsMastered)*@
+                    <input twr-for="ItemAcquisition.IsMastered" />
                     Mastered
                 </label>
             </div>
@@ -52,15 +54,15 @@
                              style="position:absolute;max-height:55px;left:50%;transform:translateX(-50%)" />
                     </div>
                     <div class="media-body">
-                        @Html.DisplayFor(x => comp.Name)
+                        <span display-for="@comp.Name"></span>
                         @if (comp.ItemCount > 1) {
-                            <span>x@(comp.ItemCount)</span>
+                            <span>x<span display-for="@comp.ItemCount"></span></span>
                         }
 
                         @if (Model.WarframeItem.IsPrime) {
                             <div class="form-check">
                                 <label>
-                                    @Html.CheckBoxFor(x => x.ComponentAcquisitions[i].IsAcquired)
+                                    <input twr-for="ComponentAcquisitions[i].IsAcquired" />
                                     Acquired
                                 </label>
                             </div>
@@ -70,6 +72,6 @@
             }
         }
 
-        @Html.DisplayFor(x => x.WarframeItem.Description)
+        <p display-for="WarframeItem.Description"></p>
     </div>
 </form>

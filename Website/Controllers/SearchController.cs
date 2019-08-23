@@ -7,16 +7,28 @@ using TowerSoft.Repository;
 using WarframeTrackerLib.Repository;
 using WarframeTrackerLib.WarframeApi;
 using Website.Infrastructure;
+using Website.ViewModels;
 
 namespace Website.Controllers {
     public class SearchController : CustomController {
+        public IActionResult Index() {
+            return View(new SearchViewModel().Load());
+        }
+
+        public IActionResult Results(SearchViewModel model) {
+            if (ModelState.IsValid) {
+                return View("Items", new SearchResultsViewModel().Load(model.AdvancedSearchModel));
+            }
+            return View("Index", model.Load());
+        }
+
         public ActionResult Basic(string q) {
             List<WarframeItem> items;
             using (IUnitOfWork uow = new UnitOfWorkFactory().UnitOfWork) {
                 items = new WarframeItemUtilities(uow).GetAll();
             }
             var items2 = items.Where(x => x.Name.ToLower().Contains(q.ToLower())).ToList();
-            return View(items2);
+            return View("Items", items2);
         }
 
         public ActionResult WarframeItemsAjax(string q, int? page = null) {

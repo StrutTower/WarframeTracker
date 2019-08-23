@@ -36,7 +36,7 @@ namespace Website.ViewModels {
                 WarframeItem.Components = WarframeItem.Components.OrderBy(x => x.Name).ToList();
 
                 ComponentAcquisitions = new ComponentAcquisitionRepository(uow)
-                    .GetByItemUniqueName(WarframeItem.UniqueName);
+                    .GetByItemUniqueNameAndUserID(WarframeItem.UniqueName, userID);
 
                 int index = 0;
                 foreach (Component comp in WarframeItem.Components) {

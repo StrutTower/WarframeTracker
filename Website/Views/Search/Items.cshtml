@@ -1,0 +1,30 @@
+﻿@model SearchResultsViewModel
+@{
+    ViewData["Title"] = "Items";
+}
+
+<h3>Search Results</h3>
+<hr />
+
+<p>
+    <span display-for="WarframeItems.Count"></span> results...
+</p>
+
+@foreach (CodexTab tab in Model.CodexTabs) {
+    var items = Model.WarframeItems
+       .Where(x => tab.ItemCategory_Objects.Select(y => y.ID).Contains(x.ItemCategoryID));
+    if (items.SafeAny()) {
+        <h3>
+            <span display-for="@tab.Name"></span> -
+            <span display-for="@tab.CodexSectionID"></span>
+        </h3>
+
+        @foreach (WarframeItem item in items) {
+            <div class="pl-2">
+                <button type="button" display-for="@item.Name" class="btn btn-link btn-sm open-item-modal"
+                        data-url="@Url.Action("Form", "Item", new { itemID = item.UniqueName.Replace("/", "|") })"></button>
+                - MR <span display-for="@item.MasteryReq"></span>
+            </div>
+        }
+    }
+}

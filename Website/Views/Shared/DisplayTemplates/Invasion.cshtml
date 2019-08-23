@@ -10,11 +10,11 @@
 @if (Model != null) {
     <div class="row mb-3">
         <div class="col-12">
-            @Html.DisplayFor(x => x.SolNode.Name) <small class="text-muted">@Html.DisplayFor(x => x.ActivateDateUtc)</small>
+            <span display-for="SolNode.Name"></span> <small display-for="ActivateDateUtc" class="text-muted"></small>
         </div>
         <div class="col-md-6">
-            @Html.DisplayFor(x => x.AttackerFaction) -
-            @Html.DisplayFor(x => x.AttackerRewardItems)
+            <span display-for="AttackerFaction"></span> -
+            <span display-for="AttackerRewardItems"></span>
         </div>
         <div class="col-12 order-md-last">
             <div class="progress" style="border-radius:0;height:12px;">
@@ -23,8 +23,8 @@
             </div>
         </div>
         <div class="col-md-6 text-right">
-            @Html.DisplayFor(x => x.DefenderRewardItems) -
-            @Html.DisplayFor(x => x.DefenderFaction)
+            <span display-for="DefenderRewardItems"></span> -
+            <span display-for="DefenderFaction"></span>
         </div>
     </div>
 }

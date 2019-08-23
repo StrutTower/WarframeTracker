@@ -1,0 +1,29 @@
+﻿@model SearchViewModel
+@{
+    ViewData["Title"] = "Search";
+}
+
+<div asp-validation-summary="All"></div>
+
+<form asp-action="Results" method="get" class="row">
+    <div class="col-md-6">
+        @Html.FormGroupEditorFor(x => x.AdvancedSearchModel.Name)
+
+        @Html.FormGroupEditorFor(x => x.AdvancedSearchModel.MasteryRequirement)
+
+        <div class="form-group">
+            <label twr-for="AdvancedSearchModel.CodexSection"></label>
+            <select asp-for="AdvancedSearchModel.CodexSection" asp-items="Model.CodexSectionSelectList" class="twr-input">
+                <option></option>
+            </select>
+            <help-text twr-for="AdvancedSearchModel.CodexSection"></help-text>
+            <span asp-validation-for="AdvancedSearchModel.CodexSection"></span>
+        </div>
+
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Search</button>
+        </div>
+    </div>
+</form>
+
+<partial name="_ItemModal" />

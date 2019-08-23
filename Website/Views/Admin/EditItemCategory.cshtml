@@ -12,10 +12,10 @@
 <h3>@ViewBag.Title</h3>
 <hr />
 
+<div asp-validation-summary="All"></div>
+
 <form action="" method="post" class="row">
     <div class="col-md-6">
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-
         @if (editing) {
             @Html.HiddenFor(x => x.ItemCategory.ID)
         }
@@ -23,10 +23,12 @@
         @Html.FormGroupEditorFor(x => x.ItemCategory.Name)
 
         <div class="form-group">
-            @Html.LabelFor(x => x.ItemCategory.CodexTabID)
-            @Html.DropDownListFor(x => x.ItemCategory.CodexTabID, Model.CodexTabSelectList, "", new { @class = "form-control"})
-            @Html.HelpTextFor(x => x.ItemCategory.CodexTabID)
-            @Html.ValidationMessageFor(x => x.ItemCategory.CodexTabID)
+            <label twr-for="ItemCategory.CodexTabID"></label>
+            <select asp-for="ItemCategory.CodexTabID" asp-items="Model.CodexTabSelectList" class="twr-input">
+                <option></option>
+            </select>
+            <help-text twr-for="ItemCategory.CodexTabID"></help-text>
+            <span asp-validation-for="ItemCategory.CodexTabID"></span>
         </div>
 
         @Html.FormGroupEditorFor(x => x.ItemCategory.WarframeApiCategoryName)

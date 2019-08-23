@@ -7,8 +7,6 @@
 
 @foreach(CodexSection codexSection in Enum.GetValues(typeof(CodexSection))) {
     <p>
-        <a asp-action="View" asp-route-id="@codexSection">
-            @codexSection.ToString()
-        </a>
+        <a display-for="@codexSection" asp-action="View" asp-route-id="@codexSection"></a>
     </p>
 }

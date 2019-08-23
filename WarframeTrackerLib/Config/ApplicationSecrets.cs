@@ -10,6 +10,8 @@ namespace WarframeTrackerLib.Config {
         
         public string DefaultPushbulletDeviceIden { get; set; }
 
+        public string InvasionRewardChannel { get; set; }
+
         public static ApplicationSecrets Get() {
             FileInfo fi = new FileInfo(Assembly.GetEntryAssembly().Location);
             
