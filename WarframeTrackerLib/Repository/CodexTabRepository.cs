@@ -6,7 +6,7 @@ using WarframeTrackerLib.Domain;
 
 namespace WarframeTrackerLib.Repository {
     public class CodexTabRepository : Repository<CodexTab> {
-        public CodexTabRepository(IUnitOfWork unitOfWork) : base(unitOfWork) { }
+        public CodexTabRepository(UnitOfWork unitOfWork) : base(unitOfWork.DbAdapter) { }
 
         public CodexTab GetByID(int id) {
             return GetSingleEntity(new WhereCondition("ID", id));

@@ -9,7 +9,7 @@ using WarframeTrackerLib.Utilities;
 
 namespace WarframeTrackerLib.Repository {
     public class ItemCacheRepository : Repository<ItemCache> {
-        public ItemCacheRepository(IUnitOfWork unitOfWork) : base(unitOfWork) { }
+        public ItemCacheRepository(UnitOfWork unitOfWork) : base(unitOfWork.DbAdapter) { }
 
         public ItemCache GetByUniqueName(string uniqueName) {
             return GetSingleEntity(new WhereCondition("UniqueName", uniqueName));
@@ -40,7 +40,7 @@ namespace WarframeTrackerLib.Repository {
         public List<ItemCache> GetByCodexSection(CodexSection codexSection) {
             QueryBuilder query = GetQueryBuilder();
             query.SqlQuery += "" +
-                "INNER JOIN itemcategory ic ON " + Mappings.TableName + ".ItemCategoryID = ic.ID " +
+                "INNER JOIN itemcategory ic ON " + TableName + ".ItemCategoryID = ic.ID " +
                 "INNER JOIN codextab ct ON ic.CodexTabID = ct.ID " +
                 "WHERE ct.CodexSectionID = @CodexSection ";
             query.AddParameter("@CodexSection", codexSection);
@@ -52,19 +52,19 @@ namespace WarframeTrackerLib.Repository {
         }
 
         public void RemoveAll() {
-            string query = "DELETE FROM " + Mappings.TableName;
+            string query = "DELETE FROM " + TableName;
             GetDbConnection().Execute(query);
         }
 
         public List<ItemCache> AdvancedSearch(AdvancedSearchModel model) {
             QueryBuilder query = GetQueryBuilder();
             query.SqlQuery += "" +
-                $"INNER JOIN itemcategory ic ON {Mappings.TableName}.ItemCategoryID = ic.ID " +
+                $"INNER JOIN itemcategory ic ON {TableName}.ItemCategoryID = ic.ID " +
                 $"INNER JOIN codextab ct ON ct.ID = ic.CodexTabID ";
 
             List<string> whereConditions = new List<string>();
             if (!string.IsNullOrWhiteSpace(model.Name)) {
-                whereConditions.Add(Mappings.TableName + ".Name LIKE @Name");
+                whereConditions.Add(TableName + ".Name LIKE @Name");
                 query.AddParameter("@Name", $"%{model.Name}%");
             }
 

@@ -15,9 +15,9 @@ namespace WarframeTrackerLib.WarframeApi {
         private readonly string _allItemsUrl =
             "https://raw.githubusercontent.com/WFCD/warframe-items/development/data/json/All.json";
 
-        IUnitOfWork _unitOfWork;
+        UnitOfWork _unitOfWork;
 
-        public WarframeItemUtilities(IUnitOfWork uow) {
+        public WarframeItemUtilities(UnitOfWork uow) {
             _unitOfWork = uow;
         }
 
@@ -94,7 +94,7 @@ namespace WarframeTrackerLib.WarframeApi {
         #endregion
 
         public List<ItemCache> RedownloadCache() {
-            using (IUnitOfWork uow = new UnitOfWorkFactory().UnitOfWork) {
+            using (UnitOfWork uow = UnitOfWork.CreateNew()) {
                 uow.BeginTransaction();
                 try {
                     List<ManualItemData> manualItemData = new ManualItemDataRepository(uow).GetAll();

@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
-using System.Threading.Tasks;
-using TowerSoft.Repository;
 using WarframeTrackerLib.Domain;
 using WarframeTrackerLib.Repository;
 using WarframeTrackerLib.WarframeApi;
@@ -19,7 +17,7 @@ namespace Website.ViewModels {
         public List<ComponentAcquisition> ComponentAcquisitions { get; set; }
 
 
-        public ItemModalViewModel Load(WarframeItem warframeItem, ItemCategory itemCategory, ClaimsPrincipal user, IUnitOfWork uow) {
+        public ItemModalViewModel Load(WarframeItem warframeItem, ItemCategory itemCategory, ClaimsPrincipal user, UnitOfWork uow) {
             WarframeItem = warframeItem;
             ItemCategory = itemCategory;
 

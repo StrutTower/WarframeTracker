@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
-using System.Threading.Tasks;
-using TowerSoft.Repository;
 using WarframeTrackerLib.Repository;
 using WarframeTrackerLib.WarframeApi;
 
@@ -26,7 +24,7 @@ namespace Website.ViewModels {
         public PrimePredictionViewModel Load(ClaimsPrincipal user) {
             int userID = int.Parse(user.FindFirstValue(ClaimTypes.NameIdentifier));
             List<WarframeItem> frames;
-            using (IUnitOfWork uow = new UnitOfWorkFactory().UnitOfWork) {
+            using (UnitOfWork uow = UnitOfWork.CreateNew()) {
                 frames = new WarframeItemUtilities(uow).GetByCategoryID(userID);
             }
 

@@ -4,7 +4,6 @@ using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using TowerSoft.Repository;
 using WarframeTrackerLib.Domain;
 using WarframeTrackerLib.Repository;
 using WarframeTrackerLib.Utilities;
@@ -29,7 +28,7 @@ namespace Website.Controllers {
 
         public ActionResult Form(string itemID) {
             itemID = itemID.Replace("|", "/");
-            using (IUnitOfWork uow = new UnitOfWorkFactory().UnitOfWork) {
+            using (UnitOfWork uow = UnitOfWork.CreateNew()) {
                 WarframeItem item = new WarframeItemUtilities(uow).GetByUniqueName(itemID);
                 ItemCategory itemCategory = new ItemCategoryRepository(uow).GetByID(item.ItemCategoryID);
                 new EagerLoader(uow).Load(itemCategory);
@@ -47,7 +46,7 @@ namespace Website.Controllers {
             [Bind(Prefix = "ComponentAcquisitions")]List<ComponentAcquisition> compModel) {
 
             if (ModelState.IsValid) {
-                using (IUnitOfWork uow = new UnitOfWorkFactory().UnitOfWork) {
+                using (UnitOfWork uow = UnitOfWork.CreateNew()) {
                     User user = new UserRepository(uow).GetByUsername(User.Identity.Name);
                     model.UserID = user.ID;
 

@@ -2,8 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using TowerSoft.Repository;
 using WarframeTrackerLib.Domain;
 using WarframeTrackerLib.Repository;
 
@@ -15,7 +13,7 @@ namespace Website.ViewModels {
         public SelectList CodexTabSelectList { get; set; }
 
 
-        public EditItemCategoryViewModel(IUnitOfWork uow, ItemCategory itemCategory) {
+        public EditItemCategoryViewModel(UnitOfWork uow, ItemCategory itemCategory) {
             ItemCategory = itemCategory;
 
             List<CodexTab> codexTabs = new CodexTabRepository(uow).GetAll();

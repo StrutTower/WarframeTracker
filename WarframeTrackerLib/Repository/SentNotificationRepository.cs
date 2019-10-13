@@ -5,7 +5,7 @@ using WarframeTrackerLib.Domain;
 
 namespace WarframeTrackerLib.Repository {
     public class SentNotificationRepository : Repository<SentNotification> {
-        public SentNotificationRepository(IUnitOfWork uow) : base(uow) { }
+        public SentNotificationRepository(UnitOfWork uow) : base(uow.DbAdapter) { }
 
         public SentNotification GetByID(int id) {
             return GetSingleEntity(new WhereCondition("ID", id));

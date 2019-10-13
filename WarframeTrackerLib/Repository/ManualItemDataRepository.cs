@@ -6,7 +6,7 @@ using WarframeTrackerLib.Domain;
 
 namespace WarframeTrackerLib.Repository {
     public class ManualItemDataRepository : Repository<ManualItemData> {
-        public ManualItemDataRepository(IUnitOfWork uow) : base(uow) { }
+        public ManualItemDataRepository(UnitOfWork uow) : base(uow.DbAdapter) { }
 
         public ManualItemData GetByID(int id) {
             return GetSingleEntity(new WhereCondition("ID", id));

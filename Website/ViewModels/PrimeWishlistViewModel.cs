@@ -3,8 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
-using System.Threading.Tasks;
-using TowerSoft.Repository;
 using WarframeTrackerLib.Domain;
 using WarframeTrackerLib.Repository;
 using WarframeTrackerLib.WarframeApi;
@@ -27,7 +25,7 @@ namespace Website.ViewModels {
                 userID = int.Parse(user.FindFirstValue(ClaimTypes.NameIdentifier));
             }
 
-            using (IUnitOfWork uow = new UnitOfWorkFactory().UnitOfWork) {
+            using (UnitOfWork uow = UnitOfWork.CreateNew()) {
                 List<WarframeItem> allItems = new WarframeItemUtilities(uow).GetAll();
                 List<WarframeItem> primes = allItems.Where(x => x.IsPrime).ToList();
 

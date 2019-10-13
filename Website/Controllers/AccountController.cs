@@ -6,7 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using TowerSoft.Repository;
 using WarframeTrackerLib.Domain;
 using WarframeTrackerLib.Repository;
 using WarframeTrackerLib.Utilities;
@@ -42,7 +41,7 @@ namespace Website.Controllers {
         public async Task<IActionResult> Login(LoginViewModel model) {
             if (ModelState.IsValid) {
                 User user;
-                using (IUnitOfWork uow = new UnitOfWorkFactory().UnitOfWork) {
+                using (UnitOfWork uow = UnitOfWork.CreateNew()) {
                     user = new UserRepository(uow).GetByUsername(model.UserName);
                 }
 

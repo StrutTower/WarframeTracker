@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using TowerSoft.Repository;
 using WarframeTrackerLib.Domain;
 using WarframeTrackerLib.Repository;
 using WarframeTrackerLib.Utilities;
@@ -16,7 +13,7 @@ namespace Website.ViewModels {
 
 
         public SearchResultsViewModel Load(AdvancedSearchModel model) {
-            using (IUnitOfWork uow = new UnitOfWorkFactory().UnitOfWork) {
+            using (UnitOfWork uow = UnitOfWork.CreateNew()) {
                 WarframeItems = new WarframeItemUtilities(uow).AdvancedSearch(model);
                 CodexTabs = new CodexTabRepository(uow).GetAll();
                 new EagerLoader(uow).Load(CodexTabs);

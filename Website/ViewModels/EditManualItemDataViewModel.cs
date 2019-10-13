@@ -3,9 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
-using TowerSoft.Repository;
 using WarframeTrackerLib.Domain;
+using WarframeTrackerLib.Repository;
 using WarframeTrackerLib.WarframeApi;
 
 namespace Website.ViewModels {
@@ -16,7 +15,7 @@ namespace Website.ViewModels {
 
         public List<string> PropertyNames { get; set; }
 
-        public EditManualItemDataViewModel Load(ManualItemData manualItemData, IUnitOfWork uow) {
+        public EditManualItemDataViewModel Load(ManualItemData manualItemData, UnitOfWork uow) {
             ManualItemData = manualItemData;
             if (ManualItemData == null) ManualItemData = new ManualItemData();
 

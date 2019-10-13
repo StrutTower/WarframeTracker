@@ -3,7 +3,7 @@ using WarframeTrackerLib.Domain;
 
 namespace WarframeTrackerLib.Repository {
     public class InvasionRewardRepository : Repository<InvasionReward> {
-        public InvasionRewardRepository(IUnitOfWork uow) : base(uow) { }
+        public InvasionRewardRepository(UnitOfWork uow) : base(uow.DbAdapter) { }
 
         public InvasionReward GetByID(int id) {
             return GetSingleEntity(new WhereCondition("ID", id));

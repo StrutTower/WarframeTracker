@@ -2,9 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using TowerSoft.Repository;
 using WarframeTrackerLib.Domain;
+using WarframeTrackerLib.Repository;
 using WarframeTrackerLib.WarframeApi;
 
 namespace Website.ViewModels {
@@ -13,7 +12,7 @@ namespace Website.ViewModels {
 
         public SelectList PrimeSelectList { get; set; }
 
-        public EditPrimeReleaseViewModel Load(IUnitOfWork uow, PrimeRelease pr) {
+        public EditPrimeReleaseViewModel Load(UnitOfWork uow, PrimeRelease pr) {
             PrimeRelease = pr;
             if (pr != null)
                 pr.LoadItemNames(uow);

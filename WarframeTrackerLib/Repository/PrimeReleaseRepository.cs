@@ -6,7 +6,7 @@ using WarframeTrackerLib.Domain;
 
 namespace WarframeTrackerLib.Repository {
     public class PrimeReleaseRepository : Repository<PrimeRelease> {
-        public PrimeReleaseRepository(IUnitOfWork uow) : base(uow) { }
+        public PrimeReleaseRepository(UnitOfWork uow) : base(uow.DbAdapter) { }
 
         public PrimeRelease GetByID(int id) {
             return GetSingleEntity(WhereEqual(x => x.ID, id));

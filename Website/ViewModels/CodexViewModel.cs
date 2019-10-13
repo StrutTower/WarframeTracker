@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
-using TowerSoft.Repository;
 using WarframeTrackerLib.Domain;
 using WarframeTrackerLib.Repository;
 using WarframeTrackerLib.Utilities;
@@ -30,7 +29,7 @@ namespace Website.ViewModels {
                 userID = int.Parse(user.FindFirstValue(ClaimTypes.NameIdentifier));
             }
 
-            using (IUnitOfWork uow = new UnitOfWorkFactory().UnitOfWork) {
+            using (UnitOfWork uow = UnitOfWork.CreateNew()) {
                 CodexTabs = new CodexTabRepository(uow).GetByCodexSection(codexSection)
                     .OrderBy(x => x.SortingPriority).ThenBy(x => x.Name).ToList();
 
@@ -58,7 +57,7 @@ namespace Website.ViewModels {
                 userID = int.Parse(user.FindFirstValue(ClaimTypes.NameIdentifier));
             }
 
-            using (IUnitOfWork uow = new UnitOfWorkFactory().UnitOfWork) {
+            using (UnitOfWork uow = UnitOfWork.CreateNew()) {
                 CodexTabs = new CodexTabRepository(uow).GetByCodexSection(codexSection)
                     .OrderBy(x => x.SortingPriority).ThenBy(x => x.Name).ToList();
 

@@ -12,7 +12,7 @@ namespace WarframeTrackerCron.Tasks {
     public class StoreInvasionRewardData : IAppTask {
         public void StartTask() {
             WorldState worldState = new WorldStateUtilities().GetWorldState();
-            using (IUnitOfWork uow = new UnitOfWorkFactory().UnitOfWork) {
+            using (UnitOfWork uow = UnitOfWork.CreateNew()) {
                 uow.BeginTransaction();
                 try {
                     TrackedDataRepository tdRepo = new TrackedDataRepository(uow);

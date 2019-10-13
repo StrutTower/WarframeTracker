@@ -19,7 +19,7 @@ namespace WarframeTrackerCron.Tasks {
             WorldState worldState = worldStateUtilities.GetWorldState();
             var solNodes = worldStateUtilities.GetSolNodeDictionary();
 
-            using (IUnitOfWork uow = new UnitOfWorkFactory().UnitOfWork) {
+            using (UnitOfWork uow = UnitOfWork.CreateNew()) {
                 SentNotificationRepository sentNotificationRepo = new SentNotificationRepository(uow);
                 InvasionRewardRepository invasionRewardRepo = new InvasionRewardRepository(uow);
                 List<SentNotification> sentNotifications = sentNotificationRepo.GetByType(TypeName);

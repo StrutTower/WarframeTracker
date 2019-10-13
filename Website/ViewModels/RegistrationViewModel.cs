@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
-using TowerSoft.Repository;
 using WarframeTrackerLib.Domain;
 using WarframeTrackerLib.Repository;
 
@@ -23,7 +20,7 @@ namespace Website.ViewModels {
                 yield return new ValidationResult("Passwords do not match", new[] { "Password", "ConfirmPassword" });
             }
 
-            using (IUnitOfWork uow = new UnitOfWorkFactory().UnitOfWork) {
+            using (UnitOfWork uow = UnitOfWork.CreateNew()) {
                 UserRepository repo = new UserRepository(uow);
                 User user = repo.GetByUsername(Username);
 

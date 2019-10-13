@@ -4,7 +4,7 @@ using WarframeTrackerLib.Domain;
 
 namespace WarframeTrackerLib.Repository {
     public class UserRepository : Repository<User> {
-        public UserRepository(IUnitOfWork uow) : base(uow) { }
+        public UserRepository(UnitOfWork uow) : base(uow.DbAdapter) { }
 
         public User GetByID(int id) {
             return GetSingleEntity(new WhereCondition("ID", id));

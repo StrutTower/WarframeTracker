@@ -2,9 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
-using TowerSoft.Repository;
 using WarframeTrackerLib.Domain;
 using WarframeTrackerLib.Repository;
 using WarframeTrackerLib.Utilities;
@@ -26,7 +23,7 @@ namespace Website.ViewModels {
             CodexSectionSelectList = new SelectList(codexSections, "Key", "Value");
 
             List<ItemCategory> itemCategories;
-            using (IUnitOfWork uow = new UnitOfWorkFactory().UnitOfWork) {
+            using (UnitOfWork uow = UnitOfWork.CreateNew()) {
                 itemCategories = new ItemCategoryRepository(uow).GetAll();
             }
             ItemCategorySelectList = new SelectList(itemCategories, "ID", "Name");

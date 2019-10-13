@@ -7,7 +7,7 @@ using WarframeTrackerLib.Domain;
 
 namespace WarframeTrackerLib.Repository {
     public class ComponentAcquisitionRepository : Repository<ComponentAcquisition> {
-        public ComponentAcquisitionRepository(IUnitOfWork unitOfWork) : base(unitOfWork) { }
+        public ComponentAcquisitionRepository(UnitOfWork unitOfWork) : base(unitOfWork.DbAdapter) { }
 
         public ComponentAcquisition GetByPrimaryKeys(int userID, string componentUniqueName, string itemUniqueName) {
             return GetSingleEntity(new[] {

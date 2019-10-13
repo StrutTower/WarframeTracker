@@ -8,9 +8,9 @@ using WarframeTrackerLib.WarframeApi;
 
 namespace WarframeTrackerLib.Utilities {
     public class EagerLoader {
-        IUnitOfWork _uow;
+        UnitOfWork _uow;
 
-        public EagerLoader(IUnitOfWork uow) {
+        public EagerLoader(UnitOfWork uow) {
             _uow = uow;
         }
 

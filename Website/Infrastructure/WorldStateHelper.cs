@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using TowerSoft.Repository;
 using WarframeTrackerLib.Domain;
 using WarframeTrackerLib.Repository;
 using WarframeTrackerLib.Utilities;
@@ -21,7 +20,7 @@ namespace Website.Infrastructure {
         }
 
 
-        public List<Invasion> GetInvasions(IUnitOfWork unitOfwork, WorldState worldState) {
+        public List<Invasion> GetInvasions(UnitOfWork unitOfwork, WorldState worldState) {
             List<Invasion> importantInavsions = new List<Invasion>();
             List<InvasionReward> invasionRewardNames = new InvasionRewardRepository(unitOfwork).GetAll();
 
@@ -53,7 +52,7 @@ namespace Website.Infrastructure {
             return importantInavsions;
         }
 
-        public List<ActiveMission> GetVoidAndOrokinCellMissions(IUnitOfWork unitOfWork, WorldState worldState) {
+        public List<ActiveMission> GetVoidAndOrokinCellMissions(UnitOfWork unitOfWork, WorldState worldState) {
             List<ActiveMission> output = new List<ActiveMission>();
 
             foreach (ActiveMission mission in worldState.ActiveMissions) {

@@ -2,8 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using TowerSoft.Repository;
 using WarframeTrackerLib.Domain;
 using WarframeTrackerLib.Repository;
 
@@ -20,7 +18,7 @@ namespace Website.ViewModels {
 
             List<string> datas;
             List<string> existing;
-            using (IUnitOfWork uow = new UnitOfWorkFactory().UnitOfWork) {
+            using (UnitOfWork uow = UnitOfWork.CreateNew()) {
                 datas = new TrackedDataRepository(uow).GetGroupedByType("InvasionRewards").Select(x => x.Data).ToList();
                 existing = new InvasionRewardRepository(uow).GetAll().Select(x => x.UniqueName).ToList();
             }

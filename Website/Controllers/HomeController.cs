@@ -2,10 +2,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using TowerSoft.Repository;
 using WarframeTrackerLib.Domain;
 using WarframeTrackerLib.Repository;
-using WarframeTrackerLib.Utilities;
 using Website.Infrastructure;
 using Website.ViewModels;
 
@@ -23,7 +21,7 @@ namespace Website.Controllers {
         [Authorize, HttpGet]
         public ActionResult UpdateStarchartCompletion() {
             int userID = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
-            using (IUnitOfWork uow = new UnitOfWorkFactory().UnitOfWork) {
+            using (UnitOfWork uow = UnitOfWork.CreateNew()) {
                 UserData userData = new UserDataRepository(uow).GetByUserID(userID);
                 return View(userData);
             }
@@ -32,7 +30,7 @@ namespace Website.Controllers {
         [Authorize, HttpPost]
         public ActionResult UpdateStarchartCompletion(UserData model) {
             if (ModelState.IsValid) {
-                using (IUnitOfWork uow = new UnitOfWorkFactory().UnitOfWork) {
+                using (UnitOfWork uow = UnitOfWork.CreateNew()) {
                     int userID = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
                     UserDataRepository repo = new UserDataRepository(uow);
                     UserData userData = repo.GetByUserID(userID);

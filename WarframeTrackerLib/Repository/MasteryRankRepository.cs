@@ -6,7 +6,7 @@ using WarframeTrackerLib.Domain;
 
 namespace WarframeTrackerLib.Repository {
     public class MasteryRankRepository : Repository<MasteryRank> {
-        public MasteryRankRepository(IUnitOfWork uow) : base(uow) { }
+        public MasteryRankRepository(UnitOfWork uow) : base(uow.DbAdapter) { }
 
         public MasteryRank GetByID(int id) {
             //return GetSingleEntity(new WhereCondition("ID", id));

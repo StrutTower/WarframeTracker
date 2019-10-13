@@ -2,10 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
-using TowerSoft.Repository;
-using WarframeTrackerLib.Domain;
 using WarframeTrackerLib.Repository;
-using WarframeTrackerLib.WarframeApi;
 using WarframeTrackerLib.WarframeApi.WorldState;
 using Website.Infrastructure;
 
@@ -23,7 +20,7 @@ namespace Website.ViewModels {
             //int userID = int.Parse(user.FindFirstValue(ClaimTypes.NameIdentifier));
             WorldState = new WorldStateUtilities().GetWorldState();
 
-            using (IUnitOfWork uow = new UnitOfWorkFactory().UnitOfWork) {
+            using (UnitOfWork uow = UnitOfWork.CreateNew()) {
 
                 WorldStateHelper worldStateHelper = new WorldStateHelper();
 

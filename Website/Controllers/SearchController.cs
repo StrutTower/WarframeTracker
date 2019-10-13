@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using TowerSoft.Repository;
 using WarframeTrackerLib.Repository;
 using WarframeTrackerLib.WarframeApi;
 using Website.Infrastructure;
@@ -24,7 +23,7 @@ namespace Website.Controllers {
 
         public ActionResult Basic(string q) {
             List<WarframeItem> items;
-            using (IUnitOfWork uow = new UnitOfWorkFactory().UnitOfWork) {
+            using (UnitOfWork uow = UnitOfWork.CreateNew()) {
                 items = new WarframeItemUtilities(uow).GetAll();
             }
             var items2 = items.Where(x => x.Name.ToLower().Contains(q.ToLower())).ToList();
@@ -34,7 +33,7 @@ namespace Website.Controllers {
         public ActionResult WarframeItemsAjax(string q, int? page = null) {
             int itemsPerPage = 15;
             List<WarframeItem> items;
-            using (IUnitOfWork uow = new UnitOfWorkFactory().UnitOfWork) {
+            using (UnitOfWork uow = UnitOfWork.CreateNew()) {
                 items = new WarframeItemUtilities(uow).Search(q).OrderBy(x => x.Name).ToList();
             }
             bool moreResults = false;

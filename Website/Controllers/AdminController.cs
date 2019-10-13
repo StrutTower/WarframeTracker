@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
-using TowerSoft.Repository;
 using WarframeTrackerLib.Domain;
 using WarframeTrackerLib.Repository;
 using WarframeTrackerLib.Utilities;
@@ -16,7 +15,7 @@ namespace Website.Controllers {
         }
 
         public ActionResult RedownloadCache() {
-            using (IUnitOfWork uow = new UnitOfWorkFactory().UnitOfWork) {
+            using (UnitOfWork uow = UnitOfWork.CreateNew()) {
                 new WarframeItemUtilities(uow).RedownloadCache();
             }
             TempData["message"] = "Image Cache Redownloaded.";
@@ -26,7 +25,7 @@ namespace Website.Controllers {
         #region CodexTabs
         public ActionResult ManageCodexTabs() {
             List<CodexTab> tabs;
-            using (IUnitOfWork uow = new UnitOfWorkFactory().UnitOfWork) {
+            using (UnitOfWork uow = UnitOfWork.CreateNew()) {
                 tabs = new CodexTabRepository(uow).GetAll();
             }
             return View(tabs);
@@ -36,7 +35,7 @@ namespace Website.Controllers {
         public ActionResult EditCodexTab(int? id = null) {
             if (id.HasValue) {
                 CodexTab tab;
-                using (IUnitOfWork uow = new UnitOfWorkFactory().UnitOfWork) {
+                using (UnitOfWork uow = UnitOfWork.CreateNew()) {
                     tab = new CodexTabRepository(uow).GetByID(id.Value);
                 }
                 return View(tab);
@@ -47,7 +46,7 @@ namespace Website.Controllers {
         [HttpPost]
         public ActionResult EditCodexTab(CodexTab model) {
             if (ModelState.IsValid) {
-                using (IUnitOfWork uow = new UnitOfWorkFactory().UnitOfWork) {
+                using (UnitOfWork uow = UnitOfWork.CreateNew()) {
                     CodexTabRepository repo = new CodexTabRepository(uow);
                     if (model.ID == 0) {
                         repo.Add(model);
@@ -66,7 +65,7 @@ namespace Website.Controllers {
         #region ItemCategories
         public ActionResult ManageItemCategories() {
             List<ItemCategory> categories;
-            using (IUnitOfWork uow = new UnitOfWorkFactory().UnitOfWork) {
+            using (UnitOfWork uow = UnitOfWork.CreateNew()) {
                 categories = new ItemCategoryRepository(uow).GetAll();
                 new EagerLoader(uow).Load(categories);
             }
@@ -76,7 +75,7 @@ namespace Website.Controllers {
         [HttpGet]
         public ActionResult EditItemCategory(int? id = null) {
             EditItemCategoryViewModel viewmodel;
-            using (IUnitOfWork uow = new UnitOfWorkFactory().UnitOfWork) {
+            using (UnitOfWork uow = UnitOfWork.CreateNew()) {
                 if (id.HasValue) {
                     ItemCategory cat;
                     cat = new ItemCategoryRepository(uow).GetByID(id.Value);
@@ -91,7 +90,7 @@ namespace Website.Controllers {
         [HttpPost]
         public ActionResult EditItemCategory([Bind(Prefix = "ItemCategory")]ItemCategory model) {
             EditItemCategoryViewModel viewmodel;
-            using (IUnitOfWork uow = new UnitOfWorkFactory().UnitOfWork) {
+            using (UnitOfWork uow = UnitOfWork.CreateNew()) {
                 if (ModelState.IsValid) {
                     ItemCategoryRepository repo = new ItemCategoryRepository(uow);
                     if (model.ID == 0) {
@@ -112,7 +111,7 @@ namespace Website.Controllers {
         #region ManualItemData
         public ActionResult ManageManualItemData() {
             List<ManualItemData> data;
-            using (IUnitOfWork uow = new UnitOfWorkFactory().UnitOfWork) {
+            using (UnitOfWork uow = UnitOfWork.CreateNew()) {
                 data = new ManualItemDataRepository(uow).GetAll();
             }
             return View(data);
@@ -120,7 +119,7 @@ namespace Website.Controllers {
 
         [HttpGet]
         public ActionResult EditManualItemData(int? id = null, bool addAnother = false) {
-            using (IUnitOfWork uow = new UnitOfWorkFactory().UnitOfWork) {
+            using (UnitOfWork uow = UnitOfWork.CreateNew()) {
                 if (id.HasValue) {
                     ManualItemData data = new ManualItemDataRepository(uow).GetByID(id.Value);
                     return View(new EditManualItemDataViewModel().Load(data, uow));
@@ -131,7 +130,7 @@ namespace Website.Controllers {
 
         [HttpPost]
         public ActionResult EditManualItemData([Bind(Prefix = "ManualItemData")]ManualItemData model, bool addAnother) {
-            using (IUnitOfWork uow = new UnitOfWorkFactory().UnitOfWork) {
+            using (UnitOfWork uow = UnitOfWork.CreateNew()) {
                 if (ModelState.IsValid) {
                     ManualItemDataRepository repo = new ManualItemDataRepository(uow);
                     if (model.ID == 0) {
@@ -152,7 +151,7 @@ namespace Website.Controllers {
         #region InvasionRewards
         public ActionResult ManageInvasionRewards() {
             List<InvasionReward> rewards;
-            using (IUnitOfWork uow = new UnitOfWorkFactory().UnitOfWork) {
+            using (UnitOfWork uow = UnitOfWork.CreateNew()) {
                 rewards = new InvasionRewardRepository(uow).GetAll();
             }
             return View(rewards);
@@ -162,7 +161,7 @@ namespace Website.Controllers {
         public ActionResult EditInvasionReward(int? id = null) {
             InvasionReward reward = null;
             if (id.HasValue) {
-                using (IUnitOfWork uow = new UnitOfWorkFactory().UnitOfWork) {
+                using (UnitOfWork uow = UnitOfWork.CreateNew()) {
                     reward = new InvasionRewardRepository(uow).GetByID(id.Value);
                 }
             }
@@ -172,7 +171,7 @@ namespace Website.Controllers {
         [HttpPost]
         public ActionResult EditInvasionReward([Bind(Prefix = "InvasionReward")]InvasionReward model) {
             if (ModelState.IsValid) {
-                using (IUnitOfWork uow = new UnitOfWorkFactory().UnitOfWork) {
+                using (UnitOfWork uow = UnitOfWork.CreateNew()) {
                     InvasionRewardRepository repo = new InvasionRewardRepository(uow);
                     if (model.ID == 0) {
                         repo.Add(model);
@@ -191,7 +190,7 @@ namespace Website.Controllers {
         #region PrimeReleases
         public IActionResult ManagePrimeReleases() {
             List<PrimeRelease> primeReleases;
-            using (IUnitOfWork uow = new UnitOfWorkFactory().UnitOfWork) {
+            using (UnitOfWork uow = UnitOfWork.CreateNew()) {
                 primeReleases = new PrimeReleaseRepository(uow).GetAll();
                 primeReleases.ForEach(x => x.LoadItemNames(uow));
             }
@@ -200,7 +199,7 @@ namespace Website.Controllers {
 
         [HttpGet]
         public IActionResult EditPrimeRelease(int? id = null) {
-            using (IUnitOfWork uow = new UnitOfWorkFactory().UnitOfWork) {
+            using (UnitOfWork uow = UnitOfWork.CreateNew()) {
                 if (id.HasValue) {
                     PrimeRelease pr = new PrimeReleaseRepository(uow).GetByID(id.Value);
                     return View(new EditPrimeReleaseViewModel().Load(uow, pr));
@@ -211,7 +210,7 @@ namespace Website.Controllers {
 
         [HttpPost, ValidateAntiForgeryToken]
         public IActionResult EditPrimeRelease([Bind(Prefix = "PrimeRelease")]PrimeRelease model) {
-            using (IUnitOfWork uow = new UnitOfWorkFactory().UnitOfWork) {
+            using (UnitOfWork uow = UnitOfWork.CreateNew()) {
                 if (ModelState.IsValid) {
                     PrimeReleaseRepository repo = new PrimeReleaseRepository(uow);
                     if (model.ID == 0) {
