@@ -12,7 +12,7 @@
         @Html.FormGroupEditorFor(x => x.AdvancedSearchModel.MasteryRequirement)
 
         <div class="form-group">
-            <label twr-for="AdvancedSearchModel.CodexSection"></label>
+            <label asp-for="AdvancedSearchModel.CodexSection" class="twr-label"></label>
             <select asp-for="AdvancedSearchModel.CodexSection" asp-items="Model.CodexSectionSelectList" class="twr-input">
                 <option></option>
             </select>

@@ -1,11 +1,5 @@
 ﻿$(document).ready(function () {
-    // Add antiforgery to any forms with method post
-    var antiforgery = $('input[name=__RequestVerificationToken]');
-    $('form[method="post"]').each(function () {
-        $(this).append(antiforgery.clone());
-    });
-
-    $('[data-toggle="tooltip"]').tooltip()
+    $('[data-toggle="tooltip"]').tooltip();
 
     // Focus an input with autofocus when opening a modal
     $('.modal').on('shown.bs.modal', function () {

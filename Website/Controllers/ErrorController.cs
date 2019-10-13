@@ -27,7 +27,9 @@ namespace Website.Controllers {
                 case 403:
                     return View("Forbidden");
                 case 404:
-                    return View("404", feature?.OriginalPath);
+                    return View("NotFound", feature?.OriginalPath);
+                default:
+                    return View("Index");
             }
             throw new NotSupportedException();
         }

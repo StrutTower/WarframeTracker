@@ -12,7 +12,8 @@
     "lobibox": "~1.2.7",
     "popper.js": "~1.15.0",
     "select2": "~4.0.7",
-    "dark-bootstrap-theme": "https://github.com/StrutTower/dark-bootstrap-theme.git"
+    "inputmask": "4.0.8",
+    "dark-bootstrap-theme": "4.0.0"
   },
   "devDependencies": {
     "gulp": "~4.0.2",

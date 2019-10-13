@@ -5,7 +5,6 @@ using Website.Infrastructure;
 using Website.ViewModels;
 
 namespace Website.Controllers {
-    [Authorize]
     public class CodexController : CustomController {
         public ActionResult Index() {
             return View();

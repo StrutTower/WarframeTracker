@@ -33,8 +33,8 @@
                 hideSelector = '.codex-item-container[data-acquired="False"]';
                 break;
             case 'showNotAcquired':
-                showSelector = '.codex-item-container[data-mastered="False"]';
-                hideSelector = '.codex-item-container[data-mastered="True"]';
+                showSelector = '.codex-item-container[data-acquired="False"]';
+                hideSelector = '.codex-item-container[data-acquired="True"]';
                 break;
             case 'showVaulted':
                 showSelector = '.codex-item-container[data-vaulted="True"]';

@@ -21,12 +21,11 @@ namespace Website.Infrastructure {
         }
 
 
-        public List<Invasion> GetImportantInvasion(IUnitOfWork unitOfwork, WorldState worldState) {
+        public List<Invasion> GetInvasions(IUnitOfWork unitOfwork, WorldState worldState) {
             List<Invasion> importantInavsions = new List<Invasion>();
             List<InvasionReward> invasionRewardNames = new InvasionRewardRepository(unitOfwork).GetAll();
 
             foreach (Invasion invasion in worldState.Invasions.Where(x => !x.Completed)) {
-                bool important = false;
                 List<InvasionRewardItem> items = new List<InvasionRewardItem>();
                 if (invasion.AttackerRewardItems.SafeAny())
                     items.AddRange(invasion.AttackerRewardItems);
@@ -36,21 +35,20 @@ namespace Website.Infrastructure {
                 if (items.Any()) {
                     foreach (InvasionRewardItem item in items) {
                         InvasionReward rewardName = invasionRewardNames.SingleOrDefault(x => x.UniqueName == item.ItemUniqueName);
-                        //if (rewardName == null || rewardName.ShowOnHomeView) {
-                            important = true;
-                            if (rewardName != null)
-                                item.Name = rewardName.Name;
-                        //}
+                        if (rewardName != null)
+                            item.Name = rewardName.Name;
+
+                        if (rewardName == null || (rewardName != null && rewardName.ShowOnHomeView)) {
+                            invasion.IsImportant = true;
+                        }
                     }
                 }
 
-                if (important) {
-                    invasion.AttackerFaction = _factions[invasion.AttackerFaction];
-                    invasion.DefenderFaction = _factions[invasion.DefenderFaction];
-                    invasion.SolNode = _solNodes[invasion.Node];
+                invasion.AttackerFaction = _factions[invasion.AttackerFaction];
+                invasion.DefenderFaction = _factions[invasion.DefenderFaction];
+                invasion.SolNode = _solNodes[invasion.Node];
 
-                    importantInavsions.Add(invasion);
-                }
+                importantInavsions.Add(invasion);
             }
             return importantInavsions;
         }

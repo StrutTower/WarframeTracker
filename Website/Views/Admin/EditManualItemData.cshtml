@@ -12,16 +12,16 @@
 <h3>@ViewBag.Title</h3>
 <hr />
 
+<div asp-validation-summary="All" class="text-danger"></div>
+
 <form action="" method="post" class="row">
     <div class="col-md-6">
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-
         @if (editing) {
             @Html.HiddenFor(x => x.ManualItemData.ID)
         }
 
         <div class="form-group">
-            @Html.LabelFor(x => x.ManualItemData.ItemUniqueName)
+            <label asp-for="ManualItemData.ItemUniqueName" class="twr-label"></label>
             <select class="form-control warframe-item-searcher" required data-val="true" data-val-required="An item is required"
                     name="@Html.NameFor(x => x.ManualItemData.ItemUniqueName)" id="@Html.IdFor(x => x.ManualItemData.ItemUniqueName)"
                     data-url="@Url.Action("WarframeItemsAjax", "Search")">
@@ -30,15 +30,17 @@
                     <option value="@Model.ManualItemData.ItemUniqueName" selected>@Model.SelectedItemName</option>
                 }
             </select>
-            @Html.HelpTextFor(x => x.ManualItemData.ItemUniqueName)
-            @Html.ValidationMessageFor(x => x.ManualItemData.ItemUniqueName)
+            <help-text twr-for="ManualItemData.ItemUniqueName"></help-text>
+            <span asp-validation-for="ManualItemData.ItemUniqueName"></span>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(x => x.ManualItemData.PropertyName)
-            @Html.DropDownListFor(x => x.ManualItemData.PropertyName, new SelectList(Model.PropertyNames), "", new { @class = "form-control" })
-            @Html.HelpTextFor(x => x.ManualItemData.PropertyName)
-            @Html.ValidationMessageFor(x => x.ManualItemData.PropertyName)
+            <label asp-for="ManualItemData.PropertyName" class="twr-label"></label>
+            <select asp-for="ManualItemData.PropertyName" asp-items="@new SelectList(Model.PropertyNames)" class="twr-input">
+                <option></option>
+            </select>
+            <help-text twr-for="ManualItemData.PropertyName"></help-text>
+            <span asp-validation-for="ManualItemData.PropertyName"></span>
         </div>
 
         @Html.FormGroupEditorFor(x => x.ManualItemData.Value)

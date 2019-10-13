@@ -1,5 +1,7 @@
 ﻿$(document).ready(function () {
 
+    $('.date-input').inputmask('9999/99/99');
+
     $('.item-category-select2-list').select2({
         width: '100%'
     });

@@ -18,8 +18,9 @@
                     <option value="showAcquired">Acquired</option>
                     <option value="showNotAcquired">Not Acquired</option>
                 }
-                @if (Model.CodexSection == CodexSection.Relics) {
-                    <option value="showValuted">Vaulted</option>
+                @if (Model.CodexSection == CodexSection.Relics ||
+                    Model.CodexSection == CodexSection.Equipment) {
+                    <option value="showVaulted">Vaulted</option>
                     <option value="showNotVaulted">Not Vaulted</option>
                 }
             </select>

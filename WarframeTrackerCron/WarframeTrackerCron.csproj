@@ -6,17 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="applicationSecrets.json" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="applicationSecrets.json">
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="PushBulletSharp" Version="3.1.0" />
   </ItemGroup>
 

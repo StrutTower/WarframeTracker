@@ -12,19 +12,23 @@
         <div class="col-12">
             <span display-for="SolNode.Name"></span> <small display-for="ActivateDateUtc" class="text-muted"></small>
         </div>
-        <div class="col-md-6">
-            <span display-for="AttackerFaction"></span> -
-            <span display-for="AttackerRewardItems"></span>
+        <div class="col-12">
+            <img src="~/images/@(Model.AttackerFaction.ToLower()).png" style="max-height:20px;" />
+            @if (Model.DefenderRewardItems.SafeAny()) {
+                <span display-for="DefenderRewardItems"></span>
+            }
         </div>
-        <div class="col-12 order-md-last">
+        <div class="col-12">
             <div class="progress" style="border-radius:0;height:12px;">
                 <div class="progress-bar bg-faction-@Model.AttackerFaction.ToLower()" role="progressbar" style="width:@width%;"></div>
                 <div class="progress-bar bg-faction-@Model.DefenderFaction.ToLower()" role="progressbar" style="width:@oppositeWidth%;"></div>
             </div>
         </div>
-        <div class="col-md-6 text-right">
-            <span display-for="DefenderRewardItems"></span> -
-            <span display-for="DefenderFaction"></span>
+        <div class="col-12 text-right">
+            @if (Model.AttackerRewardItems.SafeAny()) {
+                <span display-for="AttackerRewardItems"></span>
+            }
+            <img src="~/images/@(Model.DefenderFaction.ToLower()).png" style="max-height:20px;" />
         </div>
     </div>
 }

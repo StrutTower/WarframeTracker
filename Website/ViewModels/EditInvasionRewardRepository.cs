@@ -20,7 +20,7 @@ namespace Website.ViewModels {
 
             List<string> datas;
             List<string> existing;
-            using(IUnitOfWork uow = new UnitOfWorkFactory().UnitOfWork) {
+            using (IUnitOfWork uow = new UnitOfWorkFactory().UnitOfWork) {
                 datas = new TrackedDataRepository(uow).GetGroupedByType("InvasionRewards").Select(x => x.Data).ToList();
                 existing = new InvasionRewardRepository(uow).GetAll().Select(x => x.UniqueName).ToList();
             }

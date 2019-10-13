@@ -25,111 +25,7 @@
     <link rel="stylesheet" href="//cdn.materialdesignicons.com/3.6.95/css/materialdesignicons.min.css">
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-3">
-        <div class="container">
-            <a asp-action="Index" asp-controller="Home" display-for="@AppSettings.Value.AppName" class="navbar-brand audiowide"></a>
-
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-navmenu">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <div class="navbar-collapse collapse text-light" id="navbar-navmenu">
-                <span class="navbar-text mr-auto">
-                    <environment include="Development">
-                        <span class="text-warning">Development Server</span>
-                    </environment>
-                </span>
-                <ul class="navbar-nav">
-                    @if (User.Identity.IsAuthenticated) {
-                        <li class="nav-item dropdown d-none d-lg-inline-block">
-                            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Navigation</a>
-                            <div class="dropdown-menu dropdown-menu-right">
-                                <div class="dropdown-item-text text-info">@User.Identity.Name</div>
-                                <a asp-action="PrimeWishlist" asp-controller="Item" class="dropdown-item">
-                                    <span class="mdi mdi-lg mdi-fw mdi-playlist-star"></span>Prime Wishlist
-                                </a>
-                                <a asp-action="Index" asp-controller="Codex" class="dropdown-item">
-                                    <span class="mdi mdi-lg mdi-fw mdi-view-grid"></span>Codex
-                                </a>
-                                <a asp-action="Index" asp-controller="Search" class="dropdown-item">
-                                    <span class="mdi mdi-lg mdi-fw mdi-magnify"></span>Search
-                                </a>
-                                <a asp-action="PrimePrediction" asp-controller="Item" class="dropdown-item">
-                                    <span class="mdi mdi-lg mdi-fw mdi-timelapse"></span>Prime Release Predictions
-                                </a>
-                                <a asp-action="ModularItemInfo" asp-controller="Item" class="dropdown-item">
-                                    <span class="mdi mdi-lg mdi-fw mdi-blank"></span>Modular Item Info
-                                </a>
-                                <a asp-action="Management" asp-controller="Account" class="dropdown-item">
-                                    <span class="mdi mdi-lg mdi-account"></span>Account Management
-                                </a>
-                                @if (User.IsInRole(RoleTypes.Administrator)) {
-                                    <a asp-action="Index" asp-controller="Admin" class="dropdown-item">
-                                        <span class="mdi mdi-lg mdi-fw mdi-settings-outline"></span>Site Management
-                                    </a>
-                                }
-                            </div>
-                        </li>
-                        if (User.IsInRole(RoleTypes.Administrator)) {
-                            <li class="nav-item d-none d-lg-inline-block">
-                                <a asp-action="Index" asp-controller="Admin" class="nav-link">
-                                    <span class="mdi mdi-lg mdi-settings-outline"></span>
-                                </a>
-                            </li>
-                        }
-                        <li class="nav-item d-block d-lg-none">
-                            <a asp-action="PrimeWishlist" asp-controller="Item" class="nav-link">
-                                <span class="mdi mdi-lg mdi-fw mdi-playlist-star"></span>Prime Wishlist
-                            </a>
-                        </li>
-                        <li class="nav-item d-block d-lg-none">
-                            <a asp-action="Index" asp-controller="Codex" class="nav-link">
-                                <span class="mdi mdi-lg mdi-fw mdi-view-grid"></span>Codex
-                            </a>
-                        </li>
-                        <li class="nav-item d-block d-lg-none">
-                            <a asp-action="Index" asp-controller="Search" class="nav-link">
-                                <span class="mdi mdi-lg mdi-fw mdi-magnify"></span>Search
-                            </a>
-                        </li>
-                        <li class="nav-item d-block d-lg-none">
-                            <a asp-action="PrimePrediction" asp-controller="Item" class="nav-link">
-                                <span class="mdi mdi-lg mdi-fw mdi-timelapse"></span>Prime Release Predictions
-                            </a>
-                        </li>
-                        <li class="nav-item d-block d-lg-none">
-                            <a asp-action="ModularItemInfo" asp-controller="Item" class="nav-link">
-                                <span class="mdi mdi-lg mdi-fw mdi-blank"></span>Modular Item Info
-                            </a>
-                        </li>
-                        <li class="nav-item d-block d-lg-none">
-                            <a asp-action="Management" asp-controller="Account" class="dropdown-item">
-                                <span class="mdi mdi-lg mdi-account"></span>Account Management
-                            </a>
-                        </li>
-                        @if (User.IsInRole(RoleTypes.Administrator)) {
-                            <li class="nav-item d-block d-lg-none">
-                                <a asp-action="Index" asp-Controller="Admin" class="nav-link">
-                                    <span class="mdi mdi-lg mdi-fw mdi-settings-outline"></span>Site Management
-                                </a>
-                            </li>
-                        }
-                        <li class="nav-item">
-                            <a asp-action="Logout" asp-controller="Account" class="nav-link">
-                                <span class="mdi mdi-lg mdi-fw mdi-logout"></span>Logout <span class="d-inline d-lg-none">as @User.Identity.Name</span>
-                            </a>
-                        </li>
-                    } else {
-                        <li class="nav-item">
-                            <a asp-action="Login" asp-controller="Account" class="nav-link">
-                                <span class="mdi mdi-lg mdi-fw mdi-login"></span>Login
-                            </a>
-                        </li>
-                    }
-                </ul>
-            </div>
-        </div>
-    </nav>
+   <partial name="_LayoutNav" />
 
     <noscript class="noscript">
         JavaScript is disabled in your browser.
@@ -156,7 +52,9 @@
             </p>
         </footer>
 
-        <div class="hidden">@Html.AntiForgeryToken()</div>
+        @*<div class="hidden">
+            @Html.AntiForgeryToken()
+        </div>*@
         @if (TempData["message"] != null) {
             <input type="hidden" id="tempDataMessage" value="@TempData["message"]" />
         }

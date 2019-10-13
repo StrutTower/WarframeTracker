@@ -8,25 +8,38 @@
         <div>
             <a asp-action="PrimeWishlist" asp-controller="Item">Prime Wishlist</a>
         </div>
-        <div>
-            <a asp-action="Index" asp-controller="Codex">Codex</a>
-        </div>
     </div>
     <div class="col-6 text-right">
-        <div>Mastery Rank:</div>
-        <div display-for="MasteryRank.Name"></div>
-        <div>Total Exp: <span display-for="CurrentMasteryExperience" display-template="CommaNumber"></span></div>
-        <div class="small">
-            <a asp-action="UpdateStarchartCompletion">Update Starchart Completion</a>
+        <div>
+            <a asp-action="Index" asp-controller="Codex">Codex Index</a>
+        </div>
+        <div>
+            <a asp-action="View" asp-controller="Codex" asp-route-id="@CodexSection.Equipment">Equipment Codex</a>
         </div>
     </div>
 </div>
 
-@if (Model.Invasions.SafeAny()) {
+@if (Model.ImportantInvasions.SafeAny() || Model.OtherInvasions.SafeAny()) {
     <div>
         <h5>Invasions</h5>
-        @foreach (Invasion invasion in Model.Invasions.OrderBy(x => x.ActivationEpochUtc)) {
-            <div display-for="@invasion"></div>
+        @if (Model.ImportantInvasions.SafeAny()) {
+            <div class="row">
+                @foreach (Invasion invasion in Model.ImportantInvasions.OrderBy(x => x.ActivationEpochUtc)) {
+                    <div display-for="@invasion" class="col-md-6"></div>
+                }
+            </div>
+        }
+
+        @if (Model.OtherInvasions.SafeAny()) {
+            <div>
+                <button type="button" class="btn btn-link p-1" data-toggle="collapse" data-target=".other-invasions-container">Show/Hide More Invasions</button>
+            </div>
+
+            <div class="other-invasions-container row collapse">
+                @foreach (Invasion invasion in Model.OtherInvasions.OrderBy(x => x.ActivationEpochUtc)) {
+                    <div display-for="@invasion" class="col-md-6"></div>
+                }
+            </div>
         }
     </div>
 }

@@ -8,19 +8,18 @@
         Prime Wishlist
     </h5>
 
+    @if (!User.Identity.IsAuthenticated) {
+        <p class="text-warning"><em>Log in to track your items.</em></p>
+    }
+
     <div class="row mb-3">
         @foreach (WarframeItem item in Model.PrimeWishlist) {
             <div class="col-md-4 col-lg-3">
                 <div class="row border border-secondary h-100 py-2 position-relative">
 
-                    <a href="#" class="open-item-modal d-inline-block position-absolute" style="top:0;right:5px;z-index:20;"
+                    <a href="#" class="open-item-modal d-inline-block position-absolute" style="top:0;right:5px;z-index:20;padding:5px;"
                        data-url="@Url.Action("Form", "Item", new { itemID = item.UniqueName.Replace("/", "|") })">
                         <span class="mdi mdi-square-edit-outline"></span>
-                    </a>
-
-                    <a href="#" class="open-item-details-modal d-inline-block position-absolute" style="top:0;left:5px;z-index:20;"
-                       data-url="@Url.Action("Details", "Item", new { itemID = item.UniqueName.Replace("/", "|") })">
-                        <span class="mdi mdi-information"></span>
                     </a>
 
                     <div class="col-6">
@@ -72,4 +71,3 @@
 </div>
 
 <partial name="_ItemModal" />
-<partial name="_ItemDetailsModal" />

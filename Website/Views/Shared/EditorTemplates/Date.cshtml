@@ -1,0 +1,9 @@
+﻿@model DateTime?
+@{
+    string displayValue = "";
+    if (Model.HasValue && Model != DateTime.MinValue) {
+        displayValue = Model.Value.ToString("yyyy/MM/dd");
+    }
+}
+
+@Html.TextBox("", displayValue, new { @class = "twr-input date-input" })

@@ -13,7 +13,6 @@ using Website.Infrastructure;
 using Website.ViewModels;
 
 namespace Website.Controllers {
-    [Authorize]
     public class ItemController : CustomController {
         private readonly AppSettings _appSettings;
         public ItemController(IOptions<AppSettings> appSettings) {
@@ -26,14 +25,6 @@ namespace Website.Controllers {
 
         public IActionResult PrimeWishlist() {
             return View(new PrimeWishlistViewModel().Load(User, _appSettings));
-        }
-
-        public ActionResult Details(string itemID) {
-            itemID = itemID.Replace("|", "/");
-            using (IUnitOfWork uow = new UnitOfWorkFactory().UnitOfWork) {
-                WarframeItem item = new WarframeItemUtilities(uow).GetByUniqueName(itemID);
-                return PartialView("_ItemDetailsModalContent", new ItemDetailsModelViewModel().Load(item, uow));
-            }
         }
 
         public ActionResult Form(string itemID) {
@@ -50,6 +41,7 @@ namespace Website.Controllers {
             }
         }
 
+        [Authorize]
         public ActionResult UpdateItemAcquisition(
             [Bind(Prefix = "ItemAcquisition")]ItemAcquisition model,
             [Bind(Prefix = "ComponentAcquisitions")]List<ComponentAcquisition> compModel) {

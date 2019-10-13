@@ -1,0 +1,54 @@
+﻿@model IEnumerable<PrimeRelease>
+@{
+    ViewData["Title"] = "Manage Prime Releases";
+}
+
+<a asp-action="EditPrimeRelease" class="float-right">
+    <span class="mdi mdi-fw mdi-plus-box-outline"></span>New
+</a>
+
+<h3>@ViewBag.Title</h3>
+<hr />
+
+<div class="table-responsive">
+    <table class="table table-sm">
+        <thead>
+            <tr>
+                <th></th>
+                <th>
+                    Date
+                </th>
+                <th>
+                    Equipment
+                </th>
+                <th>
+                    Unvaulted
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (PrimeRelease item in Model.OrderBy(x => x.ReleaseDate)) {
+            <tr>
+                <td>
+                    @Html.ActionLink("Edit", "EditPrimeRelease", new { id = item.ID })
+                </td>
+                <td>
+                    <span display-for="@item.ReleaseDate" display-template="Date"></span>
+                    @if (item.VaultedDate.HasValue) {
+                        @: - 
+                        <div display-for="@item.VaultedDate" display-template="Date"></div>
+                    }
+                </td>
+                <td>
+                    <div display-for="@item.WarframeName"></div>
+                    <div display-for="@item.Item1Name" class="small"></div>
+                    <div display-for="@item.Item2Name" class="small"></div>
+                </td>
+                <td>
+                    @Html.BooleanIcon(item.IsReleasedFromVault)
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+</div>

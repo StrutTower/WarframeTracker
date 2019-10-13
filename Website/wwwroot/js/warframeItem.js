@@ -26,9 +26,7 @@
             method: 'POST',
             data: $(this).serialize(),
             success: function (response) {
-                //notify('Updated', 'success');
                 Lobibox.notify('success', {
-                    //title: 'Updated',
                     msg: 'Updated',
                     size: 'mini',
                     sound: false,

@@ -25,7 +25,10 @@ namespace Website.ViewModels {
         public CodexViewModel Load(ClaimsPrincipal user, CodexSection codexSection) {
             CodexSection = codexSection;
 
-            int userID = int.Parse(user.FindFirstValue(ClaimTypes.NameIdentifier));
+            int? userID = null;
+            if (user.Identity.IsAuthenticated) {
+                userID = int.Parse(user.FindFirstValue(ClaimTypes.NameIdentifier));
+            }
 
             using (IUnitOfWork uow = new UnitOfWorkFactory().UnitOfWork) {
                 CodexTabs = new CodexTabRepository(uow).GetByCodexSection(codexSection)
@@ -40,7 +43,9 @@ namespace Website.ViewModels {
                     .GetByCategoryIDs(CurrentCodexTab.ItemCategory_Objects.Select(x => x.ID))
                     .OrderBy(x => x.Name).ToList();
 
-                ItemAcquisitions = new ItemAcquisitionRepository(uow).GetByUserID(userID);
+                if (userID.HasValue) {
+                    ItemAcquisitions = new ItemAcquisitionRepository(uow).GetByUserID(userID.Value);
+                }
             }
             return this;
         }
@@ -48,7 +53,10 @@ namespace Website.ViewModels {
         public CodexViewModel Load(ClaimsPrincipal user, CodexSection codexSection, int tabID) {
             CodexSection = codexSection;
 
-            int userID = int.Parse(user.FindFirstValue(ClaimTypes.NameIdentifier));
+            int? userID = null;
+            if (user.Identity.IsAuthenticated) {
+                userID = int.Parse(user.FindFirstValue(ClaimTypes.NameIdentifier));
+            }
 
             using (IUnitOfWork uow = new UnitOfWorkFactory().UnitOfWork) {
                 CodexTabs = new CodexTabRepository(uow).GetByCodexSection(codexSection)
@@ -62,28 +70,11 @@ namespace Website.ViewModels {
                     .GetByCategoryIDs(CurrentCodexTab.ItemCategory_Objects.Select(x => x.ID))
                     .OrderBy(x => x.Name).ToList();
 
-                ItemAcquisitions = new ItemAcquisitionRepository(uow).GetByUserID(userID);
+                if (userID.HasValue) {
+                    ItemAcquisitions = new ItemAcquisitionRepository(uow).GetByUserID(userID.Value);
+                }
             }
             return this;
         }
-
-
-        //public CodexViewModel Load(CodexSection codexSection, ClaimsPrincipal user) {
-        //    int userID = int.Parse(user.FindFirstValue(ClaimTypes.NameIdentifier));
-
-        //    using (IUnitOfWork uow = new UnitOfWorkFactory().UnitOfWork) {
-
-        //        CodexTabs = new CodexTabRepository(uow).GetByCodexSection(codexSection)
-        //            .OrderBy(x => x.SortingPriority).ThenBy(x => x.Name).ToList();
-
-        //        new EagerLoader(uow).Load(CodexTabs);
-
-        //        WarframeItems = new WarframeItemUtilities(uow).GetByCategoryIDs(ItemCategories.Select(x => x.ID))
-        //            .OrderBy(x => x.Name).ToList();
-
-        //        ItemAcquisitions = new ItemAcquisitionRepository(uow).GetByUserID(userID);
-        //    }
-        //    return this;
-        //}
     }
 }

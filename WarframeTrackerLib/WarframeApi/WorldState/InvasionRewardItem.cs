@@ -17,9 +17,9 @@ namespace WarframeTrackerLib.WarframeApi.WorldState {
 
         public override string ToString() {
             if (string.IsNullOrWhiteSpace(Name))
-                return ItemUniqueName.Split('/').Last();
+                return (ItemCount > 1 ? ItemCount.ToString() + " " : "") + ItemUniqueName.Split('/').Last();
             else
-                return Name;
+                return (ItemCount > 1 ? ItemCount.ToString() + " " : "") + Name;
         }
     }
 }

@@ -43,7 +43,6 @@ namespace Website.TagHelpers {
                 var htmlContent = HtmlHelper.GetHtmlContent(Model, TemplateName);
                 output.Content.SetHtmlContent(htmlContent);
             }
-            //base.Process(context, output);
         }
 
     }

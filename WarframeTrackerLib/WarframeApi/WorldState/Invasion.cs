@@ -82,5 +82,7 @@ namespace WarframeTrackerLib.WarframeApi.WorldState {
         public JToken Activation {
             set { ActivationEpochUtc = value["$date"]["$numberLong"].ToObject<long>(); }
         }
+
+        public bool IsImportant { get; set; }
     }
 }

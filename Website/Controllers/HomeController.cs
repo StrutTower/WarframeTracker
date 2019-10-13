@@ -16,7 +16,6 @@ namespace Website.Controllers {
             _appSettings = appSettings.Value;
         }
 
-        [Authorize]
         public IActionResult Index() {
             return View(new HomeViewModel().Load(User, _appSettings));
         }

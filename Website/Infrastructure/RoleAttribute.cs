@@ -11,21 +11,28 @@ namespace Website.Infrastructure {
         }
 
         public void OnAuthorization(AuthorizationFilterContext context) {
-            // Automatically give admins access
-            if (context.HttpContext.User.IsInRole(RoleTypes.Administrator))
-                return;
-
-            // Check if the user has any of the roles provided
-            foreach (string type in _roles) {
-                if (context.HttpContext.User.IsInRole(type)) {
+            if (context.HttpContext.User.Identity.IsAuthenticated) {
+                // Automatically give admins access
+                if (context.HttpContext.User.IsInRole(RoleTypes.Administrator))
                     return;
-                }
-            }
 
-            context.Result = new RedirectToRouteResult(new RouteValueDictionary {
-                { "action", "NoAccess" },
-                { "controller", "Error" }
-            });
+                // Check if the user has any of the roles provided
+                foreach (string type in _roles) {
+                    if (context.HttpContext.User.IsInRole(type)) {
+                        return;
+                    }
+                }
+
+                context.Result = new RedirectToRouteResult(new RouteValueDictionary {
+                    { "action", "NoAccess" },
+                    { "controller", "Error" }
+                });
+            } else {
+                context.Result = new RedirectToRouteResult(new RouteValueDictionary {
+                    { "action", "Login" },
+                    { "controller", "Account" }
+                });
+            }
         }
     }
 }

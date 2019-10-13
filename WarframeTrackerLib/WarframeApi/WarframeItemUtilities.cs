@@ -30,7 +30,7 @@ namespace WarframeTrackerLib.WarframeApi {
             return JsonConvert.DeserializeObject<WarframeItem>(itemCache.Data);
         }
 
-        internal List<WarframeItem> GetByCodexSection(CodexSection codexSection) {
+        public List<WarframeItem> GetByCodexSection(CodexSection codexSection) {
             List<ItemCache> caches = new ItemCacheRepository(_unitOfWork).GetByCodexSection(codexSection);
 
             if (caches== null != !caches.Any() || caches.First().UpdatedTimestamp < DateTime.Now.AddDays(-2)) {

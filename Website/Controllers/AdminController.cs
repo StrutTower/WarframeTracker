@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using TowerSoft.Repository;
 using WarframeTrackerLib.Domain;
@@ -186,6 +185,46 @@ namespace Website.Controllers {
                 return RedirectToAction("ManageInvasionRewards");
             }
             return View(new EditInvasionRewardViewModel().Load(model));
+        }
+        #endregion
+
+        #region PrimeReleases
+        public IActionResult ManagePrimeReleases() {
+            List<PrimeRelease> primeReleases;
+            using (IUnitOfWork uow = new UnitOfWorkFactory().UnitOfWork) {
+                primeReleases = new PrimeReleaseRepository(uow).GetAll();
+                primeReleases.ForEach(x => x.LoadItemNames(uow));
+            }
+            return View(primeReleases);
+        }
+
+        [HttpGet]
+        public IActionResult EditPrimeRelease(int? id = null) {
+            using (IUnitOfWork uow = new UnitOfWorkFactory().UnitOfWork) {
+                if (id.HasValue) {
+                    PrimeRelease pr = new PrimeReleaseRepository(uow).GetByID(id.Value);
+                    return View(new EditPrimeReleaseViewModel().Load(uow, pr));
+                }
+                return View(new EditPrimeReleaseViewModel().Load(uow, null));
+            }
+        }
+
+        [HttpPost, ValidateAntiForgeryToken]
+        public IActionResult EditPrimeRelease([Bind(Prefix = "PrimeRelease")]PrimeRelease model) {
+            using (IUnitOfWork uow = new UnitOfWorkFactory().UnitOfWork) {
+                if (ModelState.IsValid) {
+                    PrimeReleaseRepository repo = new PrimeReleaseRepository(uow);
+                    if (model.ID == 0) {
+                        repo.Add(model);
+                        TempData["message"] = "New Prime Release Added";
+                    } else {
+                        repo.Update(model);
+                        TempData["message"] = "Updated Prime Release";
+                    }
+                    return RedirectToAction("ManagePrimeReleases");
+                }
+                return View(new EditPrimeReleaseViewModel().Load(uow, model));
+            }
         }
         #endregion
     }

@@ -13,9 +13,8 @@
     foreach (Drop drop in Model.Drops.OrderByDescending(x => x.Chance)) {
         <div>
             <span display-for="@drop.Chance" display-template="Percentage"></span> - <span display-for="@drop.Location"></span>
-            @*@Html.DisplayFor(x => drop.Chance, "Percentage") - @Html.DisplayFor(x => drop.Location)*@
             @if (drop.Rotation != null) {
-                <small> Rotation: <span display-for="@drop.Rotation"></span></small>
+                <small class="rotation-@drop.Rotation.ToLower()"> Rotation: <span display-for="@drop.Rotation"></span></small>
             }
         </div>
     }

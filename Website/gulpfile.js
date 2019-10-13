@@ -19,6 +19,8 @@ var options = {
             'bootstrap/dist/js/bootstrap.js',
             'lobibox/dist/js/notifications.js',
             'select2/dist/js/select2.js',
+            'inputmask/dist/inputmask/inputmask.js',
+            'inputmask/dist/inputmask/jquery.inputmask.js',
             'disable-form-on-submit/src/disable-form-on-submit.js'
         ],
         workingDirectory: 'node_modules',
@@ -31,7 +33,8 @@ var options = {
         libFiles: [
             //'@mdi/font/css/materialdesignicons.css',
             'select2/dist/css/select2.css',
-            'lobibox/dist/css/lobibox.css'
+            'lobibox/dist/css/lobibox.css',
+            'inputmask/css/inputmask.css'
         ],
         workingDirectory: 'node_modules',
         sassSource: 'Sass/site.scss',

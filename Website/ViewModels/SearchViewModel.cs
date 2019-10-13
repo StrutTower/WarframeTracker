@@ -26,7 +26,7 @@ namespace Website.ViewModels {
             CodexSectionSelectList = new SelectList(codexSections, "Key", "Value");
 
             List<ItemCategory> itemCategories;
-            using(IUnitOfWork uow = new UnitOfWorkFactory().UnitOfWork) {
+            using (IUnitOfWork uow = new UnitOfWorkFactory().UnitOfWork) {
                 itemCategories = new ItemCategoryRepository(uow).GetAll();
             }
             ItemCategorySelectList = new SelectList(itemCategories, "ID", "Name");

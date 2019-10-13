@@ -22,18 +22,37 @@ namespace Website.ViewModels {
 
 
         public PrimeWishlistViewModel Load(ClaimsPrincipal user, AppSettings appSettings) {
-            int userID = int.Parse(user.FindFirstValue(ClaimTypes.NameIdentifier));
+            int? userID = null;
+            if (user.Identity.IsAuthenticated) {
+                userID = int.Parse(user.FindFirstValue(ClaimTypes.NameIdentifier));
+            }
 
             using (IUnitOfWork uow = new UnitOfWorkFactory().UnitOfWork) {
                 List<WarframeItem> allItems = new WarframeItemUtilities(uow).GetAll();
                 List<WarframeItem> primes = allItems.Where(x => x.IsPrime).ToList();
 
-                ItemAcquisitions = new ItemAcquisitionRepository(uow).GetByUserID(userID);
+                if (userID.HasValue) {
+                    ItemAcquisitions = new ItemAcquisitionRepository(uow).GetByUserID(userID.Value);
+                } else {
+                    ItemAcquisitions = new List<ItemAcquisition>();
+                }
 
                 List<ItemAcquisition> ias = ItemAcquisitions.Where(x => x.IsAcquired).ToList();
-                ComponentAcquisitions = new ComponentAcquisitionRepository(uow).GetByUserID(userID);
+                if (userID.HasValue) {
+                    ComponentAcquisitions = new ComponentAcquisitionRepository(uow).GetByUserID(userID.Value);
+                } else {
+                    ComponentAcquisitions = new List<ComponentAcquisition>();
+                }
 
-                PrimeWishlist = primes.Where(x => !x.IsExclusive && !x.IsVaulted && !ias.Select(y => y.ItemUniqueName).Contains(x.UniqueName))
+                List<PrimeRelease> releases = new PrimeReleaseRepository(uow).GetAll().Where(x => x.IsReleasedFromVault).ToList();
+                List<string> unvaultedUniqueNames = new List<string>();
+                if (releases.Any()) {
+                    unvaultedUniqueNames.AddRange(releases.Select(x => x.WarframeUniqueName));
+                    unvaultedUniqueNames.AddRange(releases.Select(x => x.Item1UniqueName));
+                    unvaultedUniqueNames.AddRange(releases.Select(x => x.Item2UniqueName));
+                }
+
+                PrimeWishlist = primes.Where(x => !x.IsExclusive && (!x.IsVaulted || unvaultedUniqueNames.Contains(x.UniqueName)) && !ias.Select(y => y.ItemUniqueName).Contains(x.UniqueName))
                     .OrderBy(x => x.Name).ToList();
 
                 #region Needed Relics

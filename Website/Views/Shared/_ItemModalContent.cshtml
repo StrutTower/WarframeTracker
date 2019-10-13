@@ -12,29 +12,31 @@
 <form action="@Url.Action("UpdateItemAcquisition", "Item")" method="post" id="item-acquisition-form" class="row">
     <div class="col-6">
         <img class="img-fluid mb-2" src="https://cdn.warframestat.us/img/@Model.WarframeItem.ImageName"
-             onerror="this.onerror=null;this.src='@missingImageUrl';" />
+             onerror="this.onerror=null;this.src='@missingImageUrl';" style="max-height:100px;" />
         @Html.HiddenFor(x => x.ItemAcquisition.UserID)
         @Html.HiddenFor(x => x.ItemAcquisition.ItemUniqueName)
-        @if (Model.ItemCategory.AllowAcquisition) {
-            <div class="form-check">
-                <label>
-                    @*@Html.CheckBoxFor(x => x.ItemAcquisition.IsAcquired)*@
-                    <input twr-for="ItemAcquisition.IsAcquired" />
-                    Acquired
-                </label>
-            </div>
-        }
-        @if (Model.ItemCategory.CanBeMastered) {
-            <div class="form-check">
-                <label>
-                    @*@Html.CheckBoxFor(x => x.ItemAcquisition.IsMastered)*@
-                    <input twr-for="ItemAcquisition.IsMastered" />
-                    Mastered
-                </label>
-            </div>
-        }
-        @if (Model.ItemCategory.AllowAcquisition || Model.ItemCategory.CanBeMastered) {
-            <button type="submit" class="btn btn-primary">Update</button>
+        @if (User.Identity.IsAuthenticated) {
+            if (Model.ItemCategory.AllowAcquisition) {
+                <div class="form-check">
+                    <label>
+                        <input twr-for="ItemAcquisition.IsAcquired" />
+                        Acquired
+                    </label>
+                </div>
+            }
+            if (Model.ItemCategory.CanBeMastered) {
+                <div class="form-check">
+                    <label>
+                        <input twr-for="ItemAcquisition.IsMastered" />
+                        Mastered
+                    </label>
+                </div>
+            }
+            if (Model.ItemCategory.AllowAcquisition || Model.ItemCategory.CanBeMastered) {
+                <button type="submit" class="btn btn-primary">Update</button>
+            }
+        } else {
+            <p class="text-warning"><em>Log in to track your items.</em></p>
         }
     </div>
 
@@ -59,7 +61,7 @@
                             <span>x<span display-for="@comp.ItemCount"></span></span>
                         }
 
-                        @if (Model.WarframeItem.IsPrime) {
+                        @if (Model.WarframeItem.IsPrime && User.Identity.IsAuthenticated) {
                             <div class="form-check">
                                 <label>
                                     <input twr-for="ComponentAcquisitions[i].IsAcquired" />
@@ -71,7 +73,42 @@
                 </div>
             }
         }
+    </div>
 
+    <hr class="col-12" />
+
+    <div class="col-12">
         <p display-for="WarframeItem.Description"></p>
+
+        @if (Model.WarframeItem.IsPrime && Model.WarframeItem.Components != null && Model.WarframeItem.Components.Any()) {
+            <h5>Relics</h5>
+            <div class="pl-2">
+                @foreach (Component comp in Model.WarframeItem.Components) {
+                    ComponentAcquisition ca = Model.ComponentAcquisitions.SingleOrDefault(x => x.ComponentUniqueName == comp.UniqueName);
+
+                    if (ca != null && ca.IsAcquired) {
+                        <div class="text-muted">
+                            <span display-for="@comp.Name"></span>
+                            <span class="mdi mdi-check"></span>
+                        </div>
+                    } else {
+                        <div display-for="@comp.Name"></div>
+                    }
+
+                    <div class="pl-3 mb-2 small @(ca != null && ca.IsAcquired ? "text-muted" : "")">
+                        @if (comp.Drops != null && comp.Drops.Any()) {
+                            foreach (var group in comp.Drops.Where(x => x.RelicLevel == "Intact").GroupBy(x => x.RelicEra)) {
+                                <div>
+                                    <span display-for="@group.Key"></span>
+                                    @string.Join(", ", group.Select(x => x.RelicType + " " + x.Rarity).Distinct())
+                                </div>
+                            }
+                        } else {
+                            @:No Non-Vaulted Relics
+                        }
+                    </div>
+                }
+            </div>
+        }
     </div>
 </form>

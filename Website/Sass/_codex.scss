@@ -83,3 +83,19 @@ $rarityBorderType: 2px solid;
 .rarity-legendary {
     border:3px groove white;
 }
+
+
+.rotation-a, .rotation-b, .rotation-c {
+    padding:2px 4px;
+    border-radius:3px;
+    color:white;
+}
+.rotation-a {
+    background:#418139;
+}
+.rotation-b {
+    background: #3052a4;
+}
+.rotation-c {
+    background: #a10d0d;
+}
