@@ -15,6 +15,7 @@ namespace WarframeTrackerLib.WarframeApi {
         public string ImageName { get; set; }
         public string Category { get; set; }
         public bool? Tradable { get; set; }
+        public string WikiaUrl { get; set; }
 
         public int ItemCategoryID { get; set; }
 

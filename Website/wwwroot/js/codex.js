@@ -4,13 +4,13 @@
 
     if (codexDropdown.length) {
         var section = codexDropdown.data('codex-section');
-        var filter = sessionStorage.getItem('codexFilter' + section);
+        var filter = localStorage.getItem('codexFilter' + section);
         codexDropdown.val(filter);
         filterChange(filter);
 
         $('#codex-filter-dropdown').on('change', function (e) {
             var value = $(this).val();
-            sessionStorage.setItem('codexFilter' + section, value);
+            localStorage.setItem('codexFilter' + section, value);
             filterChange(value);
         });
     }

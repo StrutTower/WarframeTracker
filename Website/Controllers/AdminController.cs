@@ -110,11 +110,7 @@ namespace Website.Controllers {
 
         #region ManualItemData
         public ActionResult ManageManualItemData() {
-            List<ManualItemData> data;
-            using (UnitOfWork uow = UnitOfWork.CreateNew()) {
-                data = new ManualItemDataRepository(uow).GetAll();
-            }
-            return View(data);
+            return View(new ManualItemDataViewModel().Load());
         }
 
         [HttpGet]
