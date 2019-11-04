@@ -10,51 +10,60 @@
 <h3>@ViewBag.Title</h3>
 <hr />
 
-<div class="table-responsive">
-    <table class="table table-sm table-mobile table-lg-mobile">
-        <thead>
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(x => x.Name)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(x => x.CodexSectionID)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(x => x.ImageName)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(x => x.SortingPriority)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(x => x.GroupItemsByItemCategory)
-                </th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model.OrderBy(x => x.Name)) {
-                <tr>
-                    <td data-label="@Html.DisplayNameFor(x => x.Name)">
-                        @Html.DisplayFor(x => item.Name)
-                    </td>
-                    <td data-label="@Html.DisplayNameFor(x => x.CodexSectionID)">
-                        @Html.DisplayFor(x => item.CodexSectionID)
-                    </td>
-                    <td data-label="@Html.DisplayNameFor(x => x.ImageName)">
-                        @Html.DisplayFor(x => item.ImageName)
-                    </td>
-                    <td data-label="@Html.DisplayNameFor(x => x.SortingPriority)">
-                        @Html.DisplayFor(x => item.SortingPriority)
-                    </td>
-                    <td data-label="@Html.DisplayNameFor(x => x.GroupItemsByItemCategory)">
-                        @Html.DisplayFor(x => item.GroupItemsByItemCategory)
-                    </td>
-                    <td>
-                        @Html.ActionLink("Edit", "EditCodexTab", new { id = item.ID })
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+<div class="mobile-collapse-group">
+    @foreach (var group in Model.GroupBy(x => x.CodexSectionID).OrderBy(x => x.Key)) {
+        <div class="mobile-collapse">
+            <h4 class="mobile-collapse-header">
+                @EnumUtilities.GetDisplayName(group.Key)
+            </h4>
+            <div class="mobile-collapse-body">
+                <div class="table-responsive">
+                    <table class="table table-sm table-bordered table-striped w-auto">
+                        <thead class="thead-dark text-center">
+                            <tr>
+                                <th>
+                                    @Html.DisplayNameFor(x => x.Name)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(x => x.ImageName)
+                                </th>
+                                <th>
+                                    <abbr title="@Html.DisplayNameFor(x => x.SortingPriority)">
+                                        Sort
+                                    </abbr>
+                                </th>
+                                <th>
+                                    <abbr title="@Html.DisplayNameFor(x => x.GroupItemsByItemCategory)">
+                                        Group
+                                    </abbr>
+                                </th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in group.OrderBy(x => x.SortingPriority).ThenBy(x => x.Name)) {
+                                <tr>
+                                    <td>
+                                        @Html.DisplayFor(x => item.Name)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(x => item.ImageName)
+                                    </td>
+                                    <td class="text-center">
+                                        @Html.DisplayFor(x => item.SortingPriority)
+                                    </td>
+                                    <td class="text-center">
+                                        @Html.BooleanIcon(item.GroupItemsByItemCategory)
+                                    </td>
+                                    <td>
+                                        @Html.ActionLink("Edit", "EditCodexTab", new { id = item.ID })
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    }
 </div>

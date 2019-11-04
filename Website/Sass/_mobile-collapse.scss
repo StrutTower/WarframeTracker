@@ -1,0 +1,30 @@
+﻿
+
+
+.mobile-collapse {
+    .mobile-collapse-header {
+        cursor: pointer;
+
+        &:after {
+            content:'>';
+        }
+    }
+
+    .mobile-collapse-body {
+        display:none;
+    }
+
+    &.show {
+        .mobile-collapse-header:after {
+            transform:rot(-90deg);
+        }
+
+        .mobile.collapse-body {
+            display:block;
+        }
+    }
+}
+
+.mobile-collapse.mobile-collapse-md {
+
+}

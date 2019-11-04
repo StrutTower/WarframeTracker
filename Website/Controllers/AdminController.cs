@@ -10,16 +10,20 @@ using Website.ViewModels;
 namespace Website.Controllers {
     [Role(RoleTypes.Administrator)]
     public class AdminController : CustomController {
-        public ActionResult Index() {
+        public IActionResult Index() {
             return View();
         }
 
-        public ActionResult RedownloadCache() {
+        public IActionResult RedownloadCache() {
             using (UnitOfWork uow = UnitOfWork.CreateNew()) {
                 new WarframeItemUtilities(uow).RedownloadCache();
             }
             TempData["message"] = "Image Cache Redownloaded.";
             return RedirectToAction("Index");
+        }
+
+        public IActionResult ApiExplorer() {
+            return View();
         }
 
         #region CodexTabs

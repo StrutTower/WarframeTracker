@@ -1,7 +1,11 @@
-﻿namespace WarframeTrackerLib.Domain {
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace WarframeTrackerLib.Domain {
     public enum CodexSection {
         Equipment = 1,
         Relics,
-        Mods
+        Mods,
+        [Display(Name = "Captura Scenes")]
+        CapturaScenes
     }
 }
