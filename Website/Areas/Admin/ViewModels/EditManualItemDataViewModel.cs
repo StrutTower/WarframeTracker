@@ -7,7 +7,7 @@ using WarframeTrackerLib.Domain;
 using WarframeTrackerLib.Repository;
 using WarframeTrackerLib.WarframeApi;
 
-namespace Website.ViewModels {
+namespace Website.Areas.Admin.ViewModels {
     public class EditManualItemDataViewModel {
         public ManualItemData ManualItemData { get; set; }
 
@@ -15,12 +15,12 @@ namespace Website.ViewModels {
 
         public List<string> PropertyNames { get; set; }
 
-        public EditManualItemDataViewModel Load(ManualItemData manualItemData, UnitOfWork uow) {
+        public EditManualItemDataViewModel Load(ManualItemData manualItemData, UnitOfWork uow, WarframeItemUtilities itemUtils) {
             ManualItemData = manualItemData;
             if (ManualItemData == null) ManualItemData = new ManualItemData();
 
             if (!string.IsNullOrWhiteSpace(ManualItemData.ItemUniqueName)) {
-                WarframeItem item = new WarframeItemUtilities(uow).GetByUniqueName(ManualItemData.ItemUniqueName);
+                WarframeItem item = itemUtils.GetByUniqueName(ManualItemData.ItemUniqueName);
                 SelectedItemName = item.Name;
             } 
 

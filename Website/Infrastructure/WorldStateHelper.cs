@@ -22,7 +22,7 @@ namespace Website.Infrastructure {
 
         public List<Invasion> GetInvasions(UnitOfWork unitOfwork, WorldState worldState) {
             List<Invasion> importantInavsions = new List<Invasion>();
-            List<InvasionReward> invasionRewardNames = new InvasionRewardRepository(unitOfwork).GetAll();
+            List<InvasionReward> invasionRewardNames = unitOfwork.GetRepo<InvasionRewardRepository>().GetAll();
 
             foreach (Invasion invasion in worldState.Invasions.Where(x => !x.Completed)) {
                 List<InvasionRewardItem> items = new List<InvasionRewardItem>();
@@ -52,19 +52,24 @@ namespace Website.Infrastructure {
             return importantInavsions;
         }
 
-        public List<ActiveMission> GetVoidAndOrokinCellMissions(UnitOfWork unitOfWork, WorldState worldState) {
+        public List<ActiveMission> GetVoidMissions(WorldState worldState) {
             List<ActiveMission> output = new List<ActiveMission>();
 
             foreach (ActiveMission mission in worldState.ActiveMissions) {
-                SolNode node = _solNodes[mission.Node];
-                if (node.Name.Contains("Saturn") || node.Name.Contains("Ceres")) {
-                    mission.SolNode = node;
-                    mission.MissionType = _missionTypes[mission.MissionType];
-                    output.Add(mission);
-                }
+                mission.SolNode = _solNodes[mission.Node];
+                mission.MissionType = _missionTypes[mission.MissionType];
+                output.Add(mission);
             }
 
-            return output;
+            return output.OrderBy(x => x.StartedOnUtc).ToList();
+        }
+
+        public VoidTrader GetBaro(WorldState worldState) {
+            VoidTrader trader = worldState.VoidTraders.Where(x => x.Name.StartsWith("Baro")).FirstOrDefault();
+            if (trader != null) {
+                trader.SolNode = _solNodes[trader.Node];
+            }
+            return trader;
         }
     }
 }

@@ -17,14 +17,14 @@ namespace Website.ViewModels {
         public List<ComponentAcquisition> ComponentAcquisitions { get; set; }
 
 
-        public ItemModalViewModel Load(WarframeItem warframeItem, ItemCategory itemCategory, ClaimsPrincipal user, UnitOfWork uow) {
+        public ItemModalViewModel Load(WarframeItem warframeItem, ItemCategory itemCategory, ClaimsPrincipal user, UnitOfWork uow, WarframeItemUtilities itemUtils) {
             WarframeItem = warframeItem;
             ItemCategory = itemCategory;
 
             int? userID = null;
             if (user.Identity.IsAuthenticated) {
                 userID = int.Parse(user.FindFirstValue(ClaimTypes.NameIdentifier));
-                ItemAcquisition = new ItemAcquisitionRepository(uow).GetByPrimaryKeys(userID.Value, WarframeItem.UniqueName);
+                ItemAcquisition = uow.GetRepo<ItemAcquisitionRepository>().GetByPrimaryKeys(userID.Value, WarframeItem.UniqueName);
 
                 if (ItemAcquisition == null)
                     ItemAcquisition = new ItemAcquisition {
@@ -37,14 +37,14 @@ namespace Website.ViewModels {
                 WarframeItem.Components = WarframeItem.Components.OrderBy(x => x.Name).ToList();
 
                 if (userID.HasValue) {
-                    ComponentAcquisitions = new ComponentAcquisitionRepository(uow)
+                    ComponentAcquisitions = uow.GetRepo<ComponentAcquisitionRepository>()
                         .GetByItemUniqueNameAndUserID(WarframeItem.UniqueName, userID.Value);
                 }else {
                     ComponentAcquisitions = new List<ComponentAcquisition>();
                 }
 
-                ItemCategory cat = new ItemCategoryRepository(uow).GetByCodexSection(CodexSection.Relics).FirstOrDefault();
-                List<WarframeItem> relics = new WarframeItemUtilities(uow).GetByCategoryID(cat.ID);
+                ItemCategory cat = uow.GetRepo<ItemCategoryRepository>().GetByCodexSection(CodexSection.Relics).FirstOrDefault();
+                List<WarframeItem> relics = itemUtils.GetByCategoryID(cat.ID);
 
 
                 int index = 0;

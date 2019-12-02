@@ -14,8 +14,12 @@ using Website.ViewModels;
 namespace Website.Controllers {
     public class ItemController : CustomController {
         private readonly AppSettings _appSettings;
-        public ItemController(IOptions<AppSettings> appSettings) {
+        private readonly UnitOfWork _uow;
+        private readonly WarframeItemUtilities _itemUtils;
+        public ItemController(IOptions<AppSettings> appSettings, UnitOfWork unitOfWork, WarframeItemUtilities utils) {
             _appSettings = appSettings.Value;
+            _uow = unitOfWork;
+            _itemUtils = utils;
         }
 
         public ActionResult Index() {
@@ -23,21 +27,19 @@ namespace Website.Controllers {
         }
 
         public IActionResult PrimeWishlist() {
-            return View(new PrimeWishlistViewModel().Load(User, _appSettings));
+            return View(new PrimeWishlistViewModel().Load(_uow, _itemUtils, User, _appSettings));
         }
 
         public ActionResult Form(string itemID) {
             itemID = itemID.Replace("|", "/");
-            using (UnitOfWork uow = UnitOfWork.CreateNew()) {
-                WarframeItem item = new WarframeItemUtilities(uow).GetByUniqueName(itemID);
-                ItemCategory itemCategory = new ItemCategoryRepository(uow).GetByID(item.ItemCategoryID);
-                new EagerLoader(uow).Load(itemCategory);
-                if (itemCategory.CodexTab_Object.CodexSectionID == CodexSection.Relics) {
-                    return PartialView("_RelicModal", item);
-                }
-
-                return PartialView("_ItemModalContent", new ItemModalViewModel().Load(item, itemCategory, User, uow));
+            WarframeItem item = _itemUtils.GetByUniqueName(itemID);
+            ItemCategory itemCategory = _uow.GetRepo<ItemCategoryRepository>().GetByID(item.ItemCategoryID);
+            new EagerLoader(_uow).Load(itemCategory);
+            if (itemCategory.CodexTab_Object.CodexSectionID == CodexSection.Relics) {
+                return PartialView("_RelicModal", item);
             }
+
+            return PartialView("_ItemModalContent", new ItemModalViewModel().Load(item, itemCategory, User, _uow, _itemUtils));
         }
 
         [Authorize]
@@ -46,34 +48,30 @@ namespace Website.Controllers {
             [Bind(Prefix = "ComponentAcquisitions")]List<ComponentAcquisition> compModel) {
 
             if (ModelState.IsValid) {
-                using (UnitOfWork uow = UnitOfWork.CreateNew()) {
-                    User user = new UserRepository(uow).GetByUsername(User.Identity.Name);
-                    model.UserID = user.ID;
+                User user = _uow.GetRepo<UserRepository>().GetByUsername(User.Identity.Name);
+                model.UserID = user.ID;
 
-                    WarframeItem item = new WarframeItemUtilities(uow).GetByUniqueName(model.ItemUniqueName);
-                    ItemCategory category = new ItemCategoryRepository(uow).GetByID(item.ItemCategoryID);
-                    if (!category.CanBeMastered) {
-                        model.IsMastered = false;
-                    }
+                WarframeItem item = _itemUtils.GetByUniqueName(model.ItemUniqueName);
+                ItemCategory category = _uow.GetRepo<ItemCategoryRepository>().GetByID(item.ItemCategoryID);
+                if (!category.CanBeMastered) {
+                    model.IsMastered = false;
+                }
 
-                    ItemAcquisitionRepository repo = new ItemAcquisitionRepository(uow);
-                    ItemAcquisition existing = repo.GetByPrimaryKeys(user.ID, model.ItemUniqueName);
-                    if (existing == null) {
-                        repo.Add(model);
-                    } else {
-                        repo.Update(model);
-                    }
+                ItemAcquisition existing = _uow.GetRepo<ItemAcquisitionRepository>().GetByPrimaryKeys(user.ID, model.ItemUniqueName);
+                if (existing == null) {
+                    _uow.GetRepo<ItemAcquisitionRepository>().Add(model);
+                } else {
+                    _uow.GetRepo<ItemAcquisitionRepository>().Update(model);
+                }
 
-                    if (compModel != null && compModel.Any()) {
-                        ComponentAcquisitionRepository compRepo = new ComponentAcquisitionRepository(uow);
-                        foreach (ComponentAcquisition ca in compModel) {
-                            ca.UserID = user.ID;
-                            ComponentAcquisition existingComp = compRepo.GetByPrimaryKeys(user.ID, ca.ComponentUniqueName, ca.ItemUniqueName);
-                            if (existingComp == null) {
-                                compRepo.Add(ca);
-                            } else {
-                                compRepo.Update(ca);
-                            }
+                if (compModel != null && compModel.Any()) {
+                    foreach (ComponentAcquisition ca in compModel) {
+                        ca.UserID = user.ID;
+                        ComponentAcquisition existingComp = _uow.GetRepo<ComponentAcquisitionRepository>().GetByPrimaryKeys(user.ID, ca.ComponentUniqueName, ca.ItemUniqueName);
+                        if (existingComp == null) {
+                            _uow.GetRepo<ComponentAcquisitionRepository>().Add(ca);
+                        } else {
+                            _uow.GetRepo<ComponentAcquisitionRepository>().Update(ca);
                         }
                     }
                 }
@@ -91,7 +89,7 @@ namespace Website.Controllers {
 
 
         public IActionResult PrimePrediction() {
-            return View(new PrimePredictionViewModel().Load(User));
+            return View(new PrimePredictionViewModel().Load(_uow, _itemUtils, _appSettings));
         }
 
         public IActionResult ModularItemInfo() {

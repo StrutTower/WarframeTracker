@@ -10,6 +10,21 @@ using System.Text.Encodings.Web;
 
 namespace Website.Infrastructure {
     public static class HtmlHelperExtensions {
+        public static int ConvertRarityToInt(this IHtmlHelper html, string rarityString) {
+            switch (rarityString.ToLower()) {
+                case "common":
+                    return 1;
+                case "uncommon":
+                    return 2;
+                case "rare":
+                    return 3;
+                case "legendary":
+                    return 4;
+                default:
+                    return 0;
+            }
+        }
+
         /// <summary>
         /// Returns a label, editor, and validation message for the specified model property within a form-group div.
         /// This is the same as LabelEditorValFor except that it will be inside a form-group div.

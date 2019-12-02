@@ -3,7 +3,7 @@
     ViewBag.Title = "Manage Codex Tabs";
 }
 
-<a href="@Url.Action("EditCodexTab")">
+<a asp-action="Edit" class="btn btn-link float-right">
     <span class="mdi mdi-fw mdi-plus-box-outline"></span>Add New Codex Tab
 </a>
 
@@ -12,7 +12,7 @@
 
 <div class="mobile-collapse-group">
     @foreach (var group in Model.GroupBy(x => x.CodexSectionID).OrderBy(x => x.Key)) {
-        <div class="mobile-collapse">
+        <div class="mobile-collapse mobile-collapse-md">
             <h4 class="mobile-collapse-header">
                 @EnumUtilities.GetDisplayName(group.Key)
             </h4>
@@ -56,7 +56,7 @@
                                         @Html.BooleanIcon(item.GroupItemsByItemCategory)
                                     </td>
                                     <td>
-                                        @Html.ActionLink("Edit", "EditCodexTab", new { id = item.ID })
+                                        @Html.ActionLink("Edit", "Edit", new { id = item.ID })
                                     </td>
                                 </tr>
                             }

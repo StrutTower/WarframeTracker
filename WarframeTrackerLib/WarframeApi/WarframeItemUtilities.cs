@@ -22,9 +22,9 @@ namespace WarframeTrackerLib.WarframeApi {
         }
 
         #region Get Methods
-        public WarframeItem GetByUniqueName(string uniqueName) {
+        public WarframeItem GetByUniqueName(string uniqueName, bool redownloadCacheIfNotFound = true) {
             ItemCache itemCache = new ItemCacheRepository(_unitOfWork).GetByUniqueName(uniqueName);
-            if (itemCache == null || itemCache.UpdatedTimestamp < DateTime.Now.AddDays(-2)) {
+            if (redownloadCacheIfNotFound && itemCache == null || itemCache.UpdatedTimestamp < DateTime.Now.AddDays(-2)) {
                 itemCache = RedownloadCache().SingleOrDefault(x => x.UniqueName == uniqueName);
             }
             return JsonConvert.DeserializeObject<WarframeItem>(itemCache.Data);
@@ -33,7 +33,7 @@ namespace WarframeTrackerLib.WarframeApi {
         public List<WarframeItem> GetByCodexSection(CodexSection codexSection) {
             List<ItemCache> caches = new ItemCacheRepository(_unitOfWork).GetByCodexSection(codexSection);
 
-            if (caches== null != !caches.Any() || caches.First().UpdatedTimestamp < DateTime.Now.AddDays(-2)) {
+            if (caches == null != !caches.Any() || caches.First().UpdatedTimestamp < DateTime.Now.AddDays(-2)) {
                 List<ItemCategory> itemCategories = new ItemCategoryRepository(_unitOfWork).GetByCodexSection(codexSection);
                 caches = RedownloadCache().Where(x => itemCategories.Select(y => y.ID).Contains(x.ItemCategoryID)).ToList();
             }
@@ -94,49 +94,47 @@ namespace WarframeTrackerLib.WarframeApi {
         #endregion
 
         public List<ItemCache> RedownloadCache() {
-            using (UnitOfWork uow = UnitOfWork.CreateNew()) {
-                uow.BeginTransaction();
-                try {
-                    List<ManualItemData> manualItemData = new ManualItemDataRepository(uow).GetAll();
-                    IEnumerable<ItemCategory> itemCategories = new ItemCategoryRepository(uow).GetAll().OrderBy(x => x.SortingPriority);
-                    new EagerLoader(uow).Load(itemCategories);
+            _unitOfWork.BeginTransaction();
+            try {
+                List<ManualItemData> manualItemData = _unitOfWork.GetRepo<ManualItemDataRepository>().GetAll();
+                IEnumerable<ItemCategory> itemCategories = _unitOfWork.GetRepo<ItemCategoryRepository>().GetAll().OrderBy(x => x.SortingPriority);
+                new EagerLoader(_unitOfWork).Load(itemCategories);
 
-                    List<WarframeItem> items = GetWfcdItems(itemCategories);
+                List<WarframeItem> items = GetWfcdItems(itemCategories);
 
-                    ItemCacheRepository repo = new ItemCacheRepository(uow);
-                    repo.RemoveAll();
-                    List<ItemCache> itemCaches = new List<ItemCache>();
-                    foreach (WarframeItem item in items) {
-                        // Manual Item Data
-                        List<ManualItemData> manual = manualItemData.Where(x => x.ItemUniqueName == item.UniqueName).ToList();
-                        foreach (ManualItemData data in manual) {
-                            var prop = item.GetType().GetProperty(data.PropertyName);
-                            try {
-                                prop.SetValue(item, Convert.ChangeType(data.Value, prop.PropertyType));
-                            } catch { }
-                        }
-
-                        ItemCache itemCache = new ItemCache {
-                            UniqueName = item.UniqueName,
-                            ItemCategoryID = item.ItemCategoryID,
-                            Name = item.Name,
-                            MasteryRequired = item.MasteryReq,
-                            UpdatedTimestamp = DateTime.Now
-                        };
-                        itemCache.Data = JsonConvert.SerializeObject(item);
-                        itemCaches.Add(itemCache);
+                //ItemCacheRepository repo = new ItemCacheRepository(uow);
+                _unitOfWork.GetRepo<ItemCacheRepository>().RemoveAll();
+                List<ItemCache> itemCaches = new List<ItemCache>();
+                foreach (WarframeItem item in items) {
+                    // Manual Item Data
+                    List<ManualItemData> manual = manualItemData.Where(x => x.ItemUniqueName == item.UniqueName).ToList();
+                    foreach (ManualItemData data in manual) {
+                        var prop = item.GetType().GetProperty(data.PropertyName);
+                        try {
+                            prop.SetValue(item, Convert.ChangeType(data.Value, prop.PropertyType));
+                        } catch { }
                     }
 
-                    foreach (ItemCache cache in itemCaches) {
-                        repo.Add(cache);
-                    }
-                    uow.CommitTransaction();
-
-                    return itemCaches;
-                } catch {
-                    uow.RollbackTransaction();
-                    throw;
+                    ItemCache itemCache = new ItemCache {
+                        UniqueName = item.UniqueName,
+                        ItemCategoryID = item.ItemCategoryID,
+                        Name = item.Name,
+                        MasteryRequired = item.MasteryReq,
+                        UpdatedTimestamp = DateTime.Now
+                    };
+                    itemCache.Data = JsonConvert.SerializeObject(item);
+                    itemCaches.Add(itemCache);
                 }
+
+                foreach (ItemCache cache in itemCaches) {
+                    _unitOfWork.GetRepo<ItemCacheRepository>().Add(cache);
+                }
+                _unitOfWork.CommitTransaction();
+
+                return itemCaches;
+            } catch {
+                _unitOfWork.RollbackTransaction();
+                throw;
             }
         }
 

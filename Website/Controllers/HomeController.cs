@@ -1,8 +1,5 @@
-﻿using System.Security.Claims;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using WarframeTrackerLib.Domain;
 using WarframeTrackerLib.Repository;
 using Website.Infrastructure;
 using Website.ViewModels;
@@ -10,42 +7,14 @@ using Website.ViewModels;
 namespace Website.Controllers {
     public class HomeController : CustomController {
         private readonly AppSettings _appSettings;
-        public HomeController(IOptions<AppSettings> appSettings) {
+        private readonly UnitOfWork _uow;
+        public HomeController(IOptions<AppSettings> appSettings, UnitOfWork unitOfWork) {
             _appSettings = appSettings.Value;
+            _uow = unitOfWork;
         }
 
         public IActionResult Index() {
-            return View(new HomeViewModel().Load(User, _appSettings));
-        }
-
-        [Authorize, HttpGet]
-        public ActionResult UpdateStarchartCompletion() {
-            int userID = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
-            using (UnitOfWork uow = UnitOfWork.CreateNew()) {
-                UserData userData = new UserDataRepository(uow).GetByUserID(userID);
-                return View(userData);
-            }
-        }
-
-        [Authorize, HttpPost]
-        public ActionResult UpdateStarchartCompletion(UserData model) {
-            if (ModelState.IsValid) {
-                using (UnitOfWork uow = UnitOfWork.CreateNew()) {
-                    int userID = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
-                    UserDataRepository repo = new UserDataRepository(uow);
-                    UserData userData = repo.GetByUserID(userID);
-                    userData.JunctionsCompleted = model.JunctionsCompleted;
-                    userData.MissionNodesCompleted = model.MissionNodesCompleted;
-                    repo.Update(userData);
-                }
-                TempData["message"] = "Updated";
-                return RedirectToAction("Index");
-            }
-            return View(model);
-        }
-
-        public IActionResult ReleaseNotes() {
-            return View();
+            return View(new HomeViewModel().Load(_uow, User, _appSettings));
         }
     }
 }

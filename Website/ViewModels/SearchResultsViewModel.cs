@@ -12,12 +12,10 @@ namespace Website.ViewModels {
         public List<CodexTab> CodexTabs { get; set; }
 
 
-        public SearchResultsViewModel Load(AdvancedSearchModel model) {
-            using (UnitOfWork uow = UnitOfWork.CreateNew()) {
-                WarframeItems = new WarframeItemUtilities(uow).AdvancedSearch(model);
-                CodexTabs = new CodexTabRepository(uow).GetAll();
+        public SearchResultsViewModel Load(UnitOfWork uow, WarframeItemUtilities itemUtils, AdvancedSearchModel model) {
+                WarframeItems = itemUtils.AdvancedSearch(model);
+                CodexTabs = uow.GetRepo<CodexTabRepository>().GetAll();
                 new EagerLoader(uow).Load(CodexTabs);
-            }
             return this;
         }
     }

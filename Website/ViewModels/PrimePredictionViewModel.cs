@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Claims;
 using WarframeTrackerLib.Repository;
 using WarframeTrackerLib.WarframeApi;
+using Website.Infrastructure;
 
 namespace Website.ViewModels {
     public class PrimePredictionViewModel {
@@ -21,12 +22,8 @@ namespace Website.ViewModels {
 
         public int PrimeIndex { get; set; }
 
-        public PrimePredictionViewModel Load(ClaimsPrincipal user) {
-            int userID = int.Parse(user.FindFirstValue(ClaimTypes.NameIdentifier));
-            List<WarframeItem> frames;
-            using (UnitOfWork uow = UnitOfWork.CreateNew()) {
-                frames = new WarframeItemUtilities(uow).GetByCategoryID(userID);
-            }
+        public PrimePredictionViewModel Load(UnitOfWork uow, WarframeItemUtilities itemUtils, AppSettings appSettings) {
+            List<WarframeItem> frames = itemUtils.GetByCategoryID(appSettings.WarframeItemCategoryID);
 
             StandardWarframes = frames.Where(x => !x.IsPrime && !x.Name.Contains("Umbra")).OrderBy(x => string.IsNullOrWhiteSpace(x.ReleaseDate)).ThenBy(x => x.ReleaseDate).ToList();
             PrimeWarframes = frames.Where(x => x.IsPrime).OrderBy(x => x.ReleaseDate).ToList();

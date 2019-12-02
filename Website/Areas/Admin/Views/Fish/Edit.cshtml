@@ -1,0 +1,83 @@
+﻿@model EditFishViewModel
+@{
+    bool editing = false;
+    @if (Model != null && Model.Fish != null && Model.Fish.ID != 0) {
+        editing = true;
+        ViewBag.Title = "Edit Fish";
+    } else {
+        ViewBag.Title = "New Fish";
+    }
+}
+
+<h3>@ViewBag.Title</h3>
+<hr />
+
+<form action="" method="post" class="row">
+    @if (editing) {
+        @Html.HiddenFor(x => x.Fish.ID)
+    }
+
+    <div class="col-md-6">
+        <div class="form-group">
+            <label asp-for="Fish.UniqueName" class="twr-label"></label>
+            <select class="form-control warframe-item-searcher" required data-val="true" data-val-required="An item is required"
+                    name="@Html.NameFor(x => x.Fish.UniqueName)" id="@Html.IdFor(x => x.Fish.UniqueName)"
+                    data-url="@Url.Action("WarframeItemsAjax", "Search")">
+                <option></option>
+                @if (Model.Fish != null && !string.IsNullOrWhiteSpace(Model.Fish.UniqueName)) {
+                    <option value="@Model.Fish.UniqueName" selected>@Model.SelectedItemName</option>
+                }
+            </select>
+            <help-text twr-for="Fish.UniqueName"></help-text>
+            <span asp-validation-for="Fish.UniqueName"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Fish.MapName" class="twr-label"></label>
+            <select class="twr-input" asp-for="Fish.MapName" asp-items="Model.MapSelectList">
+                <option></option>
+            </select>
+            <help-text twr-for="Fish.MapName"></help-text>
+            <span asp-validation-for="Fish.MapName"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Fish.Biome" class="twr-label"></label>
+            <select class="twr-input" asp-for="Fish.Biome" asp-items="Model.BiomeSelectList">
+                <option></option>
+            </select>
+            <help-text twr-for="Fish.Biome"></help-text>
+            <span asp-validation-for="Fish.Biome"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Fish.ActiveTime" class="twr-label"></label>
+            <select class="twr-input" asp-for="Fish.ActiveTime" asp-items="Model.ActiveTimeSelectList">
+                <option></option>
+            </select>
+            <help-text twr-for="Fish.ActiveTime"></help-text>
+            <span asp-validation-for="Fish.ActiveTime"></span>
+        </div>
+
+        @Html.FormGroupEditorFor(x => x.Fish.SpearType)
+
+        <div class="form-group">
+            <label asp-for="Fish.Rarity" class="twr-label"></label>
+            <select class="twr-input" asp-for="Fish.Rarity" asp-items="Model.RaritySelectList">
+                <option></option>
+            </select>
+            <help-text twr-for="Fish.Rarity"></help-text>
+            <span asp-validation-for="Fish.Rarity"></span>
+        </div>
+
+        @Html.FormGroupEditorFor(x => x.Fish.MaxWeight)
+        @Html.FormGroupEditorFor(x => x.Fish.BaitName)
+        @Html.FormGroupEditorFor(x => x.Fish.SmallStanding)
+        @Html.FormGroupEditorFor(x => x.Fish.MediumStanding)
+        @Html.FormGroupEditorFor(x => x.Fish.LargeStanding)
+
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+    </div>
+</form>

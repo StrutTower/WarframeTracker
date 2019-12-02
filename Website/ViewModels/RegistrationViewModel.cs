@@ -16,24 +16,23 @@ namespace Website.ViewModels {
         public string ConfirmPassword { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext) {
+            UnitOfWork uow = (UnitOfWork)validationContext.GetService(typeof(UnitOfWork));
+
             if (Password != ConfirmPassword) {
                 yield return new ValidationResult("Passwords do not match", new[] { "Password", "ConfirmPassword" });
             }
 
-            using (UnitOfWork uow = UnitOfWork.CreateNew()) {
-                UserRepository repo = new UserRepository(uow);
-                User user = repo.GetByUsername(Username);
+            User user = uow.GetRepo<UserRepository>().GetByUsername(Username);
 
-                if (user != null) {
-                    yield return new ValidationResult("Username is not valid", new[] { "Username" });
-                }
+            if (user != null) {
+                yield return new ValidationResult("Username is not valid", new[] { "Username" });
+            }
 
-                user = null;
-                user = repo.GetByEmailAddress(EmailAddress);
+            user = null;
+            user = uow.GetRepo<UserRepository>().GetByEmailAddress(EmailAddress);
 
-                if (user != null) {
-                    yield return new ValidationResult("Email address is not valid", new[] { "EmailAddress" });
-                }
+            if (user != null) {
+                yield return new ValidationResult("Email address is not valid", new[] { "EmailAddress" });
             }
         }
     }

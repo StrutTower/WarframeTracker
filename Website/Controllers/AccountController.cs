@@ -14,6 +14,11 @@ using Website.ViewModels;
 
 namespace Website.Controllers {
     public class AccountController : CustomController {
+        private readonly UnitOfWork _uow;
+        public AccountController(UnitOfWork unitOfWork) {
+            _uow = unitOfWork;
+        }
+
         //TODO Add Account Management
         [Authorize]
         public IActionResult Management() {
@@ -41,9 +46,7 @@ namespace Website.Controllers {
         public async Task<IActionResult> Login(LoginViewModel model) {
             if (ModelState.IsValid) {
                 User user;
-                using (UnitOfWork uow = UnitOfWork.CreateNew()) {
-                    user = new UserRepository(uow).GetByUsername(model.UserName);
-                }
+                    user = _uow.GetRepo<UserRepository>().GetByUsername(model.UserName);
 
                 if (user != null) {
                     if (new Hasher().Validate(user.Password, model.Password, user.Salt)) {

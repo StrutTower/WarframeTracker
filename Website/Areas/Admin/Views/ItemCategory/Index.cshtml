@@ -1,0 +1,72 @@
+﻿@model IEnumerable<ItemCategory>
+
+@{
+    ViewBag.Title = "Manage Item Categories";
+}
+
+<a asp-action="Edit" class="btn btn-link float-right">
+    <span class="mdi mdi-fw mdi-plus-box-outline"></span>Add New Item Category
+</a>
+
+<h3>@ViewBag.Title</h3>
+<hr />
+
+<div class="mobile-collapse-group">
+    @foreach (var group in Model.GroupBy(x => x.CodexTab_Object.CodexSectionID)) {
+        <div class="mobile-collapse mobile-collapse-md">
+            <h4 class="mobile-collapse-header">@EnumUtilities.GetDisplayName(group.Key)</h4>
+            <div class="mobile-collapse-body">
+                <div class="table-responsive">
+                    <table class="table table-sm table-bordered table-striped w-auto">
+                        <thead class="thead-dark text-center">
+                            <tr>
+                                <th>
+                                    @Html.DisplayNameFor(x => x.Name)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(x => x.CodexTabID)
+                                </th>
+                                <th>
+                                    <abbr title="@Html.DisplayNameFor(x => x.WarframeApiCategoryName)">
+                                        API
+                                    </abbr>
+                                </th>
+                                <th>
+                                    <abbr title="@Html.DisplayNameFor(x => x.AllowAcquisition)">
+                                        Acquisition
+                                    </abbr>
+                                </th>
+                                <th>
+                                    <abbr title="@Html.DisplayNameFor(x => x.CanBeMastered)">
+                                        Mastered
+                                    </abbr>
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(x => x.SortingPriority)
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (ItemCategory cat in group.OrderBy(x => x.CodexTab_Object.SortingPriority).ThenBy(x => x.SortingPriority)) {
+                                <tr>
+                                    <td>
+                                        <a asp-action="Edit" asp-route-id="@cat.ID" display-for="@cat.Name"></a>
+                                    </td>
+                                    <td display-for="@cat.CodexTab_Object.Name"></td>
+                                    <td display-for="@cat.WarframeApiCategoryName"></td>
+                                    <td>
+                                        @Html.BooleanIcon(cat.AllowAcquisition)
+                                    </td>
+                                    <td>
+                                        @Html.BooleanIcon(cat.CanBeMastered)
+                                    </td>
+                                    <td display-for="@cat.SortingPriority"></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    }
+</div>

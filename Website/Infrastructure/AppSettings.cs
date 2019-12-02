@@ -8,6 +8,7 @@ namespace Website.Infrastructure {
         public string AppName { get; set; }
         public string DevName { get; set; }
         public string DevHomepage { get; set; }
+        public int WarframeItemCategoryID { get; set; }
 
         public int? JunctionMasteryExperience { get; set; }
         public double? MissionNodeMasteryExperience { get; set; }

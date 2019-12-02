@@ -10,26 +10,32 @@ namespace Website.ViewModels {
     public class HomeViewModel {
         public WorldState WorldState { get; set; }
 
+        public VoidTrader Baro { get; set; }
+
         public List<Invasion> ImportantInvasions { get; set; }
 
         public List<Invasion> OtherInvasions { get; set; }
 
-        public List<ActiveMission> VoidMissions { get; set; }
+        public List<ActiveMission> CellFissureMissions { get; set; }
 
-        public HomeViewModel Load(ClaimsPrincipal user, AppSettings appSettings) {
-            //int userID = int.Parse(user.FindFirstValue(ClaimTypes.NameIdentifier));
+        public List<ActiveMission> ExcavationFissureMissions { get; set; }
+
+        public HomeViewModel Load(UnitOfWork uow, ClaimsPrincipal user, AppSettings appSettings) {
             WorldState = new WorldStateUtilities().GetWorldState();
 
-            using (UnitOfWork uow = UnitOfWork.CreateNew()) {
+            WorldStateHelper worldStateHelper = new WorldStateHelper();
 
-                WorldStateHelper worldStateHelper = new WorldStateHelper();
+           Baro = worldStateHelper.GetBaro(WorldState);
 
-                List<Invasion> invasions = worldStateHelper.GetInvasions(uow, WorldState);
-                ImportantInvasions = invasions.Where(x => x.IsImportant).ToList();
-                OtherInvasions = invasions.Where(x => !x.IsImportant).ToList();
+            List<Invasion> invasions = worldStateHelper.GetInvasions(uow, WorldState);
+            ImportantInvasions = invasions.Where(x => x.IsImportant).ToList();
+            OtherInvasions = invasions.Where(x => !x.IsImportant).ToList();
 
-                VoidMissions = worldStateHelper.GetVoidAndOrokinCellMissions(uow, WorldState);
-            }
+            var voidMissions = worldStateHelper.GetVoidMissions(WorldState);
+
+            CellFissureMissions = voidMissions.Where(x => x.SolNode.Name.Contains("Saturn") || x.SolNode.Name.Contains("Ceres")).ToList();
+            ExcavationFissureMissions = voidMissions.Where(x => x.MissionType == "Excavation").ToList();
+
             return this;
         }
     }

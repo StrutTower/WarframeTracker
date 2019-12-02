@@ -3,8 +3,13 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using WarframeTrackerLib.Config;
+using WarframeTrackerLib.Repository;
+using WarframeTrackerLib.WarframeApi;
+using Website.Infrastructure;
 
 namespace Website {
     public class Startup {
@@ -27,7 +32,15 @@ namespace Website {
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
-            services.Configure<Infrastructure.AppSettings>(Configuration.GetSection("appSettings"));
+            services.Configure<RazorViewEngineOptions>(o => {
+                o.ViewLocationFormats.Add("/Views/Admin/{1}/{0}" + RazorViewEngine.ViewExtension);
+            });
+
+            services.Configure<AppSettings>(Configuration.GetSection("appSettings"));
+            services.Configure<ApplicationSecrets>(Configuration.GetSection("applicationSecrets"));
+
+            services.AddScoped<UnitOfWork>();
+            services.AddScoped<WarframeItemUtilities>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -49,6 +62,9 @@ namespace Website {
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
+                routes.MapRoute(
+                    name: "Admin",
+                    template: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
             });
         }
     }

@@ -1,30 +1,55 @@
-﻿
+﻿///<reference path="_variables.scss" />
+///<reference path="../node_modules/bootstrap/scss/_variables.scss" />
+///<reference path="../node_modules/dark-bootstrap-theme/src/_darkVariables.scss" />
 
+$transition: .2s ease;
 
 .mobile-collapse {
+    padding-bottom: .5rem;
+
     .mobile-collapse-header {
         cursor: pointer;
+        padding: .5rem .3rem;
+        border-bottom: 1px solid #555;
 
         &:after {
-            content:'>';
+            content: '\203A';
+            display: inline-block;
+            float: right;
+            transition: transform $transition;
+            transform-origin:center;
         }
     }
 
     .mobile-collapse-body {
-        display:none;
+        display: none;
     }
 
     &.show {
         .mobile-collapse-header:after {
-            transform:rot(-90deg);
+            transform: rotate(90deg);
         }
 
-        .mobile.collapse-body {
-            display:block;
+        .mobile-collapse-body {
+            display: block;
         }
     }
 }
 
-.mobile-collapse.mobile-collapse-md {
+@each $type, $size in $container-max-widths {
+    @media screen and (min-width:$size) {
+        .mobile-collapse.mobile-collapse-#{$type} {
+            .mobile-collapse-header {
+                cursor: default !important;
 
+                &:after {
+                    display: none !important;
+                }
+            }
+
+            .mobile-collapse-body {
+                display: block;
+            }
+        }
+    }
 }

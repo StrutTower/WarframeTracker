@@ -14,14 +14,14 @@ namespace Website.ViewModels {
 
         public List<CodexTab> CodexTabs { get; set; }
 
-        //public List<ItemCategory> ItemCategories { get; set; }
-
         public List<WarframeItem> WarframeItems { get; set; }
 
         public List<ItemAcquisition> ItemAcquisitions { get; set; }
 
+        public Dictionary<string, Fish> Fish { get; set; }
 
-        public CodexViewModel Load(ClaimsPrincipal user, CodexSection codexSection) {
+
+        public CodexViewModel Load(UnitOfWork uow, WarframeItemUtilities itemUtils, ClaimsPrincipal user, CodexSection codexSection) {
             CodexSection = codexSection;
 
             int? userID = null;
@@ -29,27 +29,28 @@ namespace Website.ViewModels {
                 userID = int.Parse(user.FindFirstValue(ClaimTypes.NameIdentifier));
             }
 
-            using (UnitOfWork uow = UnitOfWork.CreateNew()) {
-                CodexTabs = new CodexTabRepository(uow).GetByCodexSection(codexSection)
-                    .OrderBy(x => x.SortingPriority).ThenBy(x => x.Name).ToList();
+            CodexTabs = uow.GetRepo<CodexTabRepository>().GetByCodexSection(codexSection)
+                .OrderBy(x => x.SortingPriority).ThenBy(x => x.Name).ToList();
 
-                if (CodexTabs.Any())
-                    CurrentCodexTab = CodexTabs.FirstOrDefault();
+            if (CodexTabs.Any())
+                CurrentCodexTab = CodexTabs.FirstOrDefault();
 
-                new EagerLoader(uow).Load(CodexTabs);
+            new EagerLoader(uow).Load(CodexTabs);
 
-                WarframeItems = new WarframeItemUtilities(uow)
-                    .GetByCategoryIDs(CurrentCodexTab.ItemCategory_Objects.Select(x => x.ID))
-                    .OrderBy(x => x.Name).ToList();
+            WarframeItems = itemUtils
+                .GetByCategoryIDs(CurrentCodexTab.ItemCategory_Objects.Select(x => x.ID))
+                .OrderBy(x => x.Name).ToList();
 
-                if (userID.HasValue) {
-                    ItemAcquisitions = new ItemAcquisitionRepository(uow).GetByUserID(userID.Value);
-                }
+            if (userID.HasValue) {
+                ItemAcquisitions = uow.GetRepo<ItemAcquisitionRepository>().GetByUserID(userID.Value);
+            }
+            if (CodexSection == CodexSection.Fish) {
+                Fish = uow.GetRepo<FishRepository>().GetAll().ToDictionary(x => x.UniqueName);
             }
             return this;
         }
 
-        public CodexViewModel Load(ClaimsPrincipal user, CodexSection codexSection, int tabID) {
+        public CodexViewModel Load(UnitOfWork uow, WarframeItemUtilities itemUtils, ClaimsPrincipal user, CodexSection codexSection, int tabID) {
             CodexSection = codexSection;
 
             int? userID = null;
@@ -57,21 +58,22 @@ namespace Website.ViewModels {
                 userID = int.Parse(user.FindFirstValue(ClaimTypes.NameIdentifier));
             }
 
-            using (UnitOfWork uow = UnitOfWork.CreateNew()) {
-                CodexTabs = new CodexTabRepository(uow).GetByCodexSection(codexSection)
-                    .OrderBy(x => x.SortingPriority).ThenBy(x => x.Name).ToList();
+            CodexTabs = uow.GetRepo<CodexTabRepository>().GetByCodexSection(codexSection)
+                .OrderBy(x => x.SortingPriority).ThenBy(x => x.Name).ToList();
 
-                CurrentCodexTab = CodexTabs.SingleOrDefault(x => x.ID == tabID);
+            CurrentCodexTab = CodexTabs.SingleOrDefault(x => x.ID == tabID);
 
-                new EagerLoader(uow).Load(CodexTabs);
+            new EagerLoader(uow).Load(CodexTabs);
 
-                WarframeItems = new WarframeItemUtilities(uow)
-                    .GetByCategoryIDs(CurrentCodexTab.ItemCategory_Objects.Select(x => x.ID))
-                    .OrderBy(x => x.Name).ToList();
+            WarframeItems = itemUtils
+                .GetByCategoryIDs(CurrentCodexTab.ItemCategory_Objects.Select(x => x.ID))
+                .OrderBy(x => x.Name).ToList();
 
-                if (userID.HasValue) {
-                    ItemAcquisitions = new ItemAcquisitionRepository(uow).GetByUserID(userID.Value);
-                }
+            if (userID.HasValue) {
+                ItemAcquisitions = uow.GetRepo<ItemAcquisitionRepository>().GetByUserID(userID.Value);
+            }
+            if (CodexSection == CodexSection.Fish) {
+                Fish = uow.GetRepo<FishRepository>().GetAll().ToDictionary(x => x.UniqueName);
             }
             return this;
         }

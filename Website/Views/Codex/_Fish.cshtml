@@ -1,0 +1,57 @@
+﻿@model CodexViewModel
+@{
+    string missingImageUrl = Url.Content("~/images") + "/missingImage.jpg";
+    List<string> biomes = new List<string>();
+    foreach(var group in Model.Fish.GroupBy(x => x.Value.Biome)) {
+        if(group.Key.Contains(',')) {
+            foreach(string split in group.Key.Split(',')) {
+                if (!biomes.Contains(split.Trim())) {
+                    biomes.Add(split.Trim());
+                }
+            }
+        } else if (!biomes.Contains(group.Key.Trim())) {
+            biomes.Add(group.Key.Trim());
+        }
+    }
+    SelectList biomeList = new SelectList(biomes.OrderBy(x => x));
+}
+
+<div class="form-group">
+    <select class="twr-input" id="fish-biome-filter" asp-items="@biomeList">
+        <option value="">Show All Biomes</option>
+    </select>
+</div>
+
+<div id="fish-codex-container" class="row">
+    @foreach (WarframeItem item in Model.WarframeItems
+     .OrderByDescending(x => x.UniqueName.Contains("Legendary"))
+     .ThenByDescending(x => x.UniqueName.Contains("Rare"))
+     .ThenByDescending(x => x.UniqueName.Contains("Uncommon"))) {
+        Fish fish = null;
+        if (Model.Fish.ContainsKey(item.UniqueName)) {
+            fish = Model.Fish[item.UniqueName];
+        }
+        <div class="col-6 col-md-4 col-lg-3 fish-details-container" data-biome="@fish.Biome">
+            <div class="row border border-secondary h-100 py-2 position-relative">
+                <div class=" col-12">
+                    <span display-for="@item.Name" class="text-uppercase" style="font-weight:600;"></span>
+                </div>
+                <div class="col-4 col-md-5">
+                    <img class="img-fluid" src="https://cdn.warframestat.us/img/@item.ImageName"
+                         onerror="this.onerror=null;this.src='@missingImageUrl';" />
+                </div>
+                <div class="col-8 col-md-7">
+
+                    <small display-for="@fish.Biome" class="d-block"></small>
+                    <small display-for="@fish.ActiveTime" class="d-block"></small>
+                    <small display-for="@fish.Rarity" class="d-block"></small>
+                    <small display-for="@fish.SpearType" class="d-block"></small>
+                </div>
+                <div class="col-12 text-center small">
+                    Standing:
+                    @Html.DisplayFor(x => fish.SmallStanding)/@Html.DisplayFor(x => fish.MediumStanding)/@Html.DisplayFor(x => fish.LargeStanding)
+                </div>
+            </div>
+        </div>
+    }
+</div>

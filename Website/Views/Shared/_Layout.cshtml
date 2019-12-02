@@ -4,9 +4,9 @@
 <head>
     <title>
         @if (ViewBag.Title == null) {
-            @AppSettings.Value.AppName
+        @AppSettings.Value.AppName
         } else {
-            @ViewBag.Title @: - @AppSettings.Value.AppName
+        @ViewBag.Title  @: - @AppSettings.Value.AppName
         }
     </title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -25,7 +25,7 @@
     <link rel="stylesheet" href="//cdn.materialdesignicons.com/3.6.95/css/materialdesignicons.min.css">
 </head>
 <body>
-   <partial name="_LayoutNav" />
+    <partial name="_LayoutNav" />
 
     <noscript class="noscript">
         JavaScript is disabled in your browser.
@@ -35,30 +35,25 @@
 
     <main class="container">
         @RenderBody()
-
-        <footer>
-            <hr />
-            <p class="text-center">
-                <environment include="Development">
-                    <span class="text-danger font-weight-bold">Development Server</span>
-                </environment>
-                <a href="@AppSettings.Value.DevHomepage" display-for="@AppSettings.Value.DevName" rel="noopener noreferrer"></a>
-                <span title="Developed by StrutTower">
-                    @AppSettings.Value.AppName &copy; @DateTime.Now.Year -
-                </span>
-                <a asp-action="ReleaseNotes" asp-controller="Home">
-                    Version @Html.WebsiteVersion()
-                </a>
-            </p>
-        </footer>
-
-        @*<div class="hidden">
-            @Html.AntiForgeryToken()
-        </div>*@
-        @if (TempData["message"] != null) {
-            <input type="hidden" id="tempDataMessage" value="@TempData["message"]" />
-        }
     </main>
+
+    <footer class="container">
+        <p class="text-center">
+            <environment include="Development">
+                <span class="text-danger font-weight-bold">Development Server</span> -
+            </environment>
+            <a href="@AppSettings.Value.DevHomepage" display-for="@AppSettings.Value.DevName" rel="noopener noreferrer"></a>
+            <span title="Developed by StrutTower">
+                - @AppSettings.Value.AppName &copy; @DateTime.Now.Year -
+            </span>
+            <a asp-action="ReleaseNotes" asp-controller="Home">
+                Version @Html.WebsiteVersion()
+            </a>
+        </p>
+        @if (TempData["message"] != null) {
+        <input type="hidden" id="tempDataMessage" value="@TempData["message"]" />
+        }
+    </footer>
 
     <environment include="Development">
         <script src="~/lib/lib.js"></script>

@@ -10,32 +10,33 @@ using Website.ViewModels;
 
 namespace Website.Controllers {
     public class SearchController : CustomController {
+        private readonly UnitOfWork _uow;
+        private readonly WarframeItemUtilities _itemUtils;
+        public SearchController(UnitOfWork unitOfWork, WarframeItemUtilities itemUtils) {
+            _uow = unitOfWork;
+            _itemUtils = itemUtils;
+        }
+
         public IActionResult Index() {
-            return View(new SearchViewModel().Load());
+            return View(new SearchViewModel().Load(_uow));
         }
 
         public IActionResult Results(SearchViewModel model) {
             if (ModelState.IsValid) {
-                return View("Items", new SearchResultsViewModel().Load(model.AdvancedSearchModel));
+                return View("Items", new SearchResultsViewModel().Load(_uow, _itemUtils, model.AdvancedSearchModel));
             }
-            return View("Index", model.Load());
+            return View("Index", model.Load(_uow));
         }
 
         public ActionResult Basic(string q) {
-            List<WarframeItem> items;
-            using (UnitOfWork uow = UnitOfWork.CreateNew()) {
-                items = new WarframeItemUtilities(uow).GetAll();
-            }
+            List<WarframeItem> items = _itemUtils.GetAll();
             var items2 = items.Where(x => x.Name.ToLower().Contains(q.ToLower())).ToList();
             return View("Items", items2);
         }
 
         public ActionResult WarframeItemsAjax(string q, int? page = null) {
             int itemsPerPage = 15;
-            List<WarframeItem> items;
-            using (UnitOfWork uow = UnitOfWork.CreateNew()) {
-                items = new WarframeItemUtilities(uow).Search(q).OrderBy(x => x.Name).ToList();
-            }
+            List<WarframeItem> items = _itemUtils.Search(q).OrderBy(x => x.Name).ToList();
             bool moreResults = false;
             if (page.HasValue) {
                 List<WarframeItem> skippedList = items.Skip((page.Value - 1) * itemsPerPage).ToList();

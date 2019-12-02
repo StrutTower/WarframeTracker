@@ -1,0 +1,71 @@
+﻿@model IEnumerable<Fish>
+@{
+    ViewBag.Title = "Manage Fish";
+}
+
+<a href="@Url.Action("Edit")" class="btn btn-link float-right">
+    <span class="mdi mdi-fw mdi-plus-box-outline"></span>Add New Fish
+</a>
+
+<h3>@ViewBag.Title</h3>
+<hr />
+
+<div class="mobile-collapse-group">
+    @foreach (var group in Model.GroupBy(x => x.MapName)) {
+        <div class="mobile-collapse mobile-collapse-md">
+            <h4 class="mobile-collapse-header">@group.Key</h4>
+            <div class="mobile-collapse-body">
+                <div class="table-responsive">
+                    <table class="table table-sm table-bordered table-striped w-auto">
+                        <thead class="thead-dark text-center">
+                            <tr>
+                                <th>
+                                    @Html.DisplayNameFor(x => x.WarframeItem_Object.Name)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(x => x.Biome)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(x => x.ActiveTime)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(x => x.SpearType)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(x => x.Rarity)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(x => x.MaxWeight)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(x => x.BaitName)
+                                </th>
+                                <th>
+                                    Standing
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (Fish fish in group.OrderBy(x => x.LargeStanding)) {
+                                <tr>
+                                    <td>
+                                        <a asp-action="Edit" asp-route-id="@fish.ID" display-for="@fish.WarframeItem_Object.Name"></a>
+                                    </td>
+                                    <td display-for="@fish.Biome"></td>
+                                    <td display-for="@fish.ActiveTime"></td>
+                                    <td display-for="@fish.SpearType"></td>
+                                    <td display-for="@fish.Rarity"></td>
+                                    <td display-for="@fish.MaxWeight"></td>
+                                    <td display-for="@fish.BaitName"></td>
+                                    <td>
+                                        @Html.DisplayFor(x => fish.SmallStanding)/@Html.DisplayFor(x => fish.MediumStanding)/@Html.DisplayFor(x => fish.LargeStanding)
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    }
+</div>

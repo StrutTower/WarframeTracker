@@ -1,0 +1,54 @@
+﻿
+@{
+    ViewData["Title"] = "API Explorer";
+}
+
+<div id="api-explorer">
+    <div class="form-group">
+        <select class="twr-input" id="category-select"></select>
+    </div>
+
+    <form id="name-search-form" class="form-group">
+        <div class="input-group">
+            <input type="text" class="form-control form-control-sm" id="name-search-input" placeholder="Name Search" />
+            <div class="input-group-append">
+                <button type="submit" class="btn btn-secondary btn-sm">
+                    <span class="mdi mdi-fw mdi-lg mdi-magnify"></span>
+                </button>
+            </div>
+        </div>
+    </form>
+
+    <h6 id="api-explorer-count"></h6>
+
+    <div class="table-responsive">
+        <table class="table table-sm table-bordered">
+            <thead>
+                <tr>
+                    <th style="width:1%;"></th>
+                    <th>Name</th>
+                    <th>Category</th>
+                    <th>Unique Name</th>
+                </tr>
+            </thead>
+            <tbody id="api-explorer-results">
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="modal fade" id="api-item-details-modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Item Details</h5>
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="api-item-details-body" style="white-space:pre-line; overflow-x:auto;"></div>
+            </div>
+        </div>
+    </div>
+</div>

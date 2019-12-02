@@ -19,41 +19,71 @@
     </div>
 </div>
 
+<div display-for="Baro"></div>
+
 @if (Model.ImportantInvasions.SafeAny() || Model.OtherInvasions.SafeAny()) {
-    <div>
-        <h5>Invasions</h5>
-        @if (Model.ImportantInvasions.SafeAny()) {
-            <div class="row">
-                @foreach (Invasion invasion in Model.ImportantInvasions.OrderBy(x => x.ActivationEpochUtc)) {
-                    <div display-for="@invasion" class="col-md-6"></div>
-                }
-            </div>
-        }
+    <div class="card mb-2">
+        <div class="card-body">
+            <h4 class="card-title">Invasions</h4>
+            @if (Model.ImportantInvasions.SafeAny()) {
+                <div class="row">
+                    @foreach (Invasion invasion in Model.ImportantInvasions.OrderBy(x => x.ActivationEpochUtc)) {
+                        <div display-for="@invasion" class="col-md-6"></div>
+                    }
+                </div>
+            } else {
+                <div><em>There are currently no invasions with rare rewards.</em></div>
+            }
 
-        @if (Model.OtherInvasions.SafeAny()) {
-            <div>
-                <button type="button" class="btn btn-link p-1" data-toggle="collapse" data-target=".other-invasions-container">Show/Hide More Invasions</button>
-            </div>
+            @if (Model.OtherInvasions.SafeAny()) {
+                <div>
+                    <button type="button" class="btn btn-link p-1" data-toggle="collapse" data-target=".other-invasions-container">Show/Hide More Invasions</button>
+                </div>
 
-            <div class="other-invasions-container row collapse">
-                @foreach (Invasion invasion in Model.OtherInvasions.OrderBy(x => x.ActivationEpochUtc)) {
-                    <div display-for="@invasion" class="col-md-6"></div>
-                }
-            </div>
-        }
+                <div class="other-invasions-container row collapse">
+                    @foreach (Invasion invasion in Model.OtherInvasions.OrderBy(x => x.ActivationEpochUtc)) {
+                        <div display-for="@invasion" class="col-md-6"></div>
+                    }
+                </div>
+            }
+        </div>
     </div>
 }
 
-<hr />
+<div class="card mb-2">
+    <div class="card-body">
+        <h4 class="card-title">Fissure Missions</h4>
 
-@if (Model.VoidMissions.SafeAny()) {
-    <div>
-        <h5>
-            Void Missions on Saturn and Ceres
-            <span style="font-size:12px;"><em>Good for farming void traces and Orokin Cells</em></span>
-        </h5>
-        @foreach (ActiveMission activeMission in Model.VoidMissions.OrderBy(x => x.StartedOnLocalTime)) {
-            <div display-for="@activeMission"></div>
-        }
+
+        <div class="pl-2">
+            <h5>
+                Saturn and Ceres
+                <span style="font-size:12px;"><em>Good for farming Orokin Cells at the same time.</em></span>
+            </h5>
+            <div class="pl-3">
+                @if (Model.CellFissureMissions.SafeAny()) {
+                    foreach (ActiveMission activeMission in Model.CellFissureMissions) {
+                        <div display-for="@activeMission"></div>
+                    }
+                } else {
+                    <em>No current missions</em>
+                }
+            </div>
+
+            <hr />
+
+            <h5>
+                Excavation
+            </h5>
+            <div class="pl-3">
+                @if (Model.ExcavationFissureMissions.SafeAny()) {
+                    foreach (ActiveMission activeMission in Model.ExcavationFissureMissions) {
+                    <div display-for="@activeMission"></div>
+                    }
+                } else {
+                    <em>No current missions</em>
+                }
+            </div>
+        </div>
     </div>
-}  
+</div>

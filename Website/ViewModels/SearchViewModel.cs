@@ -15,17 +15,15 @@ namespace Website.ViewModels {
         public SelectList ItemCategorySelectList { get; set; }
 
 
-        public SearchViewModel Load() {
+        public SearchViewModel Load(UnitOfWork uow) {
             Dictionary<int, string> codexSections = new Dictionary<int, string>();
             foreach(var item in Enum.GetValues(typeof(CodexSection))) {
                 codexSections.Add((int)item, item.ToString());
             }
             CodexSectionSelectList = new SelectList(codexSections, "Key", "Value");
 
-            List<ItemCategory> itemCategories;
-            using (UnitOfWork uow = UnitOfWork.CreateNew()) {
-                itemCategories = new ItemCategoryRepository(uow).GetAll();
-            }
+            List<ItemCategory> itemCategories = uow.GetRepo<ItemCategoryRepository>().GetAll();
+            
             ItemCategorySelectList = new SelectList(itemCategories, "ID", "Name");
 
             return this;

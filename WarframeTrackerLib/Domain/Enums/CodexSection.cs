@@ -6,6 +6,7 @@ namespace WarframeTrackerLib.Domain {
         Relics,
         Mods,
         [Display(Name = "Captura Scenes")]
-        CapturaScenes
+        CapturaScenes,
+        Fish
     }
 }

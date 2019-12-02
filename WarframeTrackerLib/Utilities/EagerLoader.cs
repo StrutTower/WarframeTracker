@@ -15,32 +15,38 @@ namespace WarframeTrackerLib.Utilities {
         }
 
         public void Load(IEnumerable<CodexTab> codexTabs) {
-            ItemCategoryRepository itemCategoryRepo = new ItemCategoryRepository(_uow);
-
             foreach (var tab in codexTabs)
-                tab.ItemCategory_Objects = itemCategoryRepo.GetByCodexTabID(tab.ID);
+                tab.ItemCategory_Objects = _uow.GetRepo<ItemCategoryRepository>().GetByCodexTabID(tab.ID);
         }
 
         public void Load(CodexTab codexTab) {
-            ItemCategoryRepository itemCategoryRepo = new ItemCategoryRepository(_uow);
-            codexTab.ItemCategory_Objects = itemCategoryRepo.GetByCodexTabID(codexTab.ID);
+            codexTab.ItemCategory_Objects = _uow.GetRepo<ItemCategoryRepository>().GetByCodexTabID(codexTab.ID);
         }
 
         public void Load(IEnumerable<ItemCategory> itemCategories) {
-            CodexTabRepository repo = new CodexTabRepository(_uow);
-
             foreach (var ic in itemCategories)
-                ic.CodexTab_Object = repo.GetByID(ic.CodexTabID);
+                ic.CodexTab_Object = _uow.GetRepo<CodexTabRepository>().GetByID(ic.CodexTabID);
         }
 
         public void Load(ItemCategory itemCategory) {
-            CodexTabRepository repo = new CodexTabRepository(_uow);
-            itemCategory.CodexTab_Object = repo.GetByID(itemCategory.CodexTabID);
+            itemCategory.CodexTab_Object = _uow.GetRepo<CodexTabRepository>().GetByID(itemCategory.CodexTabID);
         }
 
-        public void Load(IEnumerable<WarframeItem> items) {
-            foreach(WarframeItem item in items) {
+        //public void Load(IEnumerable<WarframeItem> items) {
+        //    foreach(WarframeItem item in items) {
                 
+        //    }
+        //}
+
+        public void Load(Fish fish, WarframeItemUtilities wiu) {
+            if (wiu == null) wiu = new WarframeItemUtilities(_uow);
+            fish.WarframeItem_Object = wiu.GetByUniqueName(fish.UniqueName, false);
+        }
+
+        public void Load(IEnumerable<Fish> fish) {
+            WarframeItemUtilities wiu = new WarframeItemUtilities(_uow);
+            foreach(Fish f in fish) {
+                Load(f, wiu);
             }
         }
     }

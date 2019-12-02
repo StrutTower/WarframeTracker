@@ -5,23 +5,19 @@ using System.Linq;
 using WarframeTrackerLib.Domain;
 using WarframeTrackerLib.Repository;
 
-namespace Website.ViewModels {
+namespace Website.Areas.Admin.ViewModels {
     public class EditInvasionRewardViewModel {
         public InvasionReward InvasionReward { get; set; }
 
         public SelectList UniqueNameSelectList { get; set; }
 
 
-        public EditInvasionRewardViewModel Load(InvasionReward reward = null) {
+        public EditInvasionRewardViewModel Load(UnitOfWork uow, InvasionReward reward = null) {
             InvasionReward = reward;
             List<string> names = new List<string>();
 
-            List<string> datas;
-            List<string> existing;
-            using (UnitOfWork uow = UnitOfWork.CreateNew()) {
-                datas = new TrackedDataRepository(uow).GetGroupedByType("InvasionRewards").Select(x => x.Data).ToList();
-                existing = new InvasionRewardRepository(uow).GetAll().Select(x => x.UniqueName).ToList();
-            }
+            List<string> datas = uow.GetRepo<TrackedDataRepository>().GetGroupedByType("InvasionRewards").Select(x => x.Data).ToList();
+            List<string> existing = uow.GetRepo<InvasionRewardRepository>().GetAll().Select(x => x.UniqueName).ToList();
 
             foreach(string data in datas) {
                 if (!existing.Any(x => x.Equals(data))) {

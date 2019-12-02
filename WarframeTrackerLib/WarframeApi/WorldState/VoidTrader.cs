@@ -14,6 +14,8 @@ namespace WarframeTrackerLib.WarframeApi.WorldState {
 
         public string Node { get; set; }
 
+        public SolNode SolNode { get; set; }
+
         [JsonDeserializeProperty("Activation.$date.$numberLong")]
         public long StartEpoch { get; set; }
 
@@ -57,7 +59,7 @@ namespace WarframeTrackerLib.WarframeApi.WorldState {
 
         public string TimeTillDisplay {
             get {
-                if (IsHere) return Name + " is at the " + Node + ".";
+                if (IsHere) return "Currently Here.";
                 string output = string.Empty;
                 TimeSpan time = UtcStartDate.Subtract(DateTime.UtcNow);
                 if (time.TotalDays >= 1) {
@@ -77,7 +79,7 @@ namespace WarframeTrackerLib.WarframeApi.WorldState {
 
         public bool IsHere {
             get {
-                if (UtcStartDate < DateTime.UtcNow && UtcEndDate > DateTime.UtcNow) {
+                if (DateTime.UtcNow.IsBetween(UtcStartDate, UtcEndDate)) {
                     return true;
                 }
                 return false;

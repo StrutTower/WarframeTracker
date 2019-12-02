@@ -5,7 +5,7 @@ using System.Linq;
 using WarframeTrackerLib.Domain;
 using WarframeTrackerLib.Repository;
 
-namespace Website.ViewModels {
+namespace Website.Areas.Admin.ViewModels {
     public class EditItemCategoryViewModel {
 
         public ItemCategory ItemCategory { get; set; }
@@ -16,7 +16,7 @@ namespace Website.ViewModels {
         public EditItemCategoryViewModel(UnitOfWork uow, ItemCategory itemCategory) {
             ItemCategory = itemCategory;
 
-            List<CodexTab> codexTabs = new CodexTabRepository(uow).GetAll();
+            List<CodexTab> codexTabs = uow.GetRepo<CodexTabRepository>().GetAll();
 
             CodexTabSelectList = new SelectList(codexTabs.OrderBy(x => x.CodexSectionID.ToString()).ThenBy(x => x.Name), "ID", "Name", null, "CodexSectionID");
         }

@@ -3,21 +3,21 @@
     ViewBag.Title = "Manage Manual Item Data";
 }
 
-<a href="@Url.Action("EditManualItemData")" class="btn btn-link float-right">
+<a href="@Url.Action("Edit")" class="btn btn-link float-right">
     <span class="mdi mdi-fw mdi-plus-box-outline"></span>Add New Manual Item Data
 </a>
 
 <h3>@ViewBag.Title</h3>
 <hr />
 
-<div class="form-group">
-    <div class="input-group">
+<div class="form-inline">
+    <div class="form-group">
         <input type="text" class="twr-input twr-searcher w-auto" placeholder="Filter Items" data-target="table tbody tr" data-min-length="2" />
-        <div class="input-group-append">
-            <button type="button"  class="btn btn-secondary btn-sm twr-search-clear">
-                <span class="mdi mdi-fw mdi-cancel"></span>
-            </button>
-        </div>
+    </div>
+    <div class="form-group">
+        <button type="button" class="btn btn-secondary btn-sm twr-search-clear">
+            <span class="mdi mdi-fw mdi-cancel"></span>
+        </button>
     </div>
 </div>
 
@@ -40,12 +40,12 @@
         <tbody>
             @foreach (var mid in Model.ManualItemData) {
                 WarframeItem item = Model.ItemDictionary[mid.ItemUniqueName];
-                <tr data-twr-search="@item.Name @item.Category">
+                <tr data-twr-search="@item.Name @item.Category @mid.PropertyName">
                     <td display-for="@item.Name"></td>
                     <td display-for="@mid.PropertyName"></td>
                     <td display-for="@mid.Value"></td>
                     <td>
-                        <a asp-controller="EditManualItemData" asp-route-id="@mid.ID">
+                        <a asp-controller="Edit" asp-route-id="@mid.ID">
                             Edit
                         </a>
                     </td>
@@ -72,7 +72,6 @@
             </tr>
         </thead>
         <tbody id="search-results-content">
-            
         </tbody>
     </table>
 </div>

@@ -6,7 +6,7 @@ using WarframeTrackerLib.Domain;
 using WarframeTrackerLib.Repository;
 using WarframeTrackerLib.WarframeApi;
 
-namespace Website.ViewModels {
+namespace Website.Areas.Admin.ViewModels {
     public class ManualItemDataViewModel {
         public List<ManualItemData> ManualItemData { get; set; }
 
@@ -17,15 +17,13 @@ namespace Website.ViewModels {
         public Dictionary<int, CodexTab> CodexTabDictionary { get; set; }
 
 
-        public ManualItemDataViewModel Load() {
-            using (UnitOfWork uow = UnitOfWork.CreateNew()) {
-                ManualItemData = new ManualItemDataRepository(uow).GetAll();
+        public ManualItemDataViewModel Load(UnitOfWork uow, WarframeItemUtilities itemUtils) {
+                ManualItemData = uow.GetRepo<ManualItemDataRepository>().GetAll();
 
-                ItemDictionary = new WarframeItemUtilities(uow).GetAll().ToDictionary(x => x.UniqueName);
-                ItemCategoryDictionary = new ItemCategoryRepository(uow).GetAll().ToDictionary(x => x.ID);
-                CodexTabDictionary = new CodexTabRepository(uow).GetAll().ToDictionary(x => x.ID);
-            }
-
+                ItemDictionary = itemUtils.GetAll().ToDictionary(x => x.UniqueName);
+                ItemCategoryDictionary = uow.GetRepo<ItemCategoryRepository>().GetAll().ToDictionary(x => x.ID);
+                CodexTabDictionary = uow.GetRepo<CodexTabRepository>().GetAll().ToDictionary(x => x.ID);
+            
             return this;
         }
     }

@@ -48,11 +48,9 @@ namespace WarframeTrackerLib.Domain {
 
 
         public void LoadItemNames(UnitOfWork uow) {
-            ItemCacheRepository repo = new ItemCacheRepository(uow);
-
-            WarframeName = GetItemName(repo, WarframeUniqueName);
-            Item1Name = GetItemName(repo, Item1UniqueName);
-            Item2Name = GetItemName(repo, Item2UniqueName);
+            WarframeName = GetItemName(uow.GetRepo<ItemCacheRepository>(), WarframeUniqueName);
+            Item1Name = GetItemName(uow.GetRepo<ItemCacheRepository>(), Item1UniqueName);
+            Item2Name = GetItemName(uow.GetRepo<ItemCacheRepository>(), Item2UniqueName);
         }
 
         private string GetItemName(ItemCacheRepository repo, string uniqueName) {

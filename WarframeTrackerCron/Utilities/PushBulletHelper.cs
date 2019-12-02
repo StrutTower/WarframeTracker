@@ -1,24 +1,27 @@
-﻿using PushbulletSharp;
-using PushbulletSharp.Models.Requests;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
+using System.Net.Http;
 using WarframeTrackerLib.Config;
 
 namespace WarframeTrackerCron.Utilities {
     public class PushBulletHelper {
-        public void SendNotificationToCellPhone(string message) {
+        public async void SendNotificationToCellPhone(string message) {
             ApplicationSecrets appSecrets = ApplicationSecrets.Get();
 
-            PushbulletClient pbCLient = new PushbulletClient(appSecrets.PushbulletApiKey);
+            HttpClient client = new HttpClient();
+            client.DefaultRequestHeaders.Add("Access-Token", appSecrets.PushbulletApiKey);
 
-            PushNoteRequest request = new PushNoteRequest {
-                ChannelTag = appSecrets.InvasionRewardChannel,
-                Title = "Warframe Tracker",
-                Body = message
+            Dictionary<string, string> data = new Dictionary<string, string> {
+                { "channel_tag", appSecrets.InvasionRewardChannel },
+                { "type", "note" },
+                { "title", "Warframe Tracker" },
+                { "body", message }
             };
 
-            var response = pbCLient.PushNote(request);
+            var content = new FormUrlEncodedContent(data);
+
+            var response = await client.PostAsync("https://api.pushbullet.com/v2/pushes", content);
+
+            var responseString = await response.Content.ReadAsStringAsync();
         }
     }
 }
