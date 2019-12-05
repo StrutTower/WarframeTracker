@@ -5,6 +5,7 @@
 
 */wwwroot/lib/*
 applicationSecrets.json
+*/.config/
 
 
 # User-specific files

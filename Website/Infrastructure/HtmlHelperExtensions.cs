@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.AspNetCore.Mvc.ViewFeatures.Internal;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using System;
 using System.IO;
 using System.Linq;
@@ -81,11 +81,11 @@ namespace Website.Infrastructure {
         }
 
         public static IHtmlContent HelpTextFor<TModel, TValue>(this IHtmlHelper<TModel> html, Expression<Func<TModel, TValue>> expression) {
-            var modelExplorer = ExpressionMetadataProvider.FromLambdaExpression(expression, html.ViewData, html.MetadataProvider);
-            string description = modelExplorer.Metadata.Description;
+            ModelExpressionProvider modelExpressionProvider = (ModelExpressionProvider)html.ViewContext.HttpContext.RequestServices.GetService(typeof(IModelExpressionProvider));
+            ModelExpression modelExpression = modelExpressionProvider.CreateModelExpression(html.ViewData, expression);
 
-            if (string.IsNullOrWhiteSpace(description)) return HtmlString.Empty;
-            return new HtmlString(string.Format("<div class=\"form-help-text\">{0}</div>", description));
+            if (string.IsNullOrWhiteSpace(modelExpression.Metadata.Description)) return HtmlString.Empty;
+            return new HtmlString(string.Format("<div class=\"form-help-text\">{0}</div>", modelExpression.Metadata.Description));
         }
 
 
@@ -107,6 +107,31 @@ namespace Website.Infrastructure {
             string version = Assembly.GetEntryAssembly().GetName().Version.ToString();
             return new HtmlString(string.Join(".", version.Split('.').Take(3)));
         }
+
+        #region DisplayFor TagHelper Helpers
+
+        public static IHtmlContent Display(this IHtmlHelper htmlHelper, ModelExpression modelExpression, string templateName) {
+            if (htmlHelper is HtmlHelper htmlHelperConcrete) {
+                if (_getDisplayThunk == null) {
+                    var methodInfo = typeof(HtmlHelper).GetTypeInfo().GetMethod("GenerateDisplay", BindingFlags.NonPublic | BindingFlags.Instance);
+                    _getDisplayThunk = (Func<HtmlHelper, ModelExplorer, string, string, object, IHtmlContent>)methodInfo
+                        .CreateDelegate(typeof(Func<HtmlHelper, ModelExplorer, string, string, object, IHtmlContent>));
+                }
+                return _getDisplayThunk(htmlHelperConcrete, modelExpression.ModelExplorer, GetExpressionText(modelExpression.Name), templateName, null);
+            }
+            return htmlHelper.Display(GetExpressionText(modelExpression.Name), templateName);
+        }
+
+        private static Func<HtmlHelper, ModelExplorer, string, string, object, IHtmlContent> _getDisplayThunk;
+
+
+
+        private static string GetExpressionText(string expression) {
+            // If it's exactly "model", then give them an empty string, to replicate the lambda behavior.
+            return string.Equals(expression, "model", StringComparison.OrdinalIgnoreCase) ? string.Empty : expression;
+        }
+
+        #endregion
 
         private static string ToRawString(this IHtmlContent htmlContent) {
             using (StringWriter writer = new StringWriter()) {

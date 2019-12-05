@@ -1,8 +1,9 @@
 ﻿@model VoidTrader
 @if (Model != null) {
-    <div class="card mb-2">
-        <div class="card-body">
-            <h5 class="my-0 px-0">
+    <div class="card home-card mb-2">
+        <div class="card-body position-relative">
+            <img src="~/images/baro.png" class="home-icon-img" />
+            <h5 class="card-title my-0 px-0">
                 <span display-for="Name"></span>
                 <span class="h6">
                     @if (Model.IsHere) {

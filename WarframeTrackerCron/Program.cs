@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Collections.Generic;
 using TowerSoft.Repository;
 using WarframeTrackerLib.Domain;
@@ -13,6 +14,7 @@ namespace WarframeTrackerCron {
             //System.Threading.Thread.Sleep(10000);
             //Environment.Exit(0);
 #endif
+
             bool validArgumentsFound = false;
             Dictionary<string, AppTask> tasks = AppTask.GetTasks();
             if (args.SafeAny()) {

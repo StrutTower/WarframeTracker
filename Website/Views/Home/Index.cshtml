@@ -22,9 +22,12 @@
 <div display-for="Baro"></div>
 
 @if (Model.ImportantInvasions.SafeAny() || Model.OtherInvasions.SafeAny()) {
-    <div class="card mb-2">
-        <div class="card-body">
-            <h4 class="card-title">Invasions</h4>
+    <div class="card home-card mb-2">
+        <div class="card-body position-relative">
+            <img src="~/images/invasion.png" class="home-icon-img" />
+            <h4 class="card-title">
+                Invasions
+            </h4>
             @if (Model.ImportantInvasions.SafeAny()) {
                 <div class="row">
                     @foreach (Invasion invasion in Model.ImportantInvasions.OrderBy(x => x.ActivationEpochUtc)) {
@@ -50,8 +53,9 @@
     </div>
 }
 
-<div class="card mb-2">
-    <div class="card-body">
+<div class="card home-card mb-2">
+    <div class="card-body position-relative">
+        <img src="~/images/voidFissure.png" class="home-icon-img" />
         <h4 class="card-title">Fissure Missions</h4>
 
 
@@ -78,7 +82,7 @@
             <div class="pl-3">
                 @if (Model.ExcavationFissureMissions.SafeAny()) {
                     foreach (ActiveMission activeMission in Model.ExcavationFissureMissions) {
-                    <div display-for="@activeMission"></div>
+                        <div display-for="@activeMission"></div>
                     }
                 } else {
                     <em>No current missions</em>

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using WarframeTrackerLib.Config;
 using WarframeTrackerLib.Repository;
 using WarframeTrackerLib.WarframeApi;
@@ -30,11 +31,13 @@ namespace Website {
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(x => x.LoginPath = new PathString("/Account/Login"));
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
 
             services.Configure<RazorViewEngineOptions>(o => {
                 o.ViewLocationFormats.Add("/Views/Admin/{1}/{0}" + RazorViewEngine.ViewExtension);
             });
+
+            services.AddControllersWithViews().AddRazorRuntimeCompilation();
 
             services.Configure<AppSettings>(Configuration.GetSection("appSettings"));
             services.Configure<ApplicationSecrets>(Configuration.GetSection("applicationSecrets"));
@@ -44,7 +47,7 @@ namespace Website {
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env) {
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env) {
             if (env.IsDevelopment()) {
                 app.UseDeveloperExceptionPage();
             } else {
@@ -57,15 +60,24 @@ namespace Website {
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseAuthentication();
-
-            app.UseMvc(routes => {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
-                routes.MapRoute(
-                    name: "Admin",
-                    template: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+            
+            app.UseRouting();
+            app.UseAuthorization();
+            app.UseEndpoints(endpoints => {
+                endpoints.MapControllerRoute(
+                    name: "areas",
+                    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapDefaultControllerRoute();
             });
+
+            //app.UseMvc(routes => {
+            //    routes.MapRoute(
+            //        name: "default",
+            //        template: "{controller=Home}/{action=Index}/{id?}");
+            //    routes.MapRoute(
+            //        name: "Admin",
+            //        template: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+            //});
         }
     }
 }

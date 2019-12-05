@@ -3,7 +3,7 @@
     ViewData["Title"] = "Manage Prime Releases";
 }
 
-<a asp-action="EditPrimeRelease" class="float-right">
+<a asp-action="Edit" class="float-right">
     <span class="mdi mdi-fw mdi-plus-box-outline"></span>New
 </a>
 
@@ -30,7 +30,7 @@
             @foreach (PrimeRelease item in Model.OrderBy(x => x.ReleaseDate)) {
             <tr>
                 <td>
-                    @Html.ActionLink("Edit", "EditPrimeRelease", new { id = item.ID })
+                    <a asp-action="Edit" asp-route="@item.ID">Edit</a>
                 </td>
                 <td>
                     <span display-for="@item.ReleaseDate" display-template="Date"></span>
