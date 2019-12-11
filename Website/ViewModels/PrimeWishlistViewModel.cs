@@ -47,6 +47,7 @@ namespace Website.ViewModels {
                 unvaultedUniqueNames.AddRange(releases.Select(x => x.WarframeUniqueName));
                 unvaultedUniqueNames.AddRange(releases.Select(x => x.Item1UniqueName));
                 unvaultedUniqueNames.AddRange(releases.Select(x => x.Item2UniqueName));
+                unvaultedUniqueNames.AddRange(releases.Select(x => x.Item3UniqueName));
             }
 
             PrimeWishlist = primes.Where(x => !x.IsExclusive && (!x.IsVaulted || unvaultedUniqueNames.Contains(x.UniqueName)) && !ias.Select(y => y.ItemUniqueName).Contains(x.UniqueName))

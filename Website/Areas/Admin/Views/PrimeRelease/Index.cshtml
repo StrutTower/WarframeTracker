@@ -30,7 +30,7 @@
             @foreach (PrimeRelease item in Model.OrderBy(x => x.ReleaseDate)) {
             <tr>
                 <td>
-                    <a asp-action="Edit" asp-route="@item.ID">Edit</a>
+                    <a asp-action="Edit" asp-route-id="@item.ID">Edit</a>
                 </td>
                 <td>
                     <span display-for="@item.ReleaseDate" display-template="Date"></span>
@@ -43,6 +43,7 @@
                     <div display-for="@item.WarframeName"></div>
                     <div display-for="@item.Item1Name" class="small"></div>
                     <div display-for="@item.Item2Name" class="small"></div>
+                    <div display-for="@item.Item3Name" class="small"></div>
                 </td>
                 <td>
                     @Html.BooleanIcon(item.IsReleasedFromVault)

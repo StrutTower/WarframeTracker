@@ -24,6 +24,8 @@ namespace WarframeTrackerLib.Domain {
 
         public string Item2UniqueName { get; set; }
 
+        public string Item3UniqueName { get; set; }
+
         public bool IsReleasedFromVault { get; set; }
 
 
@@ -41,16 +43,22 @@ namespace WarframeTrackerLib.Domain {
 
         /// <summary>
         /// Not Mapped. Display name of the second item
-        /// 
         /// </summary>
         [NotMapped]
         public string Item2Name { get; set; }
+
+        /// <summary>
+        /// Not Mapped. Display name of the thrid item
+        /// </summary>
+        [NotMapped]
+        public string Item3Name { get; set; }
 
 
         public void LoadItemNames(UnitOfWork uow) {
             WarframeName = GetItemName(uow.GetRepo<ItemCacheRepository>(), WarframeUniqueName);
             Item1Name = GetItemName(uow.GetRepo<ItemCacheRepository>(), Item1UniqueName);
             Item2Name = GetItemName(uow.GetRepo<ItemCacheRepository>(), Item2UniqueName);
+            Item3Name = GetItemName(uow.GetRepo<ItemCacheRepository>(), Item3UniqueName);
         }
 
         private string GetItemName(ItemCacheRepository repo, string uniqueName) {

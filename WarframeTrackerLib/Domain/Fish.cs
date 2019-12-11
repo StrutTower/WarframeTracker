@@ -13,16 +13,16 @@ namespace WarframeTrackerLib.Domain {
         [Required, MaxLength(255)]
         public string UniqueName { get; set; }
 
-        [Required, MaxLength(75)]
+        [Required, MaxLength(75), Display(Name = "Map Name")]
         public string MapName { get; set; }
 
         [Required, MaxLength(45)]
         public string Biome { get; set; }
 
-        [Required, MaxLength(45)]
+        [Required, MaxLength(45), Display(Name = "Active Time")]
         public string ActiveTime { get; set; }
 
-        [Required, MaxLength(45)]
+        [Required, MaxLength(45), Display(Name = "Spear Type")]
         public string SpearType { get; set; }
 
         [Required, MaxLength(45)]

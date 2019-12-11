@@ -112,7 +112,11 @@ namespace WarframeTrackerLib.WarframeApi {
                         var prop = item.GetType().GetProperty(data.PropertyName);
                         try {
                             prop.SetValue(item, Convert.ChangeType(data.Value, prop.PropertyType));
-                        } catch { }
+                        } catch (Exception ex) {
+#if DEBUG
+                            throw new Exception($"Failed to set {prop.Name} with value {data.Value}", ex);
+#endif
+                        }
                     }
 
                     ItemCache itemCache = new ItemCache {

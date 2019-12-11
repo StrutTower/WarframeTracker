@@ -24,7 +24,7 @@
             <label asp-for="ManualItemData.ItemUniqueName" class="twr-label"></label>
             <select class="form-control warframe-item-searcher" required data-val="true" data-val-required="An item is required"
                     name="@Html.NameFor(x => x.ManualItemData.ItemUniqueName)" id="@Html.IdFor(x => x.ManualItemData.ItemUniqueName)"
-                    data-url="@Url.Action("WarframeItemsAjax", "Search")">
+                    data-url="@Url.Action("WarframeItemsAjax", "Search", new { Area = "" })">
                 <option></option>
                 @if (!string.IsNullOrWhiteSpace(Model.ManualItemData.ItemUniqueName)) {
                     <option value="@Model.ManualItemData.ItemUniqueName" selected>@Model.SelectedItemName</option>

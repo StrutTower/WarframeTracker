@@ -31,7 +31,7 @@ namespace Website {
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(x => x.LoginPath = new PathString("/Account/Login"));
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+            //services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
 
             services.Configure<RazorViewEngineOptions>(o => {
                 o.ViewLocationFormats.Add("/Views/Admin/{1}/{0}" + RazorViewEngine.ViewExtension);
@@ -57,7 +57,7 @@ namespace Website {
             }
 
             app.UseStatusCodePagesWithReExecute("/Error/Code/{0}");
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseAuthentication();
             
@@ -69,15 +69,6 @@ namespace Website {
                     pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapDefaultControllerRoute();
             });
-
-            //app.UseMvc(routes => {
-            //    routes.MapRoute(
-            //        name: "default",
-            //        template: "{controller=Home}/{action=Index}/{id?}");
-            //    routes.MapRoute(
-            //        name: "Admin",
-            //        template: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
-            //});
         }
     }
 }

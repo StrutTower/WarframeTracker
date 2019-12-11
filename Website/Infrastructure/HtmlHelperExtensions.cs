@@ -68,7 +68,7 @@ namespace Website.Infrastructure {
                 div.InnerHtml.AppendHtml(html.EditorFor(expression, null, new { htmlAttributes }).ToRawString() + html.LabelFor(expression, labelDisplay).ToRawString());
                 return new HtmlString(
                     div.ToRawString() +
-                    html.HelpTextFor(expression).ToRawString() +
+                    html.DescriptionFor(expression).ToRawString() +
                     html.ValidationMessageFor(expression).ToRawString()
                 );
             }
@@ -76,16 +76,19 @@ namespace Website.Infrastructure {
             return new HtmlString(
                 html.LabelFor(expression, labelDisplay, new { @class = "twr-label" }).ToRawString() +
                 html.EditorFor(expression, editorTemplateName, new { htmlAttributes }).ToRawString() +
-                html.HelpTextFor(expression).ToRawString() +
+                html.DescriptionFor(expression).ToRawString() +
                 html.ValidationMessageFor(expression).ToRawString());
         }
 
-        public static IHtmlContent HelpTextFor<TModel, TValue>(this IHtmlHelper<TModel> html, Expression<Func<TModel, TValue>> expression) {
-            ModelExpressionProvider modelExpressionProvider = (ModelExpressionProvider)html.ViewContext.HttpContext.RequestServices.GetService(typeof(IModelExpressionProvider));
-            ModelExpression modelExpression = modelExpressionProvider.CreateModelExpression(html.ViewData, expression);
-
-            if (string.IsNullOrWhiteSpace(modelExpression.Metadata.Description)) return HtmlString.Empty;
-            return new HtmlString(string.Format("<div class=\"form-help-text\">{0}</div>", modelExpression.Metadata.Description));
+        public static IHtmlContent DescriptionFor<TModel, TValue>(this IHtmlHelper<TModel> html, Expression<Func<TModel, TValue>> expression) {
+            var metadata = html.MetadataProvider.GetMetadataForProperties(expression.Type);
+            var propMeta = metadata.SingleOrDefault(x => x.PropertyName == expression.Name);
+            if (propMeta != null) {
+                string description = propMeta.Description;
+                if (!string.IsNullOrWhiteSpace(description))
+                    return new HtmlString($"<div class=\"form-help-text\">{description}</div>");
+            }
+            return HtmlString.Empty;
         }
 
 
