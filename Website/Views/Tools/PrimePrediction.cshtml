@@ -13,7 +13,6 @@
             <tr>
                 <th>Warframe</th>
                 <th>Gender</th>
-                <th>Original Release</th>
                 <th>Estimated Prime Release</th>
             </tr>
         </thead>
@@ -27,21 +26,19 @@
                 }
                 Model.LastPrimeReleaseDate = Model.LastPrimeReleaseDate.AddDays(90);
                 if (warframe == null) {
-                    <tr><td colspan="4">Unreleased @Model.Gender Warframe</td></tr>
+                    <tr><td colspan="3">Unreleased @Model.Gender Warframe</td></tr>
                 } else {
+                    TimeSpan time = Model.LastPrimeReleaseDate.Subtract(DateTime.Now);
                     <tr>
                         <td display-for="@warframe.Name"></td>
                         <td display-for="@warframe.Sex"></td>
                         <td>
-                            @if (DateTime.TryParse(warframe.ReleaseDate, out DateTime releaseDate)) {
-                                <span display-for="@releaseDate" display-template="ShortDate"></span>
-                            } else if (string.IsNullOrWhiteSpace(warframe.ReleaseDate)) {
-                                @:<span class="text-warning">No Release Date</span>
+                            @if (string.IsNullOrWhiteSpace(warframe.ReleaseDate)) {
+                                <em class="text-warning">Missing Release Date</em>
                             } else {
-                                @:Unable to parse date:<span display-for="@warframe.ReleaseDate"></span>
+                                <span display-for="LastPrimeReleaseDate" display-template="ShortDate"></span> <small>(@Math.Round(time.TotalDays) Days)</small>
                             }
                         </td>
-                        <td display-for="LastPrimeReleaseDate" display-template="ShortDate"></td>
                     </tr>
                 }
 

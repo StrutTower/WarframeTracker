@@ -1,0 +1,61 @@
+﻿@model List<WarframeItem>
+@using WarframeTrackerLib.Attributes;
+@{
+    ViewData["Title"] = "Valence Calculator";
+}
+
+<h3>@ViewData["Title"] - Currently a Work in Progress</h3>
+<hr />
+
+<select class="twr-input" id="kuva-weapon-select">
+    <option></option>
+    @foreach (WarframeItem item in Model.OrderBy(x => x.Name)) {
+        <option value="@item.UniqueName" data-name="@item.Name" data-total-damage="@item.Damage"
+                data-damage="@Newtonsoft.Json.JsonConvert.SerializeObject(item.DamageTypes)">
+            @item.Name
+        </option>
+    }
+</select>
+
+<div id="valence-calculator-inputs" class="hidden">
+    <hr />
+    <h4 id="kuva-weapon-name"></h4>
+    <table class="table table-bordered table-sm w-auto">
+        <thead>
+            <tr>
+                <th>Damage Type</th>
+                <th>Base</th>
+                <th>Valence</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var prop in typeof(DamageTypes).GetProperties()) {
+                KuvaValenceAttribute attr =
+                    (KuvaValenceAttribute)prop.GetCustomAttributes(typeof(KuvaValenceAttribute), true).FirstOrDefault();
+                <tr>
+                    <td class="text-right">
+                        @Html.DisplayFor(x => prop.Name)
+                    </td>
+                    <td class="text-center" id="@prop.Name.ToLower()-base-damage"></td>
+                    <td>
+                        @if (attr == null) {
+                            <input type="number" id="@prop.Name.ToLower()-damage" class="twr-input d-inline w-auto valence-bonus-input"
+                                   disabled placeholder="Not available as a bonus" data-damage-name="@prop.Name" />
+                        } else {
+                            <input type="number" id="@prop.Name.ToLower()-damage" class="twr-input d-inline w-auto valence-bonus-input"
+                                   data-damage-name="@prop.Name" />
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div>
+        <button type="button" class="btn btn-primary" id="valence-calculate">
+            Calculate
+        </button>
+        <button type="button" class="btn btn-secondary" id="valence-clear-all">
+            <span class="mdi mdi-fw mdi-cancel"></span>Clear All
+        </button>
+    </div>
+</div>

@@ -88,9 +88,6 @@ namespace Website.Controllers {
         }
 
 
-        public IActionResult PrimePrediction() {
-            return View(new PrimePredictionViewModel().Load(_uow, _itemUtils, _appSettings));
-        }
 
         public IActionResult ModularItemInfo() {
             return View();

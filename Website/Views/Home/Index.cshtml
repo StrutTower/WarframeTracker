@@ -8,6 +8,11 @@
         <div>
             <a asp-action="PrimeWishlist" asp-controller="Item">Prime Wishlist</a>
         </div>
+        @if (Model.CurrentDaysLoggedIn.HasValue) {
+        <div>
+            @Model.CurrentDaysLoggedIn Days Logged In
+        </div>
+        }
     </div>
     <div class="col-6 text-right">
         <div>
@@ -22,35 +27,35 @@
 <div display-for="Baro"></div>
 
 @if (Model.ImportantInvasions.SafeAny() || Model.OtherInvasions.SafeAny()) {
-    <div class="card home-card mb-2">
-        <div class="card-body position-relative">
-            <img src="~/images/invasion.png" class="home-icon-img" />
-            <h4 class="card-title">
-                Invasions
-            </h4>
-            @if (Model.ImportantInvasions.SafeAny()) {
-                <div class="row">
-                    @foreach (Invasion invasion in Model.ImportantInvasions.OrderBy(x => x.ActivationEpochUtc)) {
-                        <div display-for="@invasion" class="col-md-6"></div>
+<div class="card home-card mb-2">
+    <div class="card-body position-relative">
+        <img src="~/images/invasion.png" class="home-icon-img" />
+        <h4 class="card-title">
+            Invasions
+        </h4>
+        @if (Model.ImportantInvasions.SafeAny()) {
+        <div class="row">
+            @foreach (Invasion invasion in Model.ImportantInvasions.OrderBy(x => x.ActivationEpochUtc)) {
+            <div display-for="@invasion" class="col-md-6"></div>
                     }
-                </div>
-            } else {
-                <div><em>There are currently no invasions with rare rewards.</em></div>
-            }
-
-            @if (Model.OtherInvasions.SafeAny()) {
-                <div>
-                    <button type="button" class="btn btn-link p-1" data-toggle="collapse" data-target=".other-invasions-container">Show/Hide More Invasions</button>
-                </div>
-
-                <div class="other-invasions-container row collapse">
-                    @foreach (Invasion invasion in Model.OtherInvasions.OrderBy(x => x.ActivationEpochUtc)) {
-                        <div display-for="@invasion" class="col-md-6"></div>
-                    }
-                </div>
-            }
         </div>
+            } else {
+        <div><em>There are currently no invasions with rare rewards.</em></div>
+            }
+
+        @if (Model.OtherInvasions.SafeAny()) {
+        <div>
+            <button type="button" class="btn btn-link p-1" data-toggle="collapse" data-target=".other-invasions-container">Show/Hide More Invasions</button>
+        </div>
+
+        <div class="other-invasions-container row collapse">
+            @foreach (Invasion invasion in Model.OtherInvasions.OrderBy(x => x.ActivationEpochUtc)) {
+            <div display-for="@invasion" class="col-md-6"></div>
+                    }
+        </div>
+            }
     </div>
+</div>
 }
 
 <div class="card home-card mb-2">
@@ -67,10 +72,10 @@
             <div class="pl-3">
                 @if (Model.CellFissureMissions.SafeAny()) {
                     foreach (ActiveMission activeMission in Model.CellFissureMissions) {
-                        <div display-for="@activeMission"></div>
+                <div display-for="@activeMission"></div>
                     }
                 } else {
-                    <em>No current missions</em>
+                <em>No current missions</em>
                 }
             </div>
 
@@ -82,10 +87,10 @@
             <div class="pl-3">
                 @if (Model.ExcavationFissureMissions.SafeAny()) {
                     foreach (ActiveMission activeMission in Model.ExcavationFissureMissions) {
-                        <div display-for="@activeMission"></div>
+                <div display-for="@activeMission"></div>
                     }
                 } else {
-                    <em>No current missions</em>
+                <em>No current missions</em>
                 }
             </div>
         </div>

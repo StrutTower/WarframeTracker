@@ -10,6 +10,10 @@ namespace WarframeTrackerLib.Domain {
         [Key]
         public int UserID { get; set; }
 
+        public int? DaysLoggedIn { get; set; }
+
+        public DateTime? DaysLoggedInUtcStartDate { get; set; }
+
         [Range(0, 13), Display(Name = "Junctions Completed", Description = "Each completed junction gives 1,000 mastery experience.")]
         public int JunctionsCompleted { get; set; }
 

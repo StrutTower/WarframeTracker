@@ -31,13 +31,8 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a asp-action="PrimePrediction" asp-controller="Item" asp-area="" class="nav-link" title="Prime Release Predictions" data-toggle="tooltip">
-                        <span class="mdi mdi-lg mdi-fw mdi-timelapse"></span><span class="d-md-none">Prime Release Predictions</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a asp-action="ModularItemInfo" asp-controller="Item" asp-area="" class="nav-link" title="Modular Item Info" data-toggle="tooltip">
-                        <span class="mdi mdi-lg mdi-fw mdi-box-shadow"></span><span class="d-md-none">Modular Item Info</span>
+                    <a asp-action="Index" asp-controller="Tools" asp-area="" class="nav-link" title="Tools" data-toggle="tooltip">
+                        <span class="mdi mdi-lg mdi-fw mdi-toolbox-outline"></span><span class="d-md-none">Tools</span>
                     </a>
                 </li>
                 @if (User.IsInRole(RoleTypes.Administrator)) {

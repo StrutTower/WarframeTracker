@@ -1,0 +1,30 @@
+﻿@model UserData
+@{
+    ViewData["Title"] = "Update Days Logged In";
+    int daysSinceInput = (int)Math.Floor(DateTime.UtcNow.Date.Subtract(Model.DaysLoggedInUtcStartDate.Value).TotalDays);
+}
+
+<h3>@ViewData["Title"]</h3>
+<hr />
+
+<form action="" method="post" class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            <label asp-for="DaysLoggedIn" class="twr-label"></label>
+            <input asp-for="DaysLoggedIn" class="twr-input" />
+            <div class="text-muted">as of @Html.DisplayFor(x => x.DaysLoggedInUtcStartDate, "ShortDate")</div>
+            <span asp-validation-for="DaysLoggedIn"></span>
+        </div>
+        <div class="form-group">
+            You are currently at <span class="text-success">@(Model.DaysLoggedIn + daysSinceInput)</span> Days
+        </div>
+        <div class="form-group">
+                You only need to update this if the current number does not match your Warframe account.
+                If you do not miss a day, current number will automatically be calculated.
+        </div>
+
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+    </div>
+</form>
