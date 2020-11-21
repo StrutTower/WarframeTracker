@@ -1,0 +1,122 @@
+﻿
+<div id="left-sidebar">
+    <div class="under-nav">
+
+    </div>
+    <ul class="nav flex-column">
+        <li class="nav-item">
+            <a asp-action="Index" asp-controller="Home" asp-area="" class="nav-link">
+                <span class="mdi mdi-lg mdi-fw mdi-home"></span>Home
+            </a>
+        </li>
+        <li class="nav-item">
+            <a asp-action="PrimeWishlist" asp-controller="Item" asp-area="" class="nav-link">
+                <span class="mdi mdi-lg mdi-fw mdi-playlist-star"></span>Prime Wishlist
+            </a>
+        </li>
+        <li class="nav-item">
+            <a asp-action="Index" asp-controller="Search" asp-area="" class="nav-link">
+                <span class="mdi mdi-lg mdi-magnify"></span>Search
+            </a>
+        </li>
+        <li class="nav-item">
+            <a asp-action="Index" asp-controller="Tools" asp-area="" class="nav-link">
+                <span class="mdi mdi-lg mdi-fw mdi-toolbox-outline"></span>Tools
+            </a>
+        </li>
+        <li class="nav-item">
+            <div class="nav-separator"></div>
+        </li>
+        <li class="nav-item">
+            <div class="nav-header">Codex</div>
+        </li>
+        <li class="nav-item">
+            <a asp-action="View" asp-controller="Codex" asp-area="" asp-route-id="@CodexSection.Equipment" class="nav-link">
+                <img src="~/images/warframe.png" style="max-height:1.5rem;" />Equipment
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="#" class="nav-link text-faded collapsed py-1" data-toggle="collapse" data-target="#codex-sidebar-expand">
+                <span class="mdi mdi-lg mdi-fw mdi-chevron-down"></span>More
+            </a>
+        </li>
+    </ul>
+    <div class="nav flex-column collapse" id="codex-sidebar-expand">
+        <ul class="nav flex-column">
+            <li class="nav-item">
+                <a asp-action="View" asp-controller="Codex" asp-area="" asp-route-id="@CodexSection.Relics" class="nav-link">
+                    <img src="~/images/relic.png" style="max-height:1.5rem;" />Relics
+                </a>
+            </li>
+            <li class="nav-item">
+                <a asp-action="View" asp-controller="Codex" asp-area="" asp-route-id="@CodexSection.Mods" class="nav-link">
+                    <img src="~/images/fusion.png" style="max-height:1.5rem;" />Mods
+                </a>
+            </li>
+            <li class="nav-item">
+                <a asp-action="View" asp-controller="Codex" asp-area="" asp-route-id="@CodexSection.CapturaScenes" class="nav-link">
+                    <span class="mdi mdi-lg mdi-fw mdi-camera"></span>Captura Scenes
+                </a>
+            </li>
+            <li class="nav-item">
+                <a asp-action="View" asp-controller="Codex" asp-area="" asp-route-id="@CodexSection.Fish" class="nav-link">
+                    <span class="mdi mdi-lg mdi-fw mdi-fish"></span>Fish
+                </a>
+            </li>
+        </ul>
+    </div>
+    <ul class="nav flex-column">
+        <li class="nav-item">
+            <div class="nav-separator"></div>
+        </li>
+        <li class="nav-item">
+            <div class="nav-header">Guides</div>
+        </li>
+        <li class="nav-item">
+            <a asp-action="Index" asp-controller="Guides" asp-area="" class="nav-link">
+                <span class="mdi mdi-lg mdi-fw mdi-compass-outline"></span>Guide Index
+            </a>
+        </li>
+        <li class="nav-item">
+            <a asp-action="ModSuggestions" asp-controller="Guides" asp-area="" class="nav-link">
+                <img src="~/images/fusion.png" style="max-height:1.5rem;" />Mod Suggestions
+            </a>
+        </li>
+        <li class="nav-item">
+            <div class="nav-separator"></div>
+        </li>
+        @if (User.IsInRole(Roles.Administrator)) {
+            <li class="nav-item">
+                <a asp-area="Admin" asp-controller="Home" asp-action="Index" class="nav-link">
+                    <span class="mdi mdi-lg mdi-fw mdi-settings-outline"></span>Site Management
+                </a>
+            </li>
+        }
+        @if (User.Identity.IsAuthenticated) {
+            <li class="nav-item">
+                <a asp-action="Management" asp-controller="Account" asp-area="" class="nav-link">
+                    <span class="mdi mdi-lg mdi-fw mdi-account"></span>Account
+                </a>
+            </li>
+            <li class="nav-item">
+                <a asp-action="Logout" asp-controller="Account" asp-area="" class="nav-link">
+                    <span class="mdi mdi-lg mdi-fw mdi-logout"></span>Logout
+                </a>
+            </li>
+        } else {
+            <li class="nav-item">
+                <a asp-action="Login" asp-controller="Account" asp-area="" class="nav-link">
+                    <span class="mdi mdi-lg mdi-fw mdi-login"></span>Login
+                </a>
+            </li>
+            @if (AppSettings.Value.AllowRegistration) {
+                <li class="nav-item">
+                    <a asp-action="Register" asp-controller="Account" asp-area="" class="nav-link">
+                        <span class="mdi mdi-lg mdi-fw mdi-account-plus-outline"></span>Register
+                    </a>
+                </li>
+            }
+        }
+    </ul>
+</div>
+<div class="sidebar-underlay"></div>

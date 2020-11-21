@@ -2,15 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WarframeTrackerLib.Domain;
 using WarframeTrackerLib.Repository;
 using WarframeTrackerLib.WarframeApi;
 using Website.Areas.Admin.ViewModels;
+using Website.Infrastructure;
 
 namespace Website.Areas.Admin.Controllers {
     [Area("Admin")]
-    public class PrimeReleaseController : Controller {
+    [Authorize, Role(Roles.Administrator)]
+    public class PrimeReleaseController : CustomController {
         private readonly UnitOfWork _uow;
         private readonly WarframeItemUtilities _itemUtils;
         public PrimeReleaseController(UnitOfWork unitOfWork, WarframeItemUtilities utils) {

@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using Tweetinvi.Core.Extensions;
+using WesternStateHospital.WSHUtilities;
 
 namespace WarframeTrackerLib.WarframeApi.WorldState {
     public class WorldStateUtilities {
@@ -15,6 +17,8 @@ namespace WarframeTrackerLib.WarframeApi.WorldState {
 
         readonly string _missionTypeJson = "https://raw.githubusercontent.com/WFCD/warframe-worldstate-data/master/data/missionTypes.json";
 
+        readonly string cetusCycleUrl = "https://api.warframestat.us/pc/cetusCycle";
+
         public WorldState GetWorldState() {
             ServicePointManager.Expect100Continue = true;
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
@@ -22,7 +26,9 @@ namespace WarframeTrackerLib.WarframeApi.WorldState {
             using (WebClient client = new WebClient { UseDefaultCredentials = true }) {
 
                 string json = client.DownloadString(_apiUrl);
-                return JsonConvert.DeserializeObject<WorldState>(json);
+                WorldState worldState = JsonConvert.DeserializeObject<WorldState>(json);
+                CheckForBlockedInvasions(worldState);
+                return worldState;
             }
         }
 
@@ -86,6 +92,31 @@ namespace WarframeTrackerLib.WarframeApi.WorldState {
                 }
             }
             return missionTypeDictionary;
+        }
+
+        public CetusCycle GetCetusCycle() {
+            ServicePointManager.Expect100Continue = true;
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+            ServicePointManager.ServerCertificateValidationCallback = delegate { return true; };
+            using WebClient client = new WebClient { UseDefaultCredentials = true };
+            try {
+                string json = client.DownloadString(cetusCycleUrl);
+                return JsonConvert.DeserializeObject<CetusCycle>(json);
+            } catch {
+                return null;
+            }
+        }
+
+        public void CheckForBlockedInvasions(WorldState worldState) {
+            if (worldState.Invasions.SafeAny()) {
+                var nodeGroups = worldState.Invasions.Where(x => !x.Completed).GroupBy(x => x.Node);
+                foreach(var nodeGroup in nodeGroups) {
+                    if (nodeGroup.Count() > 1) {
+                        var invasions = nodeGroup.OrderBy(x => x.StartDateUtc).Skip(1);
+                        invasions.ForEach(x => x.IsBlocked = true);
+                    }
+                }
+            }
         }
     }
 }

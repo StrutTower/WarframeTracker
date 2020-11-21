@@ -1,0 +1,32 @@
+﻿@model List<User>
+@{
+    ViewData["Title"] = "User Management";
+}
+
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home" asp-area="">Homepage</a></li>
+    <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home" asp-area="Admin">Site Management</a></li>
+    <li class="breadcrumb-item active">@ViewData["Title"]</li>
+</ol>
+
+<h3>@ViewData["Title"]</h3>
+<hr />
+
+<div class="table-responsive">
+    <table class="table table-sm table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Email Address</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (User user in Model.OrderBy(x => x.Username)) {
+                <tr>
+                    <th display-for="@user.Username"></th>
+                    <th display-for="@user.EmailAddress"></th>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

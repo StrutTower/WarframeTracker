@@ -1,61 +1,4 @@
 ﻿///<reference path="_variables.scss" />
-///<reference path="../node_modules/dark-bootstrap-theme/src/_darkVariables.scss" />
-
-$twrInputBorderColor: #999;
-$twrInputFocusBorderColor: #fff;
-$twrBorderStyle: 1px solid $twrInputBorderColor;
-
-.twr-label {
-    margin-bottom:0;
-    font-size:.7rem;
-    margin-left:.5rem;
-    text-transform:uppercase;
-}
-
-.twr-input {
-    width:100%;
-    color:#ddd;
-    background:lighten($body-bg, 3);
-    padding: 2px 5px;
-    border-top:none;
-    border-left:none;
-    border-right:none;
-    border-bottom:1px solid lighten($body-bg, 15);
-    outline:none;
-    transition:border-color .3s ease;
-
-    &:focus {
-        border-bottom-color:lighten($primary, 10);
-    }
-
-    option {
-        color:white;
-    }
-}
-
-
-
-:-ms-input-placeholder { /* IE 10+ */
-    color: #6c757d;
-}
-
-.field-validation-error, .validation-summary-errors {
-    color: red;
-}
-
-.form-control.input-validation-error {
-    border-color: red;
-
-    &:focus {
-        box-shadow: inset 0px 1px 1px rgba(0,0,0,0.075), 0px 0px 8px rgba(255,0,0,0.6);
-    }
-}
-
-.form-check {
-    input, label {
-        cursor: pointer;
-    }
-}
 
 .form-help-text {
     opacity: 0.7;
@@ -66,11 +9,4 @@ $twrBorderStyle: 1px solid $twrInputBorderColor;
 .form-check ~ .form-help-text {
     transform: translateY(-7px);
     padding-left: 25px;
-}
-
-@supports(-moz-appearance:none) {
-    select:focus {
-        background: white !important;
-        color: black !important;
-    }
 }

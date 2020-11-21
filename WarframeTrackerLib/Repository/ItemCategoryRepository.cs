@@ -5,15 +5,15 @@ using TowerSoft.Repository;
 using WarframeTrackerLib.Domain;
 
 namespace WarframeTrackerLib.Repository {
-    public class ItemCategoryRepository : Repository<ItemCategory> {
+    public class ItemCategoryRepository : DbRepository<ItemCategory> {
         public ItemCategoryRepository(UnitOfWork unitOfWork) : base(unitOfWork.DbAdapter) { }
 
         public ItemCategory GetByID(int id) {
-            return GetSingleEntity(new WhereCondition("ID", id));
+            return GetSingleEntity(WhereEqual(x => x.ID, id));
         }
 
         public List<ItemCategory> GetByCodexTabID(int codexTabID) {
-            return GetEntities(new WhereCondition("CodexTabID", codexTabID));
+            return GetEntities(WhereEqual(x => x.CodexTabID, codexTabID));
         }
 
         public List<ItemCategory> GetAssignedToCodexSection(CodexSection codexSection) {

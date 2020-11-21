@@ -1,10 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using TowerSoft.Repository;
-using WarframeTrackerLib.Domain;
-using WarframeTrackerLib.Repository;
-using WarframeTrackerLib.Utilities;
+using WesternStateHospital.WSHUtilities;
 
 namespace WarframeTrackerCron {
     class Program {

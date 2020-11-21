@@ -1,10 +1,37 @@
-﻿
+﻿@model AdminIndexViewModel
 @{
     ViewBag.title = "Site Management";
 }
 
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home" asp-area=""><span class="mdi mdi-home mdi-lg"></span></a></li>
+    <li class="breadcrumb-item active"><span>@ViewData["Title"]</span></li>
+</ol>
+
 <h3>Site Management</h3>
 <hr />
+
+@if (Model.WarframesMissingReleaseDate.SafeAny()) {
+    <div class="text-danger">
+        The following warfames are missing a release date:
+        <ul>
+            @foreach (string warframeName in Model.WarframesMissingReleaseDate.OrderBy(x => x)) {
+                <li display-for="@warframeName"></li>
+            }
+        </ul>
+    </div>
+}
+
+@if (Model.InvasionRewardsMissingNames.SafeAny()) {
+    <div class="text-danger">
+        The following invasion rewards are missing names:
+        <ul>
+            @foreach (string reward in Model.InvasionRewardsMissingNames.OrderBy(x => x)) {
+                <li display-for="@reward"></li>
+            }
+        </ul>
+    </div>
+}
 
 <p>
     <a asp-action="RedownloadCache">
@@ -14,38 +41,65 @@
 
 <hr />
 
-<p>
-    <a asp-controller="CodexTab">
-        <span class="mdi mdi-fw mdi-tab"></span>Manage Codex Tabs
-    </a>
-</p>
-<p>
-    <a asp-controller="ItemCategory">
-        <span class="mdi mdi-fw mdi-group"></span>Manage Item Categories
-    </a>
-</p>
-<p>
-    <a asp-controller="ManualItemData">
-        <span class="mdi mdi-fw mdi-blank"></span>Manage Manual Item Data
-    </a>
-</p>
-<p>
-    <a asp-controller="InvasionReward">
-        <span class="mdi mdi-fw mdi-blank"></span>Manage Invasion Rewards
-    </a>
-</p>
-<p>
-    <a asp-controller="PrimeRelease">
-        <span class="mdi mdi-fw mdi-blank"></span>Manage Prime Releases
-    </a>
-</p>
-<p>
-    <a asp-controller="Fish">
-        <span class="mdi mdi-fw mdi-fish"></span>Manage Fish
-    </a>
-</p>
-<p>
-    <a asp-action="ApiExplorer">
-        API Explorer
-    </a>
-</p>
+<fieldset>
+    <legend>Utilities</legend>
+    <p>
+        <a asp-action="ApiExplorer">
+            API Explorer
+        </a>
+    </p>
+    <p>
+        <a asp-action="ModCompatTypes">
+            Mod Compat Types
+        </a>
+    </p>
+    <p>
+        <a asp-action="ModPlaceholders">
+            Mod Placeholder Text
+        </a>
+    </p>
+</fieldset>
+
+<fieldset>
+    <legend>Management</legend>
+    <p>
+        <a asp-controller="CodexTab">
+            Codex Tabs
+        </a>
+    </p>
+    <p>
+        <a asp-controller="ItemCategory">
+            Item Categories
+        </a>
+    </p>
+    <p>
+        <a asp-controller="ManualItemData">
+            Manual Item Data
+        </a>
+    </p>
+    <p>
+        <a asp-controller="InvasionReward">
+            Invasion Rewards
+        </a>
+    </p>
+    <p>
+        <a asp-controller="PrimeRelease">
+            Prime Releases
+        </a>
+    </p>
+    <p>
+        <a asp-controller="AmpComponent">
+            Amp Components
+        </a>
+    </p>
+    <p>
+        <a asp-controller="Fish">
+            Fish
+        </a>
+    </p>
+    <p>
+        <a asp-controller="ModSuggestion">
+            Mod Suggestions
+        </a>
+    </p>
+</fieldset>

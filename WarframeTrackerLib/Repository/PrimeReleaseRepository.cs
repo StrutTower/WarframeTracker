@@ -5,7 +5,7 @@ using TowerSoft.Repository;
 using WarframeTrackerLib.Domain;
 
 namespace WarframeTrackerLib.Repository {
-    public class PrimeReleaseRepository : Repository<PrimeRelease> {
+    public class PrimeReleaseRepository : DbRepository<PrimeRelease> {
         public PrimeReleaseRepository(UnitOfWork uow) : base(uow.DbAdapter) { }
 
         public PrimeRelease GetByID(int id) {

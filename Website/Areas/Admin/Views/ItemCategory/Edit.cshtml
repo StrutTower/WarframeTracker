@@ -1,6 +1,6 @@
 ﻿@model EditItemCategoryViewModel
 @{
-    Boolean editing = false;
+    bool editing = false;
     if (Model != null && Model.ItemCategory != null && Model.ItemCategory.ID != 0) {
         ViewBag.Title = "Edit Item Category";
         editing = true;
@@ -8,6 +8,13 @@
         ViewBag.Title = "New Item Category";
     }
 }
+
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home" asp-area=""><span class="mdi mdi-home mdi-lg"></span></a></li>
+    <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home" asp-area="Admin">Site Management</a></li>
+    <li class="breadcrumb-item"><a asp-action="Index" asp-controller="ItemCategory" asp-area="Admin">Manage Item Categories</a></li>
+    <li class="breadcrumb-item active"><span>@ViewData["Title"]</span></li>
+</ol>
 
 <h3>@ViewBag.Title</h3>
 <hr />
@@ -21,28 +28,14 @@
         }
 
         @Html.FormGroupEditorFor(x => x.ItemCategory.Name)
-
-        <div class="form-group">
-            <label twr-for="ItemCategory.CodexTabID"></label>
-            <select asp-for="ItemCategory.CodexTabID" asp-items="Model.CodexTabSelectList" class="twr-input">
-                <option></option>
-            </select>
-            <help-text twr-for="ItemCategory.CodexTabID"></help-text>
-            <span asp-validation-for="ItemCategory.CodexTabID"></span>
-        </div>
-
+        @Html.FormGroupSelectListFor(x => x.ItemCategory.CodexTabID, Model.CodexTabSelectList, "")
         @Html.FormGroupEditorFor(x => x.ItemCategory.WarframeApiCategoryName)
-
+        @Html.FormGroupEditorFor(x => x.ItemCategory.WarframeApiProductCategoryName)
         @Html.FormGroupEditorFor(x => x.ItemCategory.WarframeApiUniqueNameRegexFilter)
-
         @Html.FormGroupEditorFor(x => x.ItemCategory.AllowAcquisition)
-
         @Html.FormGroupEditorFor(x => x.ItemCategory.CanBeMastered)
-
         @Html.FormGroupEditorFor(x => x.ItemCategory.MaxRankExperience)
-
         @Html.FormGroupEditorFor(x => x.ItemCategory.ManuallyExcludedUniqueNames, null, "TextArea")
-
         @Html.FormGroupEditorFor(x => x.ItemCategory.SortingPriority)
 
         <div class="form-group">

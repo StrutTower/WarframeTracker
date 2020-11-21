@@ -2,20 +2,18 @@
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Runtime.Serialization;
 using System.Text;
 using WarframeTrackerLib.Utilities;
 
 namespace WarframeTrackerLib.WarframeApi.WorldState {
-    //[JsonConverter(typeof(JsonPathConverter<EventGoal>))]
     public class EventGoal {
-        [JsonDeserializeProperty("_id.$oid")]
         public string ID { get; set; }
 
-        [JsonDeserializeProperty("Activation.$date.$numberLong")]
-        public long StartEpoch { get; set; }
+        public DateTime StartDateUtc { get; set; }
 
-        [JsonDeserializeProperty("Expiry.$date.$numberLong")]
-        public long EndEpoch { get; set; }
+        public DateTime EndDateUtc { get; set; }
 
         public int Count { get; set; }
 
@@ -33,7 +31,7 @@ namespace WarframeTrackerLib.WarframeApi.WorldState {
 
         public string Faction { get; set; }
 
-        [JsonDeserializeProperty("Desc")]
+        [JsonProperty("Desc")]
         public string Description { get; set; }
 
         public string Tooltip { get; set; }
@@ -45,5 +43,26 @@ namespace WarframeTrackerLib.WarframeApi.WorldState {
         public List<EventReward> InterimRewards { get; set; }
 
         public EventReward Reward { get; set; }
+
+
+        #region Manual Deserialization
+        [JsonExtensionData]
+        [SuppressMessage("Style", "IDE0044", Justification = "Readonly prevents Newtonsoft.Json from setting the data.")]
+#pragma warning disable 0649
+        private IDictionary<string, JToken> _additionalData;
+#pragma warning restore 0649
+
+        [OnDeserialized]
+        private void OnDeserialized(StreamingContext context) {
+            ID = JsonHelper.ConvertPath<string>(_additionalData, "_id.$oid");
+
+            long startMilliseconds = JsonHelper.ConvertPath<long>(_additionalData, "Activation.$date.$numberLong");
+            StartDateUtc = JsonHelper.MillisecondsToDateTimeUtc(startMilliseconds);
+
+
+            long endMilliseconds = JsonHelper.ConvertPath<long>(_additionalData, "Expiry.$date.$numberLong");
+            EndDateUtc = JsonHelper.MillisecondsToDateTimeUtc(endMilliseconds);
+        }
+        #endregion
     }
 }

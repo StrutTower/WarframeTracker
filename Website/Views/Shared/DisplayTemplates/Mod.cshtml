@@ -1,0 +1,55 @@
+﻿@model WarframeItem
+@{
+    string missingImageUrl = Url.Content("~/images") + "/missingModImage.jpg";
+    ItemAcquisition ia = null;
+    if (ViewData["itemAcquisition"] != null && ViewData["itemAcquisition"] is ItemAcquisition) {
+        ia = (ItemAcquisition)ViewData["itemAcquisition"];
+    } else {
+        ia = new ItemAcquisition();
+    }
+
+    int? totalDrain = null;
+    if (Model.BaseDrain.HasValue && Model.FusionLimit.HasValue) {
+        totalDrain = Model.BaseDrain.Value + Model.FusionLimit.Value;
+    }
+}
+
+<div class="mod-container mod-rarity-@Model.Rarity.ToLower()">
+    <span class="acquisition-symbol">
+        <partial name="AcquisitionIcon" for="@ia" />
+    </span>
+    <div class="mod-level">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+    @if (totalDrain.HasValue && totalDrain > 0) {
+        <div class="mod-drain">
+            @Html.DisplayFor(x => totalDrain)
+            <span class="polarity-icon @Model.Polarity.ToLower()-polarity"></span>
+        </div>
+    }
+
+    <img src="https://cdn.warframestat.us/img/@Model.ImageName" onerror="this.onerror=null;this.src='@missingImageUrl';" class="mod-image" />
+
+    <div class="mod-description">
+        <div class="mod-name" display-for="Name"></div>
+        @if (Model.LevelStats.SafeAny() && Model.LevelStats.Last().Stats.SafeAny()) {
+            <div class="mod-stats">
+                @foreach (string stats in Model.LevelStats.Last().Stats) {
+                    <div display-for="@stats" display-template="ModStats"></div>
+                }
+            </div>
+        }
+        @if (!string.IsNullOrWhiteSpace(Model.CompatName)) {
+            <div class="mod-compatibility">
+                @if (!string.IsNullOrWhiteSpace(Model.ModSet)) {
+                    @:SET:
+                }
+                @Html.DisplayFor(x => x.CompatName)
+            </div>
+        }
+    </div>
+</div>

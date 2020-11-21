@@ -10,7 +10,10 @@
 @if (Model != null) {
     <div class="row mb-3">
         <div class="col-12">
-            <span display-for="SolNode.Name"></span> <small display-for="ActivateDateUtc" class="text-muted"></small>
+            <span display-for="SolNode.Name"></span> <small display-for="StartDateUtc" class="text-muted"></small>
+            @if (Model.IsBlocked) {
+             @: <span class="text-muted">/</span> <span class="text-danger" data-toggle="tooltip" title="This invasion is currently blocked by another invasion on the same node."><span class="mdi mdi-fw mdi-block-helper"></span>Blocked</span>
+            }
         </div>
         <div class="col-12">
             <img src="~/images/@(Model.AttackerFaction.ToLower()).png" style="max-height:20px;" />
@@ -20,8 +23,8 @@
         </div>
         <div class="col-12">
             <div class="progress" style="border-radius:0;height:12px;">
-                <div class="progress-bar bg-faction-@Model.AttackerFaction.ToLower()" role="progressbar" style="width:@width%;"></div>
-                <div class="progress-bar bg-faction-@Model.DefenderFaction.ToLower()" role="progressbar" style="width:@oppositeWidth%;"></div>
+                <div class="progress-bar bg-faction-@Model.AttackerFaction.ToLower()" role="progressbar" style="width:@(width + "%");"></div>
+                <div class="progress-bar bg-faction-@Model.DefenderFaction.ToLower()" role="progressbar" style="width:@(oppositeWidth + "%");"></div>
             </div>
         </div>
         <div class="col-12 text-right">

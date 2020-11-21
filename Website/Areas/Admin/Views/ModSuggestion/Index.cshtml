@@ -1,0 +1,76 @@
+﻿@model List<ModSuggestion>
+@{
+    ViewData["Title"] = "Manage Mod Suggestions";
+    List<ModSuggestion> mainMods = Model.Where(x => !x.PredecessorModSuggestionID.HasValue).ToList();
+}
+
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home" asp-area=""><span class="mdi mdi-home mdi-lg"></span></a></li>
+    <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home" asp-area="Admin">Site Management</a></li>
+    <li class="breadcrumb-item active"><span>@ViewData["Title"]</span></li>
+</ol>
+
+@foreach (ModCategory modCategory in Enum.GetValues(typeof(ModCategory))) {
+    <div>
+        <span class="h5">@EnumUtilities.GetDisplayName(modCategory)</span> <a asp-action="Edit" asp-route-modCategory="@modCategory"><span class="mdi mdi-plus-box-outline"></span> Add Mod</a>
+    </div>
+    <table class="table table-sm table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Stats</th>
+                <th>Drop Location</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (ModSuggestion mod in mainMods.Where(x => x.ModCategory == modCategory).OrderBy(x => x.WarframeItem.Name)) {
+                var upgrades = Model.Where(x => x.PredecessorModSuggestionID == mod.ID);
+                <tr>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@mod.ID">
+                            @mod.WarframeItem.Name
+                        </a>
+                    </td>
+                    <td>
+                        @if (mod.WarframeItem.LevelStats.SafeAny()) {
+                            foreach (string stat in mod.WarframeItem.LevelStats.Last().Stats) {
+                                <div>
+                                    @Html.DisplayFor(x => stat, "ModStats")
+                                </div>
+                            }
+                        }
+                    </td>
+                    <td display-for="@mod.DropLocation"></td>
+                </tr>
+                @if (upgrades.SafeAny()) {
+                    foreach (ModSuggestion upgrade in upgrades) {
+                        <tr>
+                            <td class="pl-3">
+                                <ul class="mb-0">
+                                    <li>
+                                        <a asp-action="Edit" asp-route-id="@upgrade.ID">
+                                            @upgrade.WarframeItem.Name
+                                        </a>
+
+                                    </li>
+                                </ul>
+
+                            </td>
+                            <td>
+                                @if (upgrade.WarframeItem.LevelStats.SafeAny()) {
+                                    foreach (string stat in upgrade.WarframeItem.LevelStats.Last().Stats) {
+                                        <div>
+                                            @Html.DisplayFor(x => stat, "ModStats")
+                                        </div>
+                                    }
+                                }
+                            </td>
+                            <td display-for="@upgrade.DropLocation"></td>
+                        </tr>
+                    }
+                }
+            }
+        </tbody>
+    </table>
+}
+

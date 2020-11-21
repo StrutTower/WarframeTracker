@@ -9,6 +9,7 @@ using TowerSoft.Repository;
 using WarframeTrackerLib.Domain;
 using WarframeTrackerLib.Repository;
 using WarframeTrackerLib.Utilities;
+using WesternStateHospital.WSHUtilities;
 
 namespace WarframeTrackerLib.WarframeApi {
     public class WarframeItemUtilities {
@@ -30,10 +31,20 @@ namespace WarframeTrackerLib.WarframeApi {
             return JsonConvert.DeserializeObject<WarframeItem>(itemCache.Data);
         }
 
+        public List<WarframeItem> GetByName(string name) {
+            List<ItemCache> caches = new ItemCacheRepository(_unitOfWork).GetByName(name);
+
+            if (caches.SafeAny() && caches.First().UpdatedTimestamp < DateTime.Now.AddDays(-2)) {
+                caches = RedownloadCache().Where(x => x.Name == name).ToList();
+            }
+            string test = "[" + string.Join(",", caches.Select(x => x.Data)) + "]";
+            return JsonConvert.DeserializeObject<List<WarframeItem>>(test);
+        }
+
         public List<WarframeItem> GetByCodexSection(CodexSection codexSection) {
             List<ItemCache> caches = new ItemCacheRepository(_unitOfWork).GetByCodexSection(codexSection);
 
-            if (caches == null != !caches.Any() || caches.First().UpdatedTimestamp < DateTime.Now.AddDays(-2)) {
+            if (caches == null && !caches.Any() || caches.First().UpdatedTimestamp < DateTime.Now.AddDays(-2)) {
                 List<ItemCategory> itemCategories = new ItemCategoryRepository(_unitOfWork).GetByCodexSection(codexSection);
                 caches = RedownloadCache().Where(x => itemCategories.Select(y => y.ID).Contains(x.ItemCategoryID)).ToList();
             }
@@ -91,6 +102,13 @@ namespace WarframeTrackerLib.WarframeApi {
             string test = "[" + string.Join(",", ics.Select(x => x.Data)) + "]";
             return JsonConvert.DeserializeObject<List<WarframeItem>>(test);
         }
+
+        public List<WarframeItem> GetAllMods() {
+            using WebClient client = new WebClient();
+            string json = client.DownloadString("https://raw.githubusercontent.com/WFCD/warframe-items/development/data/json/Mods.json");
+            List<WarframeItem> items = JsonConvert.DeserializeObject<List<WarframeItem>>(json);
+            return items;
+        }
         #endregion
 
         public List<ItemCache> RedownloadCache() {
@@ -106,6 +124,9 @@ namespace WarframeTrackerLib.WarframeApi {
                 _unitOfWork.GetRepo<ItemCacheRepository>().RemoveAll();
                 List<ItemCache> itemCaches = new List<ItemCache>();
                 foreach (WarframeItem item in items) {
+                    if (item.Name.Contains("'S")) {
+                        item.Name = item.Name.Replace("'S", "'s");
+                    }
                     // Manual Item Data
                     List<ManualItemData> manual = manualItemData.Where(x => x.ItemUniqueName == item.UniqueName).ToList();
                     foreach (ManualItemData data in manual) {
@@ -130,7 +151,7 @@ namespace WarframeTrackerLib.WarframeApi {
                     itemCaches.Add(itemCache);
                 }
 
-                foreach (ItemCache cache in itemCaches) {
+                foreach (ItemCache cache in itemCaches.GroupBy(x => x.UniqueName).Select(x => x.First())) {
                     _unitOfWork.GetRepo<ItemCacheRepository>().Add(cache);
                 }
                 _unitOfWork.CommitTransaction();
@@ -156,6 +177,9 @@ namespace WarframeTrackerLib.WarframeApi {
             foreach (ItemCategory itemCategory in itemCategories) {
 
                 var matchingItems = items.Where(x => x.Category == itemCategory.WarframeApiCategoryName).ToList();
+                if (!string.IsNullOrWhiteSpace(itemCategory.WarframeApiProductCategoryName)) {
+                    matchingItems = matchingItems.Where(x => x.ProductCategory == itemCategory.WarframeApiProductCategoryName).ToList();
+                }
                 if (!string.IsNullOrWhiteSpace(itemCategory.WarframeApiUniqueNameRegexFilter)) {
                     matchingItems = matchingItems
                         .Where(x => Regex.IsMatch(x.UniqueName, itemCategory.WarframeApiUniqueNameRegexFilter)).ToList();

@@ -13,7 +13,7 @@ namespace Website.Infrastructure {
         public void OnAuthorization(AuthorizationFilterContext context) {
             if (context.HttpContext.User.Identity.IsAuthenticated) {
                 // Automatically give admins access
-                if (context.HttpContext.User.IsInRole(RoleTypes.Administrator))
+                if (context.HttpContext.User.IsInRole(Roles.Administrator))
                     return;
 
                 // Check if the user has any of the roles provided

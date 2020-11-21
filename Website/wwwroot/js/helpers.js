@@ -11,30 +11,46 @@
         buttonTemplate: '<span class="mdi mdi-loading mdi-spin-fast"></span>'
     });
 
+    //if (isRunningStandalone()) {
+    //    $(window).on('beforeunload', function (e) {
+    //        $('#page-loader').removeClass('hidden');
+    //    });
+    //}
+
     // Show TempData Notification using Bootstrap notify
     var tempDataMessage = $('#tempDataMessage').val();
     if (tempDataMessage) {
         notify(tempDataMessage, 'success');
     }
+
+    $('.table-transpose').each(function () {
+        var $this = $(this);
+        var newrows = [];
+        $this.find("tr").each(function () {
+            var i = 0;
+            $(this).find("th,td").each(function () {
+                i++;
+                if (newrows[i] === undefined) { newrows[i] = $("<tr></tr>"); }
+                newrows[i].append($(this));
+            });
+        });
+        $this.find("tr").remove();
+        $.each(newrows, function () {
+            $this.append(this);
+        });
+        $(this).removeClass('hidden');
+    });
 });
 
-////#region Notification Helper
-//function notify(text, type, duration) {
-//    if (duration === undefined) {
-//        duration = 4000;
+//function isRunningStandalone() {
+//    //return (window.matchMedia('(display-mode: standalone)').matches);
+//    if (window.matchMedia('(display-mode: minimal-ui)').matches ||
+//        window.matchMedia('(display-mode: standalone)').matches || 
+//        window.matchMedia('(display-mode: fullscreen)').matches) {
+//        return true;
 //    }
-
-//    $.toast({
-//        text,
-//        icon:type,
-//        showHideTransition: 'slide',
-//        allowToastClose: true,
-//        hideAfter: duration,
-//        stack: false,
-//        position: 'bottom-center', 
-//    })
+//    return false;
 //}
-////#endregion
 
 //#region Notification Helper
 /** @description Generates a notification

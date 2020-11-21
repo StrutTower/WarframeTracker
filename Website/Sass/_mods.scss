@@ -1,0 +1,350 @@
+﻿$compatibilityLineHeight: 1.5em;
+$borderWidth: 3px;
+$borderRadius: 3px;
+$descriptionBackground: #222;
+
+$damageTypes: impact,puncture,slash,heat,cold,toxin,electricity,blast,corrosive,gas,magnetic,radiation,tau,viral;
+$polarities: vazarin,zenurik,unairu,umbra,penjaga,naramon,madurai,aura;
+
+.codex-mod-link {
+    display: block;
+    width: 220px;
+    margin: 0 auto;
+}
+
+.mod-container {
+    display: flex;
+    align-items: center;
+    margin: 0 auto;
+    width: 220px;
+    height: 290px;
+    position: relative;
+    background-clip: padding-box;
+    border: solid $borderWidth transparent;
+    border-radius: $borderRadius;
+
+    &:before {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: -1;
+        margin: -$borderWidth;
+        border-radius: inherit;
+        background: linear-gradient(to right, red, red);
+    }
+
+    .mod-image {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 10;
+        padding: 0;
+        max-width: 100%;
+        border-top-right-radius: $borderRadius;
+        border-top-left-radius: $borderRadius;
+    }
+
+    .mod-description {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 13;
+        background: #222;
+        background: linear-gradient(to bottom, transparent 0px, #222 8px);
+        padding-left: 0.25rem;
+        padding-right: 0.25rem;
+        padding-bottom: 0.25rem;
+        padding-top: 8px;
+        text-align: center;
+        min-height: 80px;
+        border-bottom-right-radius: $borderRadius;
+        border-bottom-left-radius: $borderRadius;
+
+        .mod-name {
+            font-size: 1.2rem;
+        }
+
+        .mod-stats {
+            font-size: 0.9rem;
+            margin-bottom: 4px;
+
+            .mod-stats-icon {
+                display: inline-block;
+                background: red;
+                height: 18px;
+                width: 18px;
+                margin-right: 1px;
+                transform: translateY(3px);
+
+                @each $damageType in $damageTypes {
+                    &.damage-type-#{$damageType} {
+                        -webkit-mask-image: url(../images/damageTypes/#{$damageType}.png);
+                        mask-image: url(../images/damageTypes/#{$damageType}.png);
+                    }
+                }
+
+                &.middle-mouse {
+                    margin: 0;
+                    width: 14px;
+                    -webkit-mask-image: url(../images/middleMouse.png);
+                    -webkit-mask-size: 21px;
+                    -webkit-mask-repeat: no-repeat;
+                    -webkit-mask-position: center;
+                    mask-image: url(../images/middleMouse.png);
+                    mask-size: 21px;
+                    mask-repeat: no-repeat;
+                    mask-position: center;
+                }
+
+                &.ammo-mutation {
+                    margin:0;
+                    -webkit-mask-image: url(../images/ammoMutation.png);
+                    mask-image: url(../images/ammoMutation.png);
+                }
+
+                &.energy-icon {
+                    margin: 0 1px;
+                    background: transparent;
+                    background-image: url(../images/energy.png);
+                }
+            }
+        }
+
+        .mod-compatibility {
+            background: black;
+            font-size: 0.9em;
+            margin-left: 15px;
+            margin-right: 15px;
+            margin-bottom: 2px;
+            border: 1px solid;
+            border-radius: $compatibilityLineHeight/4;
+        }
+    }
+
+    .mod-level {
+        position: absolute;
+        top: 2px;
+        left: 0;
+        right: 0;
+        z-index: 11;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        span {
+            height: 0;
+            width: 0;
+            display: block;
+            border: 3px solid red;
+            margin: 0 2px;
+            transform: rotate(45deg);
+            box-shadow: 0 0 5px black, 0 0 10px black;
+        }
+    }
+
+    .acquisition-symbol {
+        position: absolute;
+        top: 0;
+        left: 3px;
+        color: white;
+        z-index: 15;
+    }
+
+    .mod-drain {
+        position: absolute;
+        top: 8px;
+        right: 0;
+        z-index: 11;
+        color: white;
+        background: black;
+        padding-left: 5px;
+        padding-right: 5px;
+        border-top-left-radius: $compatibilityLineHeight/4;
+        border-bottom-left-radius: $compatibilityLineHeight/4;
+        border-top: 1px solid red;
+        border-left: 1px solid red;
+        border-bottom: 1px solid red;
+
+        img {
+            transform: translateY(-1px);
+            max-width: 18px;
+        }
+
+        .polarity-icon {
+            display: inline-block;
+            background: red;
+            height: 1em;
+            width: 1em;
+            transform: translateY(1px);
+
+            &.universal-polarity {
+                display: none;
+            }
+
+            @each $polarity in $polarities {
+                &.#{$polarity}-polarity {
+                    -webkit-mask-image: url(../images/polarity/#{$polarity}.png);
+                    mask-image: url(../images/polarity/#{$polarity}.png);
+                }
+            }
+        }
+    }
+
+    $commonColor: #CA9D8B;
+    $commonBorderColor: #A3744D;
+
+    &.mod-rarity-common {
+        color: $commonColor;
+
+        .mod-compatibility {
+            border-color: $commonBorderColor;
+        }
+
+        &:before {
+            background: linear-gradient(155deg, $commonColor, $commonBorderColor);
+        }
+
+        .mod-stats .mod-stats-icon {
+            background: $commonColor;
+        }
+
+        .mod-level {
+            span {
+                border-color: $commonColor;
+            }
+
+            span:nth-child(n+2) {
+                display: none;
+            }
+        }
+
+        .mod-drain {
+            color: $commonColor;
+            border-color: $commonBorderColor;
+
+            .polarity-icon {
+                background: $commonColor;
+            }
+        }
+    }
+
+    $uncommonColor: #E1E2E4;
+    $uncommonBorderColor: #B4BDC2;
+
+    &.mod-rarity-uncommon {
+        color: $uncommonColor;
+
+        .mod-compatibility {
+            border-color: $uncommonBorderColor;
+        }
+
+        &:before {
+            background: linear-gradient(155deg, darken($uncommonColor,5),darken($uncommonBorderColor,15));
+        }
+
+        .mod-stats .mod-stats-icon {
+            background: $uncommonColor;
+        }
+
+        .mod-level {
+            span {
+                border-color: $uncommonBorderColor;
+            }
+
+            span:nth-child(n+3) {
+                display: none;
+            }
+        }
+
+        .mod-drain {
+            color: $uncommonColor;
+            border-color: $uncommonBorderColor;
+
+            .polarity-icon {
+                background: $uncommonColor;
+            }
+        }
+    }
+
+    $rareColor: #F6E8C5;
+    $rareBorderColor: #A98C4A;
+
+    &.mod-rarity-rare {
+        color: $rareColor;
+
+        .mod-compatibility {
+            border-color: $rareBorderColor;
+        }
+
+        &:before {
+            background: linear-gradient(155deg, $rareColor, $rareBorderColor);
+        }
+
+        .mod-stats .mod-stats-icon {
+            background: $rareColor;
+        }
+
+        .mod-level {
+            span {
+                border-color: $rareColor;
+            }
+
+            span:nth-child(n+4) {
+                display: none;
+            }
+        }
+
+        .mod-drain {
+            color: $rareColor;
+            border-color: $rareBorderColor;
+
+            .polarity-icon {
+                background: $rareColor;
+            }
+        }
+    }
+
+    $legendaryColor: #E7EAEB;
+    $legendaryBorderColor: #fff;
+
+    &.mod-rarity-legendary {
+        color: $legendaryColor;
+
+        .mod-compatibility {
+            border-color: $legendaryBorderColor;
+        }
+
+        &:before {
+            background: linear-gradient(155deg, $legendaryColor, $legendaryBorderColor)
+        }
+
+        .mod-stats .mod-stats-icon {
+            background: $legendaryColor;
+        }
+
+        .mod-level {
+            span {
+                border-color: $legendaryBorderColor;
+            }
+
+            span:nth-child(n+5) {
+                display: none;
+            }
+        }
+
+        .mod-drain {
+            color: $legendaryColor;
+            border-color: $legendaryBorderColor;
+
+            .polarity-icon {
+                background: $legendaryColor;
+            }
+        }
+    }
+}

@@ -1,0 +1,11 @@
+﻿@model AmpInfoViewModel
+@{
+    ViewData["Title"] = "Amp Info";
+}
+
+<h4>Prisms</h4>
+<partial name="_AmpComponentTable" model="Model.Prisms" />
+<h4>Scaffolds</h4>
+<partial name="_AmpComponentTable" model="Model.Scaffolds" />
+<h4>Braces</h4>
+<partial name="_AmpComponentTable" model="Model.Braces" />

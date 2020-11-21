@@ -1,0 +1,34 @@
+﻿@model IEnumerable<IGrouping<string, WarframeItem>>
+@{
+    ViewData["Title"] = "Mod Compat Types";
+    List<WarframeItem> augments = (List<WarframeItem>)ViewData["augments"];
+}
+
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home" asp-area=""><span class="mdi mdi-home mdi-lg"></span></a></li>
+    <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home" asp-area="Admin">Site Management</a></li>
+    <li class="breadcrumb-item active"><span>@ViewData["Title"]</span></li>
+</ol>
+
+@foreach (IGrouping<string, WarframeItem> group in Model.OrderBy(x => x.Key)) {
+    List<string> names = group.Select(x => x.Name).ToList();
+    <div>
+        <h5>
+            @if (string.IsNullOrWhiteSpace(group.Key)) {
+                @:NONE
+            } else {
+                @group.Key
+            }
+        </h5>
+        <div class="pl-3">
+            @string.Join(", ", names)
+        </div>
+    </div>
+}
+
+<div>
+    <h5>AUGMENT</h5>
+    <div class="pl-3">
+        @string.Join(", ", augments.Select(x => x.Name))
+    </div>
+</div>

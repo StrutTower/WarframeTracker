@@ -2,9 +2,9 @@
 @{ 
     IDictionary<String, Object> attributes = HtmlHelper.AnonymousObjectToHtmlAttributes(ViewData["htmlAttributes"]);
     if (attributes.ContainsKey("class")) {
-        attributes["class"] += " twr-input";
+        attributes["class"] += " form-control";
     } else {
-        attributes.Add("class", "twr-input");
+        attributes.Add("class", "form-control");
     }
 
     if (!attributes.ContainsKey("autocomplete")) {

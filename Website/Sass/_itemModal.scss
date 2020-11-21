@@ -1,0 +1,25 @@
+﻿///<reference path="../node_modules/bootstrap/scss/_variables.scss" />
+
+#item-modal-image {
+    position: absolute;
+    top: 0;
+    left: -10px;
+    max-width: 350px;
+}
+
+#item-modal-components {
+    background: linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba($body-bg,0.5) 4%, rgba($body-bg,0.8) 8%, rgba($body-bg,0.9) 15%);
+}
+
+@media screen and (min-width:576px) {
+    #item-modal-image {
+        max-width: 500px;
+    }
+}
+
+@media screen and (min-width:992px) {
+    #item-modal-image {
+        position: relative;
+        max-width: unset;
+    }
+}

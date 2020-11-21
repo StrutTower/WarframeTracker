@@ -2,6 +2,7 @@
 @using Website
 @using Website.Infrastructure
 @using Website.TagHelpers
+@using Website.Utilities
 @using Website.ViewModels
 @using WarframeTrackerLib.Domain;
 @using WarframeTrackerLib.Utilities;
@@ -10,3 +11,5 @@
 @using WesternStateHospital.WSHUtilities;
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @addTagHelper *, Website
+
+@inject IOptions<AppSettings> AppSettings

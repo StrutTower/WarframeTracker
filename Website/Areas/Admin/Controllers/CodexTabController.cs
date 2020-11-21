@@ -2,13 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WarframeTrackerLib.Domain;
 using WarframeTrackerLib.Repository;
+using Website.Infrastructure;
 
 namespace Website.Areas.Admin.Controllers {
     [Area("Admin")]
-    public class CodexTabController : Controller {
+    [Authorize, Role(Roles.Administrator)]
+    public class CodexTabController : CustomController {
         private readonly UnitOfWork _uow;
         public CodexTabController(UnitOfWork uow) {
             _uow = uow;

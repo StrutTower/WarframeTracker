@@ -4,18 +4,18 @@ using TowerSoft.Repository;
 using WarframeTrackerLib.Domain;
 
 namespace WarframeTrackerLib.Repository {
-    public class SentNotificationRepository : Repository<SentNotification> {
+    public class SentNotificationRepository : DbRepository<SentNotification> {
         public SentNotificationRepository(UnitOfWork uow) : base(uow.DbAdapter) { }
 
         public SentNotification GetByID(int id) {
-            return GetSingleEntity(new WhereCondition("ID", id));
+            return GetSingleEntity(WhereEqual(x => x.ID, id)); ;
         }
 
         public List<SentNotification> GetByType(string type) {
-            return GetEntities(new WhereCondition("Type", type));
+            return GetEntities(WhereEqual(x => x.Type, type));
         }
 
-        public object GetByDataID(string oid) {
+        public SentNotification GetByDataID(string oid) {
             return GetSingleEntity(WhereEqual(x => x.DataID, oid)); ;
         }
     }

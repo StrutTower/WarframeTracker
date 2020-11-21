@@ -2,24 +2,29 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WarframeTrackerLib.Domain;
 using WarframeTrackerLib.Repository;
 using WarframeTrackerLib.Utilities;
 using Website.Areas.Admin.ViewModels;
+using Website.Infrastructure;
 
 namespace Website.Areas.Admin.Controllers {
     [Area("Admin")]
-    public class ItemCategoryController : Controller {
+    [Authorize, Role(Roles.Administrator)]
+    public class ItemCategoryController : CustomController {
         private readonly UnitOfWork _uow;
         public ItemCategoryController(UnitOfWork uow) {
             _uow = uow;
         }
 
         public ActionResult Index() {
-            List<ItemCategory> categories = _uow.GetRepo<ItemCategoryRepository>().GetAll();
-            new EagerLoader(_uow).Load(categories);
-            return View(categories);
+            //List<ItemCategory> categories = _uow.GetRepo<ItemCategoryRepository>().GetAll();
+            //new EagerLoader(_uow).Load(categories);
+            List<CodexTab> tabs = _uow.GetRepo<CodexTabRepository>().GetAll();
+            new EagerLoader(_uow).Load(tabs);
+            return View(tabs);
         }
 
         [HttpGet]

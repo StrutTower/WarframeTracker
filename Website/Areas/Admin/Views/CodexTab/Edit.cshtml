@@ -1,6 +1,6 @@
 ﻿@model CodexTab
 @{
-    Boolean editing = false;
+    bool editing = false;
     if (Model == null || Model.ID == 0) {
         ViewBag.Title = "New Codex Tab";
     } else {
@@ -9,29 +9,25 @@
     }
 }
 
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home" asp-area=""><span class="mdi mdi-home mdi-lg"></span></a></li>
+    <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home" asp-area="Admin">Site Management</a></li>
+    <li class="breadcrumb-item"><a asp-action="Index" asp-controller="CodexTab" asp-area="Admin">Manage Codex Tabs</a></li>
+    <li class="breadcrumb-item active"><span>@ViewData["Title"]</span></li>
+</ol>
+
 <h3>@ViewBag.Title</h3>
 <hr />
 
 <div asp-validation-summary="All"></div>
 
 <form action="" method="post" class="row">
+    @if (editing) {
+        @Html.HiddenFor(x => x.ID)
+    }
     <div class="col-md-6">
-
-        @if (editing) {
-            @Html.HiddenFor(x => x.ID)
-        }
-
         @Html.FormGroupEditorFor(x => x.Name)
-
-        <div class="form-group">
-            <label asp-for="CodexSectionID" class="twr-label"></label>
-            <select asp-for="CodexSectionID" asp-items="Html.GetEnumSelectList<CodexSection>()" class="twr-input">
-                <option></option>
-            </select>
-            <help-text twr-for="CodexSectionID"></help-text>
-            <span asp-validation-for="CodexSectionID"></span>
-        </div>
-
+        @Html.FormGroupSelectListFor(x => x.CodexSectionID, Html.GetEnumSelectList<CodexSection>(), "")
         @Html.FormGroupEditorFor(x => x.ImageName)
         @Html.FormGroupEditorFor(x => x.SortingPriority)
         @Html.FormGroupEditorFor(x => x.GroupItemsByItemCategory)

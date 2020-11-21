@@ -8,15 +8,19 @@ using WarframeTrackerLib.Domain;
 using WarframeTrackerLib.Utilities;
 
 namespace WarframeTrackerLib.Repository {
-    public class ItemCacheRepository : Repository<ItemCache> {
+    public class ItemCacheRepository : DbRepository<ItemCache> {
         public ItemCacheRepository(UnitOfWork unitOfWork) : base(unitOfWork.DbAdapter) { }
 
         public ItemCache GetByUniqueName(string uniqueName) {
-            return GetSingleEntity(new WhereCondition("UniqueName", uniqueName));
+            return GetSingleEntity(WhereEqual(x => x.UniqueName, uniqueName));
+        }
+
+        public List<ItemCache> GetByName(string name) {
+            return GetEntities(WhereEqual(x => x.Name, name));
         }
 
         public List<ItemCache> GetByItemCategoryID(int categoryID) {
-            return GetEntities(new WhereCondition("ItemCategoryID", categoryID));
+            return GetEntities(WhereEqual(x => x.ItemCategoryID, categoryID));
         }
 
         public List<ItemCache> GetByItemCategoryIDs(IEnumerable<int> categoryIDs) {
@@ -48,7 +52,7 @@ namespace WarframeTrackerLib.Repository {
         }
 
         public List<ItemCache> Search(string criteria) {
-            return GetEntities(new WhereCondition("Name", criteria, Comparison.LikeBothSidesWildcard));
+            return GetEntities(Where(x => x.Name, Comparison.LikeBothSidesWildcard, criteria));
         }
 
         public void RemoveAll() {

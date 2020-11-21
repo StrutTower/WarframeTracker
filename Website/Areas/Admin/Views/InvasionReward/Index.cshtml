@@ -3,6 +3,13 @@
     ViewData["Title"] = "Manage Invasion Rewards";
 }
 
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home" asp-area=""><span class="mdi mdi-home mdi-lg"></span></a></li>
+    <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home" asp-area="Admin">Site Management</a></li>
+    <li class="breadcrumb-item active"><span>@ViewData["Title"]</span></li>
+</ol>
+
+<div class="clearfix"></div>
 <a asp-action="Edit" class="btn btn-link float-right">
     <span class="mdi mdi-fw mdi-plus-box-outline"></span>Add Invasion Reward
 </a>
@@ -21,7 +28,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach(InvasionReward reward in Model.OrderBy(x => x.Name)) {
+                @foreach (InvasionReward reward in Model.OrderBy(x => x.Name)) {
                     <tr>
                         <td>
                             <a asp-action="Edit" asp-route-id="@reward.ID">
@@ -29,7 +36,7 @@
                             </a>
                         </td>
                         <td>
-                            @Html.BooleanIcon(reward.ShowOnHomeView)
+                            @ViewUtilities.BooleanIcon(reward.ShowOnHomeView)
                         </td>
                         <td class="small">
                             @reward.UniqueName.Replace("/Lotus/Types/Recipes/", "").Replace("/Lotus/Types/Items", "")

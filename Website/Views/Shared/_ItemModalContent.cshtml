@@ -7,83 +7,95 @@
     <span aria-hidden="true">&times;</span>
 </button>
 
-<h3 display-for="WarframeItem.Name" class="text-center"></h3>
 
-<form action="@Url.Action("UpdateItemAcquisition", "Item")" method="post" id="item-acquisition-form" class="row">
-    <div class="col-6">
-        <img class="img-fluid mb-2" src="https://cdn.warframestat.us/img/@Model.WarframeItem.ImageName"
-             onerror="this.onerror=null;this.src='@missingImageUrl';" style="max-height:100px;" />
-        @Html.HiddenFor(x => x.ItemAcquisition.UserID)
-        @Html.HiddenFor(x => x.ItemAcquisition.ItemUniqueName)
-        @if (User.Identity.IsAuthenticated) {
-            if (Model.ItemCategory.AllowAcquisition) {
-                <div class="form-check">
-                    <label>
-                        <input twr-for="ItemAcquisition.IsAcquired" />
-                        Acquired
-                    </label>
-                </div>
-            }
-            if (Model.ItemCategory.CanBeMastered) {
-                <div class="form-check">
-                    <label>
-                        <input twr-for="ItemAcquisition.IsMastered" />
-                        Mastered
-                    </label>
-                </div>
-            }
-            if (Model.ItemCategory.AllowAcquisition || Model.ItemCategory.CanBeMastered) {
-                <button type="submit" class="btn btn-primary">Update</button>
-            }
-        } else {
-            <p class="text-warning"><em>Log in to track your items.</em></p>
-        }
-    </div>
+<h3 display-for="WarframeItem.Name" class="text-center">
+</h3>
 
-    <div class="col-6">
-        <hr class="d-md-none" />
-        @if (!string.IsNullOrWhiteSpace(Model.WarframeItem.WikiaUrl)) {
-            <div class="text-right">
-                <a href="@Model.WarframeItem.WikiaUrl" target="_blank" rel="noreferrer noopener" class="btn btn-link">Open Wiki Page</a>
+<form asp-action="UpdateItemAcquisition" asp-controller="Item" method="post" asp-antiforgery="true" id="item-acquisition-form">
+
+    <div class="position-relative">
+        <div class="row" id="item-modal-form-row">
+            <div class="col-6 col-sm-7 col-lg-8 position-relative pb-2">
+                <img id="item-modal-image" src="https://cdn.warframestat.us/img/@Model.WarframeItem.ImageName"
+                     onerror="this.onerror=null;this.src='@missingImageUrl';" />
             </div>
-        }
 
-        @if (Model.ComponentAcquisitions != null && Model.ComponentAcquisitions.Any()) {
-            <h6>Components</h6>
-            for (int i = 0; i < Model.ComponentAcquisitions.Count; i++) {
-                Component comp = Model.WarframeItem.Components.Where(x => x.UniqueName == Model.ComponentAcquisitions[i].ComponentUniqueName).FirstOrDefault();
-                @Html.HiddenFor(x => x.ComponentAcquisitions[i].UserID)
-                @Html.HiddenFor(x => x.ComponentAcquisitions[i].ComponentUniqueName)
-                @Html.HiddenFor(x => x.ComponentAcquisitions[i].ItemUniqueName)
-
-                <div class="media">
-                    <div style="height:45px;width:55px;overflow:hidden;position:relative;">
-                        <img class="mr-2" src="https://cdn.warframestat.us/img/@comp.ImageName"
-                             style="position:absolute;max-height:55px;left:50%;transform:translateX(-50%)" />
+            <div class="col-6 col-sm-5 col-lg-4 pb-2" id="item-modal-components">
+                @if (!string.IsNullOrWhiteSpace(Model.WarframeItem.WikiaUrl)) {
+                    <div class="text-right">
+                        <a href="@Model.WarframeItem.WikiaUrl" target="_blank" rel="noreferrer noopener" class="btn btn-link">Open Wiki Page</a>
                     </div>
-                    <div class="media-body">
-                        <span display-for="@comp.Name"></span>
-                        @if (comp.ItemCount > 1) {
-                            <span>x<span display-for="@comp.ItemCount"></span></span>
-                        }
+                }
 
-                        @if (Model.WarframeItem.IsPrime && User.Identity.IsAuthenticated) {
+                @if (Model.ComponentAcquisitions != null && Model.ComponentAcquisitions.Any()) {
+                    <h6>Components</h6>
+                    for (int i = 0; i < Model.ComponentAcquisitions.Count; i++) {
+                        Component comp = Model.WarframeItem.Components.Where(x => x.UniqueName == Model.ComponentAcquisitions[i].ComponentUniqueName).FirstOrDefault();
+                        @Html.HiddenFor(x => x.ComponentAcquisitions[i].UserID)
+                        @Html.HiddenFor(x => x.ComponentAcquisitions[i].ComponentUniqueName)
+                        @Html.HiddenFor(x => x.ComponentAcquisitions[i].ItemUniqueName)
+
+                        <div class="media">
+                            <div style="height:45px;width:55px;overflow:hidden;position:relative;">
+                                <img class="mr-2" src="https://cdn.warframestat.us/img/@comp.ImageName"
+                                     style="position:absolute;max-height:55px;left:50%;transform:translateX(-50%)" />
+                            </div>
+                            <div class="media-body">
+                                <span display-for="@comp.Name"></span>
+                                @if (comp.ItemCount > 1) {
+                                    <span>x<span display-for="@comp.ItemCount"></span></span>
+                                }
+
+                                @if (Model.WarframeItem.IsPrime && User.Identity.IsAuthenticated) {
+                                    <div class="form-check">
+                                        <label>
+                                            <input asp-for="ComponentAcquisitions[i].IsAcquired" />
+                                            Acquired
+                                        </label>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    }
+                }
+
+                <hr class="my-1" />
+
+                @Html.HiddenFor(x => x.ItemAcquisition.UserID)
+                @Html.HiddenFor(x => x.ItemAcquisition.ItemUniqueName)
+                @if (User.Identity.IsAuthenticated) {
+                    <div class="pl-4">
+                        @if (Model.ItemCategory.AllowAcquisition) {
                             <div class="form-check">
                                 <label>
-                                    <input twr-for="ComponentAcquisitions[i].IsAcquired" />
+                                    <input asp-for="ItemAcquisition.IsAcquired" class="form-check-input" />
                                     Acquired
                                 </label>
                             </div>
                         }
+                        @if (Model.ItemCategory.CanBeMastered) {
+                            <div class="form-check">
+                                <label>
+                                    <input asp-for="ItemAcquisition.IsMastered" class="form-check-input" />
+                                    Mastered
+                                </label>
+                            </div>
+                        }
                     </div>
-                </div>
-            }
-        }
+                    if (Model.ItemCategory.AllowAcquisition || Model.ItemCategory.CanBeMastered) {
+                        <button type="submit" class="btn btn-primary btn-block">Update</button>
+                    }
+                } else {
+                    <p class="text-warning"><em>Log in to track your items.</em></p>
+                }
+            </div>
+
+        </div>
     </div>
 
-    <hr class="col-12" />
+    <hr class="mt-0" />
 
-    <div class="col-12">
+    <div>
         <p display-for="WarframeItem.Description"></p>
 
         @if (Model.WarframeItem.IsPrime && Model.WarframeItem.Components != null && Model.WarframeItem.Components.Any()) {
@@ -93,7 +105,7 @@
                     ComponentAcquisition ca = Model.ComponentAcquisitions.SingleOrDefault(x => x.ComponentUniqueName == comp.UniqueName);
 
                     if (ca != null && ca.IsAcquired) {
-                        <div class="text-muted">
+                        <div>
                             <span display-for="@comp.Name"></span>
                             <span class="mdi mdi-check"></span>
                         </div>
@@ -101,18 +113,35 @@
                         <div display-for="@comp.Name"></div>
                     }
 
-                    <div class="pl-3 mb-2 small @(ca != null && ca.IsAcquired ? "text-muted" : "")">
-                        @if (comp.Drops != null && comp.Drops.Any()) {
-                            foreach (var group in comp.Drops.Where(x => x.RelicLevel == "Intact").GroupBy(x => x.RelicEra)) {
-                                <div>
-                                    <span display-for="@group.Key"></span>
-                                    @string.Join(", ", group.Select(x => x.RelicType + " " + x.Rarity).Distinct())
-                                </div>
+                    @if (!ca.ComponentName.Equals("Orokin Cell")) {
+                        <div class="pl-3 mb-2 small">
+                            @if (comp.Drops != null && comp.Drops.Any()) {
+                                foreach (var group in comp.Drops.Where(x => !x.Location.Contains(")")).GroupBy(x => x.RelicEra)) {
+                                    <div class="component-relic-container" data-url="@Url.Action("RelicInfo", "Item")">
+                                        <span display-for="@group.Key"></span>
+                                        <div class="relic-drop-list @(ca != null && ca.IsAcquired ? "component-acquired" : "")">
+                                            @foreach (Drop drop in group) {
+                                                if (drop.Chance.HasValue) {
+                                                    if (drop.Chance > .2) {
+                                                        <a class="drop-common relic-info-link" data-name="@drop.Location" title="@drop.Location - Common - @(Math.Round(drop.Chance.Value * 100, 0))%">@drop.Location</a>
+                                                    } else if (drop.Chance > .1) {
+                                                        <a class="drop-uncommon relic-info-link" data-name="@drop.Location" title="@drop.Location - Uncommon - @(Math.Round(drop.Chance.Value * 100, 0))%">@drop.Location</a>
+                                                    } else if (drop.Chance > .01) {
+                                                        <a class="drop-rare relic-info-link" data-name="@drop.Location" title="@drop.Location - Rare - @(Math.Round(drop.Chance.Value * 100, 0))%">@drop.Location</a>
+                                                    }
+                                                } else {
+                                                    <span class="relic-info-link" data-name="@drop.Location">@drop.Location</span>
+                                                }
+                                            }
+                                        </div>
+                                        <div class="relic-info"></div>
+                                    </div>
+                                }
+                            } else {
+                                @:No Non-Vaulted Relics
                             }
-                        } else {
-                            @:No Non-Vaulted Relics
-                        }
-                    </div>
+                        </div>
+                    }
                 }
             </div>
         }

@@ -1,0 +1,34 @@
+﻿@model List<WarframeItem>
+@{
+
+}
+<div class="card">
+    <div class="card-body">
+        <button type="button" class="relic-info-close"><span class="mdi mdi-close"></span></button>
+        @if (Model.SafeAny() && Model.Count == 1) {
+            WarframeItem item = Model.First();
+            <h5>
+                @Html.DisplayFor(x => item.Name)
+            </h5>
+
+            @if (item.Drops != null && item.Drops.Any()) {
+                <h6>Drop Locations</h6>
+                foreach (Drop drop in item.Drops.OrderByDescending(x => x.Chance)) {
+                    <div>
+                        <span display-for="@drop.Chance" display-template="Percentage"></span> - <span display-for="@drop.Location"></span>
+                        @if (drop.Rotation != null) {
+                            <small class="rotation-@drop.Rotation.ToLower()"> Rotation: <span display-for="@drop.Rotation"></span></small>
+                        }
+                    </div>
+                }
+            } else {
+                <p>No drop locations found. This relic is probably vaulted.</p>
+            }
+        } else if (Model.SafeAny()) {
+            <p>Multiple items founds matching this name</p>
+        } else {
+            <p>Relic not found</p>
+        }
+    </div>
+</div>
+

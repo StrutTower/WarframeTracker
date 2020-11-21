@@ -41,17 +41,29 @@ namespace Website.ViewModels {
                 ComponentAcquisitions = new List<ComponentAcquisition>();
             }
 
-            List<PrimeRelease> releases = uow.GetRepo<PrimeReleaseRepository>().GetAll().Where(x => x.IsReleasedFromVault).ToList();
+            List<PrimeRelease> releases = uow.GetRepo<PrimeReleaseRepository>().GetAll();
+            List<PrimeRelease> unvaulted = releases.Where(x => x.IsReleasedFromVault).ToList();
             List<string> unvaultedUniqueNames = new List<string>();
-            if (releases.Any()) {
-                unvaultedUniqueNames.AddRange(releases.Select(x => x.WarframeUniqueName));
-                unvaultedUniqueNames.AddRange(releases.Select(x => x.Item1UniqueName));
-                unvaultedUniqueNames.AddRange(releases.Select(x => x.Item2UniqueName));
-                unvaultedUniqueNames.AddRange(releases.Select(x => x.Item3UniqueName));
+            if (unvaulted.Any()) {
+                unvaultedUniqueNames.AddRange(unvaulted.Select(x => x.WarframeUniqueName));
+                unvaultedUniqueNames.AddRange(unvaulted.Select(x => x.Item1UniqueName));
+                unvaultedUniqueNames.AddRange(unvaulted.Select(x => x.Item2UniqueName));
+                unvaultedUniqueNames.AddRange(unvaulted.Select(x => x.Item3UniqueName));
             }
 
-            PrimeWishlist = primes.Where(x => !x.IsExclusive && (!x.IsVaulted || unvaultedUniqueNames.Contains(x.UniqueName)) && !ias.Select(y => y.ItemUniqueName).Contains(x.UniqueName))
-                .OrderBy(x => x.Name).ToList();
+            PrimeWishlist = primes.Where(x => !x.IsExclusive && (!x.IsVaulted || unvaultedUniqueNames.Contains(x.UniqueName)) && !ias.Select(y => y.ItemUniqueName).Contains(x.UniqueName)).ToList();
+
+            foreach (WarframeItem item in PrimeWishlist) {
+                if (string.IsNullOrWhiteSpace(item.ReleaseDate)) {
+                    PrimeRelease primeRelease = releases.SingleOrDefault(x => x.WarframeUniqueName == item.UniqueName || x.Item1UniqueName == item.UniqueName || x.Item2UniqueName == item.UniqueName || x.Item3UniqueName == item.UniqueName);
+                    if (primeRelease != null)
+                        item.ReleaseDate = primeRelease.ReleaseDate.ToString("yyyy MM dd");
+                }
+                if (item.Components != null)
+                    item.Components = item.Components.OrderByDescending(x => x.Name == "Blueprint").ThenBy(x => x.Name == "Orokin Cell").ThenBy(x => x.Name).ToList();
+            }
+
+            PrimeWishlist = PrimeWishlist.OrderBy(x => x.ReleaseDate).ToList();
 
             #region Needed Relics
             NeededRelics = new List<WarframeItem>();
@@ -66,9 +78,14 @@ namespace Website.ViewModels {
                         if (ca == null) {
                             if (comp.Drops != null && comp.Drops.Any()) {
                                 foreach (Drop drop in comp.Drops) {
-                                    var relic = allRelics.SingleOrDefault(x => x.Name == drop.Location);
-                                    if (relic != null && !relic.IsVaulted)
-                                        NeededRelics.Add(relic);
+                                    string[] split = drop.Location.Split(" ", StringSplitOptions.RemoveEmptyEntries);
+                                    if (split.Length > 1) {
+                                        string relicName = split[0] + " " + split[1];
+                                        var relic = allRelics.SingleOrDefault(x => x.Name.StartsWith(relicName + " "));
+                                        //var relic = allRelics.Where(x => x.Name.Substring(0, 8) == drop.Location.Substring(0, 8));
+                                        if (relic != null && !relic.IsVaulted)
+                                            NeededRelics.Add(relic);
+                                    }
                                 }
                             }
                         }

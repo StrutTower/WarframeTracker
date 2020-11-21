@@ -4,26 +4,10 @@
 }
 
 <form action="" method="post" class="row">
-    <div class="col-md-4 offset-md-4">
-        <div class="form-group">
-            <input twr-for="UserName" autocomplete="off" />
-            <help-text twr-for="UserName"></help-text>
-            <span asp-validation-for="UserName"></span>
-        </div>
-
-        <div class="form-group">
-            <input twr-for="Password" autocomplete="off" />
-            <help-text twr-for="Password"></help-text>
-            <span asp-validation-for="Password"></span>
-        </div>
-
-        <div class="form-group">
-            <div class="form-check">
-                <input twr-for="RememberLogin" />
-                <label asp-for="RememberLogin"></label>
-            </div>
-            <span asp-validation-for="RememberLogin"></span>
-        </div>
+    <div class="col-md-8 col-lg-6">
+        @Html.FormGroupEditorFor(x => x.UserName)
+        @Html.FormGroupEditorFor(x => x.Password)
+        @Html.FormGroupEditorFor(x => x.RememberLogin)
 
         <div class="form-group">
             <button type="submit" class="btn btn-primary btn-block">

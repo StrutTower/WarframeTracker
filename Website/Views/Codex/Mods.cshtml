@@ -1,0 +1,87 @@
+﻿@model CodexModsViewModel
+@{
+
+}
+
+<ul class="nav nav-tabs mb-2 justify-content-around" id="codex-tab-list" role="tablist"
+    style="margin-left:-12px;margin-right:-12px;">
+    <li class="nav-item" title="Warframes" data-toggle="tooltip">
+        <a class="nav-link px-1 px-md-2 py-1 @(Model.TabID == 1 ? "active" : "")" asp-action="ViewTab" asp-route-id="@CodexSection.Mods" asp-route-tab="1">
+            Warframes
+        </a>
+    </li>
+    <li class="nav-item" title="Augments" data-toggle="tooltip">
+        <a class="nav-link px-1 px-md-2 py-1 @(Model.TabID == 2 ? "active" : "")" asp-action="ViewTab" asp-route-id="@CodexSection.Mods" asp-route-tab="2">
+            Augments
+        </a>
+    </li>
+    <li class="nav-item" title="Primary" data-toggle="tooltip">
+        <a class="nav-link px-1 px-md-2 py-1 @(Model.TabID == 3 ? "active" : "")" asp-action="ViewTab" asp-route-id="@CodexSection.Mods" asp-route-tab="3">
+            Primary
+        </a>
+    </li>
+    <li class="nav-item" title="Secondary" data-toggle="tooltip">
+        <a class="nav-link px-1 px-md-2 py-1 @(Model.TabID == 4 ? "active" : "")" asp-action="ViewTab" asp-route-id="@CodexSection.Mods" asp-route-tab="4">
+            Secondary
+        </a>
+    </li>
+    <li class="nav-item" title="Melee" data-toggle="tooltip">
+        <a class="nav-link px-1 px-md-2 py-1 @(Model.TabID == 5 ? "active" : "")" asp-action="ViewTab" asp-route-id="@CodexSection.Mods" asp-route-tab="5">
+            Melee
+        </a>
+    </li>
+    <li class="nav-item" title="Archwing" data-toggle="tooltip">
+        <a class="nav-link px-1 px-md-2 py-1 @(Model.TabID == 6 ? "active" : "")" asp-action="ViewTab" asp-route-id="@CodexSection.Mods" asp-route-tab="6">
+            Archwing
+        </a>
+    </li>
+    <li class="nav-item" title="Arch-Gun" data-toggle="tooltip">
+        <a class="nav-link px-1 px-md-2 py-1 @(Model.TabID == 7 ? "active" : "")" asp-action="ViewTab" asp-route-id="@CodexSection.Mods" asp-route-tab="7">
+            Arch-Gun
+        </a>
+    </li>
+    <li class="nav-item" title="Arch-Melee" data-toggle="tooltip">
+        <a class="nav-link px-1 px-md-2 py-1 @(Model.TabID == 8 ? "active" : "")" asp-action="ViewTab" asp-route-id="@CodexSection.Mods" asp-route-tab="8">
+            Arch-Melee
+        </a>
+    </li>
+    <li class="nav-item" title="Companion" data-toggle="tooltip">
+        <a class="nav-link px-1 px-md-2 py-1 @(Model.TabID == 9 ? "active" : "")" asp-action="ViewTab" asp-route-id="@CodexSection.Mods" asp-route-tab="9">
+            Companion
+        </a>
+    </li>
+    <li class="nav-item" title="K-Drive" data-toggle="tooltip">
+        <a class="nav-link px-1 px-md-2 py-1 @(Model.TabID == 10 ? "active" : "")" asp-action="ViewTab" asp-route-id="@CodexSection.Mods" asp-route-tab="10">
+            K-Drive
+        </a>
+    </li>
+    <li class="nav-item" title="Necramech" data-toggle="tooltip">
+        <a class="nav-link px-1 px-md-2 py-1 @(Model.TabID == 11 ? "active" : "")" asp-action="ViewTab" asp-route-id="@CodexSection.Mods" asp-route-tab="11">
+            Necramech
+        </a>
+    </li>
+    <li class="nav-item" title="Parazon" data-toggle="tooltip">
+        <a class="nav-link px-1 px-md-2 py-1 @(Model.TabID == 12 ? "active" : "")" asp-action="ViewTab" asp-route-id="@CodexSection.Mods" asp-route-tab="12">
+            Parazon
+        </a>
+    </li>
+</ul>
+
+<div>
+    <div class="row gutter-5">
+        @foreach (WarframeItem mod in Model.Mods.OrderBy(x => x.Name)) {
+
+            <div class="col-md-6 col-lg-4 col-xl-3 mb-3 codex-item-container">
+                @if (Model.ItemAcquisitions.SafeAny()) {
+                    ViewData["itemAcquisition"] = Model.ItemAcquisitions.SingleOrDefault(x => x.ItemUniqueName == mod.UniqueName);
+                }
+                <a href="#" class="open-item-modal codex-mod-link"
+                   data-url="@Url.Action("Form", "Item", new { itemID = mod.UniqueName.Replace("/", "|") })">
+                    @Html.DisplayFor(x => mod, "Mod")
+                </a>
+            </div>
+        }
+    </div>
+</div>
+
+<partial name="_ItemModal" />

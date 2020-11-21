@@ -8,17 +8,8 @@
 <form asp-action="Results" method="get" class="row">
     <div class="col-md-6">
         @Html.FormGroupEditorFor(x => x.AdvancedSearchModel.Name)
-
         @Html.FormGroupEditorFor(x => x.AdvancedSearchModel.MasteryRequirement)
-
-        <div class="form-group">
-            <label asp-for="AdvancedSearchModel.CodexSection" class="twr-label"></label>
-            <select asp-for="AdvancedSearchModel.CodexSection" asp-items="Model.CodexSectionSelectList" class="twr-input">
-                <option></option>
-            </select>
-            <help-text twr-for="AdvancedSearchModel.CodexSection"></help-text>
-            <span asp-validation-for="AdvancedSearchModel.CodexSection"></span>
-        </div>
+        @Html.FormGroupSelectListFor(x => x.AdvancedSearchModel.CodexSection, Model.CodexSectionSelectList, "")
 
         <div class="form-group">
             <button type="submit" class="btn btn-primary">Search</button>

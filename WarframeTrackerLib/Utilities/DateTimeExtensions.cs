@@ -11,17 +11,9 @@ namespace WarframeTrackerLib.Utilities {
             if (firstDate == secondDate)
                 throw new ArgumentException("The two dates supplied are the same.");
 
-            if (firstDate > secondDate) {
-                if (date > firstDate && date < secondDate)
-                    return true;
-                else
-                    return false;
-            } else {
-                if (date > secondDate && date < secondDate)
-                    return true;
-                else
-                    return false;
-            }
+            if (firstDate < secondDate) 
+                return date > firstDate && date < secondDate;
+            return date > secondDate && date < firstDate;
         }
     }
 }

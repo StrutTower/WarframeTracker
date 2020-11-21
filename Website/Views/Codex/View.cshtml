@@ -8,19 +8,19 @@
     <div class="col-md-6">
         @if (Model.CodexSection != CodexSection.Fish) {
             <div class="form-group">
-                <select class="twr-input" id="codex-filter-dropdown" data-codex-section="@Model.CodexSection">
+                <select class="form-control" id="codex-filter-dropdown" data-codex-section="@Model.CodexSection">
                     <option value="">Show All Items</option>
                     @if (Model.CodexSection == CodexSection.Equipment) {
                         <option value="showMastered">Mastered</option>
                         <option value="showNotMastered">Not Mastered</option>
                     }
                     @if (Model.CodexSection == CodexSection.Equipment ||
-               Model.CodexSection == CodexSection.Mods) {
+             Model.CodexSection == CodexSection.Mods) {
             <option value="showAcquired">Acquired</option>
             <option value="showNotAcquired">Not Acquired</option>
         }
                     @if (Model.CodexSection == CodexSection.Relics ||
-               Model.CodexSection == CodexSection.Equipment) {
+             Model.CodexSection == CodexSection.Equipment) {
             <option value="showVaulted">Vaulted</option>
             <option value="showNotVaulted">Not Vaulted</option>
         }
@@ -59,11 +59,7 @@
                                 if (Model.ItemAcquisitions.SafeAny()) {
                                     ViewData["itemAcquisition"] = Model.ItemAcquisitions.SingleOrDefault(x => x.ItemUniqueName == item.UniqueName);
                                 }
-                                @if (Model.CurrentCodexTab.CodexSectionID == CodexSection.Mods) {
-                                    <partial name="_ModItem" for="@item" view-data="@ViewData" />
-                                } else {
-                                    <partial name="_CodexItem" for="@item" view-data="@ViewData" />
-                                }
+                                <partial name="_CodexItem" for="@item" view-data="@ViewData" />
                             }
                         </div>
                     }

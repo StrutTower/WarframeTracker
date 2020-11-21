@@ -25,13 +25,15 @@ body {
     opacity: 0.7;
 }
 
-select option {
-    color: black;
+#page-loader {
+    position:fixed;
+    top:-4px;
+    right:3px;
+    z-index:99999;
 }
 
 footer {
     opacity: 0.7;
-    border-top: lighten($body-bg,15) 1px solid;
     margin-top: .5rem;
     padding-top: 0.5rem;
 
@@ -54,15 +56,13 @@ footer {
     }
 }
 
-/* FIREFOX FIX OF UGLY SELECT BOXES */
-@supports (-moz-appearance:none) {
-    select {
-        -moz-appearance: none !important;
-        background: transparent url('data:image/gif;base64,R0lGODlhBgAGAKEDAFVVVX9/f9TU1CgmNyH5BAEKAAMALAAAAAAGAAYAAAIODA4hCDKWxlhNvmCnGwUAOw==') right center no-repeat !important;
-        background-position: calc(100% - 5px) center !important;
-    }
+[data-toggle="collapse"] .mdi-chevron-down:before {
+    transition:transform 0.3s ease;
 }
 
+[data-toggle="collapse"].collapsed .mdi-chevron-down:before {
+    transform: rotate(-90deg);
+}
 
 @media print {
     header, footer, nav {

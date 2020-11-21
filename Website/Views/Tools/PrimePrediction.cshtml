@@ -6,9 +6,10 @@
 }
 
 <h3>@ViewBag.Title</h3>
-<hr />
+<p>The average days between prime releases is currently @Html.DisplayFor(x => x.AverageDaysBetweenPrimes) days.</p>
+
 <div class="table-responsive">
-    <table class="table table-sm w-auto">
+    <table class="table table-sm table-bordered w-auto">
         <thead>
             <tr>
                 <th>Warframe</th>
@@ -20,11 +21,11 @@
             @for (int i = 0; i < Model.StandardWithoutPrimeWarframes.Count; i++) {
                 WarframeItem warframe = null;
                 if (Model.Gender == "Male") {
-                    warframe = Model.StandardWithoutPrimeWarframes.Where(x => x.Sex == Model.Gender).Skip(maleIndex).First();
+                    warframe = Model.StandardWithoutPrimeWarframes.Where(x => x.Sex == Model.Gender).Skip(maleIndex).FirstOrDefault();
                 } else if (Model.Gender == "Female") {
-                    warframe = Model.StandardWithoutPrimeWarframes.Where(x => x.Sex == Model.Gender).Skip(femaleIndex).First();
+                    warframe = Model.StandardWithoutPrimeWarframes.Where(x => x.Sex == Model.Gender || x.Sex == "").Skip(femaleIndex).FirstOrDefault();
                 }
-                Model.LastPrimeReleaseDate = Model.LastPrimeReleaseDate.AddDays(90);
+                Model.LastPrimeReleaseDate = Model.LastPrimeReleaseDate.AddDays(Model.AverageDaysBetweenPrimes);
                 if (warframe == null) {
                     <tr><td colspan="3">Unreleased @Model.Gender Warframe</td></tr>
                 } else {
@@ -36,7 +37,7 @@
                             @if (string.IsNullOrWhiteSpace(warframe.ReleaseDate)) {
                                 <em class="text-warning">Missing Release Date</em>
                             } else {
-                                <span display-for="LastPrimeReleaseDate" display-template="ShortDate"></span> <small>(@Math.Round(time.TotalDays) Days)</small>
+                                <span display-for="LastPrimeReleaseDate" display-template="ShortDate"></span> <small class="text-faded">(@Math.Round(time.TotalDays) Days)</small>
                             }
                         </td>
                     </tr>

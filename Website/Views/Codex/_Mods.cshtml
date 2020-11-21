@@ -1,0 +1,19 @@
+﻿@model CodexViewModel
+@{ 
+    var grouped = Model.WarframeItems.GroupBy(x => x.Type);
+}
+
+@*<ul class="nav nav-tabs mb-2 justify-content-around" id="codex-tab-list" role="tablist"
+        style="margin-left:-12px;margin-right:-12px;">
+        @foreach (CodexTab tab in Model.CodexTabs) {
+            <li class="nav-item" title="@tab.Name" data-toggle="tooltip">
+                <a class="nav-link px-1 px-md-2 py-1 @(tab.ID == Model.CurrentCodexTab.ID ? "active" : "")"
+                   href="@Url.Action("ViewTab", new { id = (int)Model.CodexSection, tab = tab.ID })">
+                    <img src="~/images/@tab.ImageName" style="max-height:40px" />
+                </a>
+            </li>
+        }
+    </ul>*@
+@foreach (var group in grouped) {
+
+}

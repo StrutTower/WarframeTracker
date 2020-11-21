@@ -45,7 +45,8 @@ namespace Website.ViewModels {
                 ItemAcquisitions = uow.GetRepo<ItemAcquisitionRepository>().GetByUserID(userID.Value);
             }
             if (CodexSection == CodexSection.Fish) {
-                Fish = uow.GetRepo<FishRepository>().GetAll().ToDictionary(x => x.UniqueName);
+                var fish = uow.GetRepo<FishRepository>().GetAll();
+                Fish = fish.Where(x => WarframeItems.Select(y => y.UniqueName).Contains(x.UniqueName)).ToDictionary(x => x.UniqueName);
             }
             return this;
         }
@@ -73,7 +74,8 @@ namespace Website.ViewModels {
                 ItemAcquisitions = uow.GetRepo<ItemAcquisitionRepository>().GetByUserID(userID.Value);
             }
             if (CodexSection == CodexSection.Fish) {
-                Fish = uow.GetRepo<FishRepository>().GetAll().ToDictionary(x => x.UniqueName);
+                var fish = uow.GetRepo<FishRepository>().GetAll();
+                Fish = fish.Where(x => WarframeItems.Select(y => y.UniqueName).Contains(x.UniqueName)).ToDictionary(x => x.UniqueName);
             }
             return this;
         }

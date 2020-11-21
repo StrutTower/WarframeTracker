@@ -2,16 +2,19 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WarframeTrackerLib.Domain;
 using WarframeTrackerLib.Repository;
 using WarframeTrackerLib.Utilities;
 using WarframeTrackerLib.WarframeApi;
 using Website.Areas.Admin.ViewModels;
+using Website.Infrastructure;
 
 namespace Website.Areas.Admin.Controllers {
     [Area("Admin")]
-    public class FishController : Controller {
+    [Authorize, Role(Roles.Administrator)]
+    public class FishController : CustomController {
         private readonly UnitOfWork _uow;
         private readonly WarframeItemUtilities _warframeItemUtilities;
         public FishController(UnitOfWork uow, WarframeItemUtilities warframeItemUtilities) {
@@ -46,7 +49,7 @@ namespace Website.Areas.Admin.Controllers {
                 }
                 return RedirectToAction("Index");
             }
-            return View(fish);
+            return View(new EditFishViewModel().Load(_warframeItemUtilities, fish));
         }
     }
 }

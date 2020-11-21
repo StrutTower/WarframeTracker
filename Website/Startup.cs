@@ -4,13 +4,20 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Razor;
+using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Serilog;
+using System;
+using System.IO;
 using WarframeTrackerLib.Config;
 using WarframeTrackerLib.Repository;
+using WarframeTrackerLib.Services;
+using WarframeTrackerLib.Utilities;
 using WarframeTrackerLib.WarframeApi;
 using Website.Infrastructure;
+using WesternStateHospital.WSHUtilities;
 
 namespace Website {
     public class Startup {
@@ -22,28 +29,32 @@ namespace Website {
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services) {
-            services.Configure<CookiePolicyOptions>(options => {
-                // This lambda determines whether user consent for non-essential cookies is needed for a given request.
-                options.CheckConsentNeeded = context => true;
-                options.MinimumSameSitePolicy = SameSiteMode.None;
-            });
+            services.AddControllersWithViews(options => {
+                options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+                options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+            }).AddRazorRuntimeCompilation();
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(x => x.LoginPath = new PathString("/Account/Login"));
 
-            //services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+            services.Configure<AppSettings>(Configuration.GetSection(nameof(AppSettings)));
+            services.Configure<ApplicationSecrets>(Configuration.GetSection(nameof(ApplicationSecrets)));
 
-            services.Configure<RazorViewEngineOptions>(o => {
-                o.ViewLocationFormats.Add("/Views/Admin/{1}/{0}" + RazorViewEngine.ViewExtension);
-            });
+            AppSettings appSettings = Configuration.GetSection(nameof(AppSettings)).Get<AppSettings>();
 
-            services.AddControllersWithViews().AddRazorRuntimeCompilation();
-
-            services.Configure<AppSettings>(Configuration.GetSection("appSettings"));
-            services.Configure<ApplicationSecrets>(Configuration.GetSection("applicationSecrets"));
+            // Initialize Serilog
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Override("Microsoft.AspNetCore", Serilog.Events.LogEventLevel.Warning)
+                .Enrich.FromLogContext()
+                .WriteTo.Console()
+                .WriteTo.File(Path.Combine(Environment.ExpandEnvironmentVariables(appSettings.LogPath)),
+                    fileSizeLimitBytes: ByteInfo.FromMegabytes(50).Length, rollOnFileSizeLimit: true)
+                .CreateLogger();
 
             services.AddScoped<UnitOfWork>();
             services.AddScoped<WarframeItemUtilities>();
+            services.AddScoped<InvasionRewardNotifier>();
+            services.AddScoped<TwitterHelper>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -56,9 +67,15 @@ namespace Website {
                 app.UseHsts();
             }
 
-            app.UseStatusCodePagesWithReExecute("/Error/Code/{0}");
+            //app.UseStatusCodePagesWithReExecute("/Error/Code/{0}");
             //app.UseHttpsRedirection();
-            app.UseStaticFiles();
+
+            FileExtensionContentTypeProvider fileExtensionContentTypeProvider = new FileExtensionContentTypeProvider();
+            fileExtensionContentTypeProvider.Mappings[".webmanifest"] = "application/manifest+json";
+            app.UseStaticFiles(new StaticFileOptions {
+                ContentTypeProvider = fileExtensionContentTypeProvider
+            });
+
             app.UseAuthentication();
             
             app.UseRouting();

@@ -1,0 +1,34 @@
+﻿@model List<ModSuggestion>
+@{
+    int tabCounter = 0;
+    int paneCounter = 0;
+}
+
+<ul class="nav nav-tabs mb-1" id="myTab" role="tablist">
+    @foreach (ModCategory modCategory in Enum.GetValues(typeof(ModCategory))) {
+        <li class="nav-item">
+            <a class="nav-link @(tabCounter == 0 ? "active": "")" data-toggle="tab" href="#mod-category-@modCategory.ToString()" role="tab">
+                @EnumUtilities.GetDisplayName(modCategory)
+            </a>
+        </li>
+        tabCounter++;
+    }
+</ul>
+
+<div class="tab-content" id="myTabContent">
+    @foreach (ModCategory modCategory in Enum.GetValues(typeof(ModCategory))) {
+        List<ModSuggestion> mods = Model.Where(x => x.ModCategory == modCategory && !x.PredecessorModSuggestionID.HasValue).ToList();
+        <div class="tab-pane @(paneCounter == 0 ? "active": "")" id="mod-category-@modCategory.ToString()" role="tabpanel">
+            @if (mods.SafeAny()) {
+                <div class="row">
+                    @foreach (ModSuggestion mod in mods) {
+                        <partial name="_ModSuggestion" model="mod" />
+                    }
+                </div>
+            } else {
+                <h5 class="text-center">Nothing has been added to this category yet.</h5>
+            }
+        </div>
+        paneCounter++;
+    }
+</div>

@@ -1,0 +1,54 @@
+﻿///<reference path="_variables.scss" />
+///<reference path="../node_modules/bootstrap/scss/_variables.scss" />
+
+.relic-drop-list {
+    & > a:after {
+        content: ', ';
+    }
+
+    & > a:last-child:after {
+        content: '';
+    }
+
+    .relic-info-link {
+        cursor: pointer;
+    }
+
+    .drop-common {
+        color: #7d5636 !important;
+    }
+
+    .drop-uncommon {
+        color: silver !important;
+    }
+
+    .drop-rare {
+        color: gold !important;
+    }
+
+    &.component-acquired {
+        text-decoration: line-through;
+    }
+}
+
+.relic-info-close {
+    color: #ccc;
+    border: 1px solid #666;
+    border-radius: 50%;
+    float: right;
+    padding: 5px;
+    height: 2rem;
+    width: 2rem;
+    line-height: 1rem;
+    background: transparent;
+    transition: background 0.2s ease, border-color 0.2s ease;
+
+    &:hover {
+        background: lighten($body-bg,3);
+    }
+
+    &:active, &:focus {
+        outline: none;
+        border-color: #888;
+    }
+}

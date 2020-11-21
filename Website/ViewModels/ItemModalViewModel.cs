@@ -34,7 +34,7 @@ namespace Website.ViewModels {
             }
 
             if (WarframeItem.Components != null && WarframeItem.Components.Any()) {
-                WarframeItem.Components = WarframeItem.Components.OrderBy(x => x.Name).ToList();
+                WarframeItem.Components = WarframeItem.Components.OrderByDescending(x => x.Name == "Blueprint").ThenBy(x => x.Name == "Orokin Cell").ThenBy(x => x.Name).ToList();
 
                 if (userID.HasValue) {
                     ComponentAcquisitions = uow.GetRepo<ComponentAcquisitionRepository>()
@@ -73,7 +73,7 @@ namespace Website.ViewModels {
                     index++;
                 }
 
-                ComponentAcquisitions = ComponentAcquisitions.OrderBy(x => x.ComponentName).ToList();
+                ComponentAcquisitions = ComponentAcquisitions.OrderByDescending(x => x.ComponentName == "Blueprint").ThenBy(x => x.ComponentName == "Orokin Cell").ThenBy(x => x.ComponentName).ToList();
             }
             return this;
         }

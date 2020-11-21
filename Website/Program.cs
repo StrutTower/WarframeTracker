@@ -1,6 +1,7 @@
-﻿using Microsoft.AspNetCore;
-using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
+using Serilog;
 
 namespace Website {
     public class Program {
@@ -8,11 +9,14 @@ namespace Website {
             CreateWebHostBuilder(args).Build().Run();
         }
 
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
-                .ConfigureAppConfiguration((builderContext, config) => {
+        public static IHostBuilder CreateWebHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+                .UseSerilog()
+                .ConfigureAppConfiguration((hostContext, config) => {
                     config.AddJsonFile("applicationSecrets.json", optional: false, reloadOnChange: true);
                 })
-                .UseStartup<Startup>();
+                .ConfigureWebHostDefaults(webBuilder => {
+                    webBuilder.UseStartup<Startup>();
+                });
     }
 }

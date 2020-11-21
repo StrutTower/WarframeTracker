@@ -79,7 +79,7 @@ namespace Website.Controllers {
                 return Json(new {
                     success = true,
                     itemName = model.ItemUniqueName,
-                    view = RenderViewAsync("AcquisitionIcon", model)
+                    view = RenderViewAsync("AcquisitionIcon", model).Result
                 });
             }
             return Json(new {
@@ -87,7 +87,12 @@ namespace Website.Controllers {
             });
         }
 
-
+        public IActionResult RelicInfo(string name) {
+            List<WarframeItem> items = _itemUtils.GetByName(name.Replace("Relic", "Intact"));
+            if (IsAjaxRequest)
+            return PartialView("_RelicInfo", items);
+            return View("_RelicInfo", items);
+        }
 
         public IActionResult ModularItemInfo() {
             return View();

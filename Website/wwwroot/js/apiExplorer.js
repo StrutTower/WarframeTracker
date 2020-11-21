@@ -88,7 +88,10 @@
             cell2.textContent = v.category;
 
             var cell3 = row.insertCell(3);
-            cell3.textContent = v.uniqueName;
+            cell3.textContent = v.productCategory;
+
+            var cell4 = row.insertCell(4);
+            cell4.textContent = v.uniqueName;
         });
     }
 });

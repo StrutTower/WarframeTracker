@@ -2,19 +2,13 @@
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Diagnostics.CodeAnalysis;
+using System.Runtime.Serialization;
 using WarframeTrackerLib.Utilities;
 
 namespace WarframeTrackerLib.WarframeApi.WorldState {
     public class Invasion {
-        public string OID { get; set; }
-
-        [JsonProperty("_id")]
-        public JToken OIDToken {
-            set { OID = value["$oid"].ToString(); }
-        }
+        public string ID { get; set; }
 
         public string Faction { get; set; }
 
@@ -30,59 +24,41 @@ namespace WarframeTrackerLib.WarframeApi.WorldState {
 
         public bool Completed { get; set; }
 
-        public List<InvasionRewardItem> AttackerRewardItems { get; set; }
+        public bool IsBlocked { get; set; }
 
-        [JsonProperty("AttackerReward")]
-        public JToken AttackerRewardJToken {
-            set {
-                if (value is JArray) {
+        public bool IsImportant { get; set; }
 
-                } else if (value["countedItems"] != null) {
-                    AttackerRewardItems = value["countedItems"].ToObject<List<InvasionRewardItem>>();
-                }
-            }
-        }
+        public DateTime StartDateUtc { get; set; }
 
-        //Attacker Mission Info
         public string AttackerFaction { get; set; }
 
-        public JToken AttackerMissionInfo {
-            set { AttackerFaction = value["faction"].ToString(); }
-        }
+        public List<InvasionRewardItem> AttackerRewardItems { get; set; }
+
+        public string DefenderFaction { get; set; }
 
         public List<InvasionRewardItem> DefenderRewardItems { get; set; }
 
-        [JsonProperty("DefenderReward")]
-        public JToken DefenderRewardJToken {
-            set {
-                if (value is JArray) {
 
-                } else if (value["countedItems"] != null) {
-                    DefenderRewardItems = value["countedItems"].ToObject<List<InvasionRewardItem>>();
-                }
-            }
+        #region Manual Deserialization
+        [JsonExtensionData]
+        [SuppressMessage("Style", "IDE0044", Justification = "Readonly prevents Newtonsoft.Json from setting the data.")]
+#pragma warning disable 0649
+        private IDictionary<string, JToken> _additionalData;
+#pragma warning restore 0649
+
+        [OnDeserialized]
+        private void OnDeserialized(StreamingContext context) {
+            ID = JsonHelper.ConvertPath<string>(_additionalData, "_id.$oid");
+
+            long startMilliseconds = JsonHelper.ConvertPath<long>(_additionalData, "Activation.$date.$numberLong");
+            StartDateUtc = JsonHelper.MillisecondsToDateTimeUtc(startMilliseconds);
+
+            AttackerRewardItems = JsonHelper.ConvertPath<List<InvasionRewardItem>>(_additionalData, "AttackerReward.countedItems");
+            AttackerFaction = JsonHelper.ConvertPath<string>(_additionalData, "AttackerMissionInfo.faction");
+
+            DefenderRewardItems = JsonHelper.ConvertPath<List<InvasionRewardItem>>(_additionalData, "DefenderReward.countedItems");
+            DefenderFaction = JsonHelper.ConvertPath<string>(_additionalData, "DefenderMissionInfo.faction");
         }
-
-        //Defender Mission Info
-        public string DefenderFaction { get; set; }
-
-        public JToken DefenderMissionInfo {
-            set { DefenderFaction = value["faction"].ToString(); }
-        }
-
-        [JsonProperty("Activation.$date.$numberLong")]
-        public long ActivationEpochUtc { get; set; }
-
-        public DateTime ActivateDateUtc {
-            get {
-                return new DateTime(1970, 1, 1).AddMilliseconds(ActivationEpochUtc);
-            }
-        }
-
-        public JToken Activation {
-            set { ActivationEpochUtc = value["$date"]["$numberLong"].ToObject<long>(); }
-        }
-
-        public bool IsImportant { get; set; }
+        #endregion
     }
 }

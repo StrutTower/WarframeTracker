@@ -5,7 +5,7 @@ using TowerSoft.Repository;
 using WarframeTrackerLib.Domain;
 
 namespace WarframeTrackerLib.Repository {
-    public class FishRepository : Repository<Fish> {
+    public class FishRepository : DbRepository<Fish> {
         public FishRepository(UnitOfWork uow) : base(uow.DbAdapter) { }
 
         public Fish GetByID(int id) {

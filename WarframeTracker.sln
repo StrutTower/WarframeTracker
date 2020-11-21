@@ -9,6 +9,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Website", "Website\Website.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WarframeTrackerCron", "WarframeTrackerCron\WarframeTrackerCron.csproj", "{54137B16-2313-4084-A0E5-D90909FEF6AB}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaskTrigger", "TaskTrigger\TaskTrigger.csproj", "{B156BFA2-9E17-4B2B-BE62-4CA2E46BCF9B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WarframeTrackerTests", "WarframeTrackerTests\WarframeTrackerTests.csproj", "{87720C8D-F6AB-4927-AEDD-46A802A5FBBE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +31,14 @@ Global
 		{54137B16-2313-4084-A0E5-D90909FEF6AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{54137B16-2313-4084-A0E5-D90909FEF6AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{54137B16-2313-4084-A0E5-D90909FEF6AB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B156BFA2-9E17-4B2B-BE62-4CA2E46BCF9B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B156BFA2-9E17-4B2B-BE62-4CA2E46BCF9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B156BFA2-9E17-4B2B-BE62-4CA2E46BCF9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B156BFA2-9E17-4B2B-BE62-4CA2E46BCF9B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{87720C8D-F6AB-4927-AEDD-46A802A5FBBE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{87720C8D-F6AB-4927-AEDD-46A802A5FBBE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{87720C8D-F6AB-4927-AEDD-46A802A5FBBE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{87720C8D-F6AB-4927-AEDD-46A802A5FBBE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

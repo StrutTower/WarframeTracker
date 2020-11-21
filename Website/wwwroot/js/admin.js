@@ -59,6 +59,9 @@
                     page: params.page || 1
                 };
                 return query;
+            },
+            error: function (response) {
+                console.log(response);
             }
         }
     });

@@ -4,9 +4,7 @@ using WarframeTrackerLib.Config;
 
 namespace WarframeTrackerCron.Utilities {
     public class PushBulletHelper {
-        public async void SendNotificationToCellPhone(string message) {
-            ApplicationSecrets appSecrets = ApplicationSecrets.Get();
-
+        public async void SendNotificationToCellPhone(string message, ApplicationSecrets appSecrets) {
             HttpClient client = new HttpClient();
             client.DefaultRequestHeaders.Add("Access-Token", appSecrets.PushbulletApiKey);
 

@@ -10,32 +10,11 @@ $navbar-dark-hover-color: rgba(#fff, .85);
 $navbar-dark-toggler-border-color: transparent;
 
 
-@import "../node_modules/dark-bootstrap-theme/src/darkVariables";
-
-// Import Bootstrap's Sass
-@import "../node_modules/bootstrap/scss/bootstrap";
-
-@import "../node_modules/dark-bootstrap-theme/src/fixes";
-@import "../node_modules/dark-bootstrap-theme/src/dark-customStyles";
+@import "../node_modules/tower-bootstrap-theme/src/dark-theme.scss";
 
 // Fix for X icon not looking correct on Exo 2
 .close {
     font-family:sans-serif;
-}
-
-// Navbar link hover background color
-.navbar-dark .navbar-nav .nav-link:hover {
-    background: #3f464d
-}
-
-// Adds a shadow to dropdown menus
-.dropdown-menu.show {
-    box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
-}
-
-// Placeholder style for IE 10 and 11
-:-ms-input-placeholder { /* IE 10+ */
-    color: $input-placeholder-color;
 }
 
 .row.gutter-5 {
@@ -46,11 +25,10 @@ $navbar-dark-toggler-border-color: transparent;
     }
 }
 
-
-//HACK This media query works to only apply the styles to IE10 and IE11
-@media all and (-ms-high-contrast:none), (-ms-high-contrast:active) {
-    // This fixes the missing padding on the bottom of inputs on IE
-    input.form-control {
-        padding-bottom: .58rem;
+.row.gutter-0 {
+    > .col,
+    > [class*="col-"] {
+        padding-left: 0;
+        padding-right: 0;
     }
 }

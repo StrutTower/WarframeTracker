@@ -1,11 +1,14 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Runtime.Serialization;
 using System.Text;
 using WarframeTrackerLib.Utilities;
 
 namespace WarframeTrackerLib.WarframeApi.WorldState {
    public class ActiveMission {
-        [JsonDeserializeProperty("_id.$oid")]
         public string ID { get; set; }
 
         public int Region { get; set; }
@@ -18,35 +21,28 @@ namespace WarframeTrackerLib.WarframeApi.WorldState {
 
         public string Modifier { get; set; }
 
-        public DateTime StartedOnUtc { get; set; }
+        public DateTime StartDateUtc { get; set; }
 
-        [JsonDeserializeProperty("Activation.$date.$numberLong")]
-        public long StartedOnUtcEpoch {
-            get {
-                return (long)StartedOnUtc.Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds;
-            }
-            set {
-                StartedOnUtc = new DateTime(1970, 1, 1).AddMilliseconds(value);
-            }
-        }
-        public DateTime StartedOnLocalTime {
-            get { return StartedOnUtc.ToLocalTime(); }
-        }
+        public DateTime EndDateUtc { get; set; }
 
-        public DateTime EndsOnUtc { get; set; }
 
-        [JsonDeserializeProperty("Expiry.$date.$numberLong")]
-        public long EndsOnUtcEpoch {
-            get {
-                return (long)StartedOnUtc.Subtract(new DateTime(1970, 1, 1)).TotalMilliseconds;
-            }
-            set {
-                StartedOnUtc = new DateTime(1970, 1, 1).AddMilliseconds(value);
-            }
-        }
+        #region Manual Deserialization
+        [JsonExtensionData]
+        [SuppressMessage("Style", "IDE0044", Justification = "Readonly prevents Newtonsoft.Json from setting the data.")]
+#pragma warning disable 0649
+        private IDictionary<string, JToken> _additionalData;
+#pragma warning restore 0649
 
-        public DateTime EndsOnLocalTime {
-            get { return EndsOnUtc.ToLocalTime(); }
+        [OnDeserialized]
+        private void OnDeserialized(StreamingContext context) {
+            ID = JsonHelper.ConvertPath<string>(_additionalData, "_id.$oid");
+
+            long startMilliseconds = JsonHelper.ConvertPath<long>(_additionalData, "Activation.$date.$numberLong");
+            StartDateUtc = JsonHelper.MillisecondsToDateTimeUtc(startMilliseconds);
+
+            long endMilliseconds = JsonHelper.ConvertPath<long>(_additionalData, "Expiry.$date.$numberLong");
+            EndDateUtc = JsonHelper.MillisecondsToDateTimeUtc(endMilliseconds);
         }
+        #endregion
     }
 }

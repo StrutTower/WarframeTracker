@@ -9,7 +9,15 @@
     }
 }
 
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home" asp-area=""><span class="mdi mdi-home mdi-lg"></span></a></li>
+    <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home" asp-area="Admin">Site Management</a></li>
+    <li class="breadcrumb-item"><a asp-action="Index" asp-controller="InvasionReward" asp-area="Admin">Manage Invasion Rewards</a></li>
+    <li class="breadcrumb-item active"><span>@ViewData["Title"]</span></li>
+</ol>
+
 <h3>@ViewData["message"]</h3>
+<hr />
 
 <form action="" method="post" class="row">
     @if (editing) {
@@ -21,30 +29,12 @@
                 @Html.HiddenFor(x => x.InvasionReward.UniqueName)
                 @Html.DisplayFor(x => x.InvasionReward.UniqueName)
             } else {
-                <label twr-for="InvasionReward.UniqueName"></label>
-                <select asp-for="InvasionReward.UniqueName" asp-items="Model.UniqueNameSelectList" class="twr-input">
-                    <option></option>
-                </select>
-                <help-text twr-for="InvasionReward.UniqueName"></help-text>
-                <span asp-validation-for="InvasionReward.UniqueName"></span>
+                @Html.FormGroupSelectListFor(x => x.InvasionReward.UniqueName, Model.UniqueNameSelectList, "")
             }
         </div>
 
-        <div class="form-group">
-            <label twr-for="InvasionReward.Name"></label>
-            <input twr-for="InvasionReward.Name" />
-            <help-text twr-for="InvasionReward.Name"></help-text>
-            <span asp-validation-for="InvasionReward.Name"></span>
-        </div>
-
-        <div class="form-group">
-            <div class="form-check">
-                <input twr-for="InvasionReward.ShowOnHomeView" />
-                <label twr-for="InvasionReward.ShowOnHomeView"></label>
-            </div>
-            <help-text twr-for="InvasionReward.ShowOnHomeView"></help-text>
-            <span asp-validation-for="InvasionReward.ShowOnHomeView"></span>
-        </div>
+        @Html.FormGroupEditorFor(x => x.InvasionReward.Name)
+        @Html.FormGroupEditorFor(x => x.InvasionReward.ShowOnHomeView)
 
         <div class="form-group">
             <button type="submit" class="btn btn-primary">Save</button>

@@ -13,8 +13,11 @@ namespace WarframeTrackerLib.Domain {
         [Required]
         public string Name { get; set; }
 
-        [Display(Name = "Warframe API Category Type")]
+        [Display(Name = "Warframe API Category Type"), MaxLength(45)]
         public string WarframeApiCategoryName { get; set; }
+
+        [Display(Name = "Warframe API Product Category Name"), MaxLength(45)]
+        public string WarframeApiProductCategoryName { get; set; }
 
         [Display(Name = "Warframe API Unique Name Regex Filter")]
         public string WarframeApiUniqueNameRegexFilter { get; set; }

@@ -1,9 +1,16 @@
-﻿@model IEnumerable<ItemCategory>
+﻿@model IEnumerable<CodexTab>
 
 @{
     ViewBag.Title = "Manage Item Categories";
 }
 
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home" asp-area=""><span class="mdi mdi-home mdi-lg"></span></a></li>
+    <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home" asp-area="Admin">Site Management</a></li>
+    <li class="breadcrumb-item active"><span>@ViewData["Title"]</span></li>
+</ol>
+
+<div class="clearfix"></div>
 <a asp-action="Edit" class="btn btn-link float-right">
     <span class="mdi mdi-fw mdi-plus-box-outline"></span>Add New Item Category
 </a>
@@ -11,60 +18,79 @@
 <h3>@ViewBag.Title</h3>
 <hr />
 
-<div class="mobile-collapse-group">
-    @foreach (var group in Model.GroupBy(x => x.CodexTab_Object.CodexSectionID)) {
-        <div class="mobile-collapse mobile-collapse-md">
-            <h4 class="mobile-collapse-header">@EnumUtilities.GetDisplayName(group.Key)</h4>
-            <div class="mobile-collapse-body">
-                <div class="table-responsive">
-                    <table class="table table-sm table-bordered table-striped w-auto">
-                        <thead class="thead-dark text-center">
-                            <tr>
-                                <th>
-                                    @Html.DisplayNameFor(x => x.Name)
-                                </th>
-                                <th>
-                                    @Html.DisplayNameFor(x => x.CodexTabID)
-                                </th>
-                                <th>
-                                    <abbr title="@Html.DisplayNameFor(x => x.WarframeApiCategoryName)">
-                                        API
-                                    </abbr>
-                                </th>
-                                <th>
-                                    <abbr title="@Html.DisplayNameFor(x => x.AllowAcquisition)">
-                                        Acquisition
-                                    </abbr>
-                                </th>
-                                <th>
-                                    <abbr title="@Html.DisplayNameFor(x => x.CanBeMastered)">
-                                        Mastered
-                                    </abbr>
-                                </th>
-                                <th>
-                                    @Html.DisplayNameFor(x => x.SortingPriority)
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (ItemCategory cat in group.OrderBy(x => x.CodexTab_Object.SortingPriority).ThenBy(x => x.SortingPriority)) {
+<div class="accordion">
+    @foreach (var codexSection in Model.GroupBy(x => x.CodexSectionID)) {
+        <div class="card">
+            <h4 class="card-header p-0 bg-primary">
+                <a href="#" data-toggle="collapse" data-target="#codex-section-card-@codexSection.Key" class="p-3 d-block text-white collapsed">
+                    <span class="mdi mdi-lg mdi-fw mdi-chevron-down"></span>@EnumUtilities.GetDisplayName(codexSection.Key)
+                </a>
+            </h4>
+            <div class="collapse" id="codex-section-card-@codexSection.Key">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-sm table-bordered">
+                            <thead>
                                 <tr>
-                                    <td>
-                                        <a asp-action="Edit" asp-route-id="@cat.ID" display-for="@cat.Name"></a>
-                                    </td>
-                                    <td display-for="@cat.CodexTab_Object.Name"></td>
-                                    <td display-for="@cat.WarframeApiCategoryName"></td>
-                                    <td>
-                                        @Html.BooleanIcon(cat.AllowAcquisition)
-                                    </td>
-                                    <td>
-                                        @Html.BooleanIcon(cat.CanBeMastered)
-                                    </td>
-                                    <td display-for="@cat.SortingPriority"></td>
+                                    <th></th>
+                                    <th>Name</th>
+                                    <th>Category</th>
+                                    <th>P-Category</th>
+                                    <th>RegEx</th>
+                                    <th>Acq</th>
+                                    <th>Mas</th>
+                                    <th>Sort</th>
                                 </tr>
-                            }
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                @foreach (CodexTab tab in codexSection.OrderBy(x => x.SortingPriority)) {
+                                    if (tab.ItemCategory_Objects.SafeAny()) {
+                                        <tr>
+                                            <th rowspan="@tab.ItemCategory_Objects.Count" style="width:40px;vertical-align:middle;" title="@tab.Name">
+                                                <img src="~/images/@tab.ImageName" style="max-height:40px" />
+                                            </th>
+                                            <td>
+                                                <a asp-action="Edit" asp-route-id="@tab.ItemCategory_Objects[0].ID" display-for="@tab.ItemCategory_Objects[0].Name"></a>
+                                            </td>
+                                            <td display-for="@tab.ItemCategory_Objects[0].WarframeApiCategoryName"></td>
+                                            <td display-for="@tab.ItemCategory_Objects[0].WarframeApiProductCategoryName"></td>
+                                            <td>
+                                                @ViewUtilities.BooleanIcon(!string.IsNullOrWhiteSpace(tab.ItemCategory_Objects[0].WarframeApiUniqueNameRegexFilter))
+                                            </td>
+                                            <td>
+                                                @ViewUtilities.BooleanIcon(tab.ItemCategory_Objects[0].AllowAcquisition)
+                                            </td>
+                                            <td>
+                                                @ViewUtilities.BooleanIcon(tab.ItemCategory_Objects[0].CanBeMastered)
+                                            </td>
+                                            <td display-for="@tab.ItemCategory_Objects[0].SortingPriority"></td>
+                                        </tr>
+                                        @if (tab.ItemCategory_Objects.Count > 1) {
+                                            for (int i = 1; i < tab.ItemCategory_Objects.Count; i++) {
+                                                <tr>
+                                                    <td>
+                                                        <a asp-action="Edit" asp-route-id="@tab.ItemCategory_Objects[i].ID" display-for="@tab.ItemCategory_Objects[i].Name"></a>
+                                                    </td>
+                                                    <td display-for="@tab.ItemCategory_Objects[i].WarframeApiCategoryName"></td>
+                                                    <td display-for="@tab.ItemCategory_Objects[i].WarframeApiProductCategoryName"></td>
+                                                    <td>
+                                                        @ViewUtilities.BooleanIcon(!string.IsNullOrWhiteSpace(tab.ItemCategory_Objects[i].WarframeApiUniqueNameRegexFilter))
+                                                    </td>
+                                                    <td>
+                                                        @ViewUtilities.BooleanIcon(tab.ItemCategory_Objects[i].AllowAcquisition)
+                                                    </td>
+                                                    <td>
+                                                        @ViewUtilities.BooleanIcon(tab.ItemCategory_Objects[i].CanBeMastered)
+                                                    </td>
+                                                    <td display-for="@tab.ItemCategory_Objects[i].SortingPriority"></td>
+                                                </tr>
+                                            }
+                                        }
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>

@@ -13,7 +13,8 @@
     "popper.js": "~1.15.0",
     "select2": "~4.0.7",
     "inputmask": "4.0.8",
-    "dark-bootstrap-theme": "4.0.0"
+    "marked": "1.2.4",
+    "tower-bootstrap-theme": "0.8.0"
   },
   "devDependencies": {
     "gulp": "~4.0.2",

@@ -17,19 +17,22 @@
 }
 
 <div class="form-group">
-    <select class="twr-input" id="fish-biome-filter" asp-items="@biomeList">
+    <select class="form-control" id="fish-biome-filter" asp-items="@biomeList">
         <option value="">Show All Biomes</option>
     </select>
 </div>
 
 <div id="fish-codex-container" class="row">
     @foreach (WarframeItem item in Model.WarframeItems
-     .OrderByDescending(x => x.UniqueName.Contains("Legendary"))
-     .ThenByDescending(x => x.UniqueName.Contains("Rare"))
-     .ThenByDescending(x => x.UniqueName.Contains("Uncommon"))) {
+   .OrderByDescending(x => x.UniqueName.Contains("Legendary"))
+   .ThenByDescending(x => x.UniqueName.Contains("Rare"))
+   .ThenByDescending(x => x.UniqueName.Contains("Uncommon"))) {
         Fish fish = null;
         if (Model.Fish.ContainsKey(item.UniqueName)) {
             fish = Model.Fish[item.UniqueName];
+        }
+        if (fish == null) {
+            continue;
         }
         <div class="col-6 col-md-4 col-lg-3 fish-details-container" data-biome="@fish.Biome">
             <div class="row border border-secondary h-100 py-2 position-relative">

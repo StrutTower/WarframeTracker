@@ -4,54 +4,55 @@
 }
 
 <div>
-    <h5>
-        Prime Wishlist
-    </h5>
+    <p>
+        <span class="h5">Prime Wishlist</span> - Sorted by the items that are most likely to get vaulted first
+    </p>
 
     @if (!User.Identity.IsAuthenticated) {
         <p class="text-warning"><em>Log in to track your items.</em></p>
     }
 
-    <div class="row mb-3">
+    <div class="row mb-3 mx-1 gutter-0">
         @foreach (WarframeItem item in Model.PrimeWishlist) {
-            <div class="col-md-4 col-lg-3">
-                <div class="row border border-secondary h-100 py-2 position-relative">
+            <div class="col-md-4 col-lg-3" style="margin-left:-1px;margin-top:-1px;">
+                <div class="border border-secondary h-100 p-2 position-relative">
+                    <div class="row">
+                        <a href="#" class="open-item-modal d-inline-block position-absolute" style="top:0;right:5px;z-index:20;padding:5px;"
+                           data-url="@Url.Action("Form", "Item", new { itemID = item.UniqueName.Replace("/", "|") })">
+                            <span class="mdi mdi-square-edit-outline"></span>
+                        </a>
 
-                    <a href="#" class="open-item-modal d-inline-block position-absolute" style="top:0;right:5px;z-index:20;padding:5px;"
-                       data-url="@Url.Action("Form", "Item", new { itemID = item.UniqueName.Replace("/", "|") })">
-                        <span class="mdi mdi-square-edit-outline"></span>
-                    </a>
+                        <div class="col-6">
+                            <img class="img-fluid" src="https://cdn.warframestat.us/img/@item.ImageName"
+                                 onerror="this.onerror=null;this.src='@missingImageUrl';" />
+                            <span display-for="@item.Name"></span>
 
-                    <div class="col-6">
-                        <img class="img-fluid" src="https://cdn.warframestat.us/img/@item.ImageName"
-                             onerror="this.onerror=null;this.src='@missingImageUrl';" />
-                        <span display-for="@item.Name"></span>
-
-                    </div>
-                    <div class="col-6">
-                        @if (item.Components != null && item.Components.Any()) {
-                            foreach (Component comp in item.Components) {
-                                ComponentAcquisition ca = Model.ComponentAcquisitions
-                                    .SingleOrDefault(x => x.ComponentUniqueName == comp.UniqueName && x.ItemUniqueName == item.UniqueName);
-                                <div>
-                                    @if (ca != null && ca.IsAcquired) {
-                                        <del class="text-muted">
-                                            <span display-for="@comp.Name"></span>
-                                            @if (comp.ItemCount > 1) {
-                                                @:x@(comp.ItemCount)
-                                            }
-                                        </del>
-                                    } else {
-                                        <span>
-                                            <span display-for="@comp.Name"></span>
-                                            @if (comp.ItemCount > 1) {
-                                                @:x@(comp.ItemCount)
-                                            }
-                                        </span>
-                                    }
-                                </div>
+                        </div>
+                        <div class="col-6">
+                            @if (item.Components != null && item.Components.Any()) {
+                                foreach (Component comp in item.Components) {
+                                    ComponentAcquisition ca = Model.ComponentAcquisitions
+                                        .SingleOrDefault(x => x.ComponentUniqueName == comp.UniqueName && x.ItemUniqueName == item.UniqueName);
+                                    <div>
+                                        @if (ca != null && ca.IsAcquired) {
+                                            <del class="text-muted">
+                                                <span display-for="@comp.Name"></span>
+                                                @if (comp.ItemCount > 1) {
+                                                    @:x@(comp.ItemCount)
+                                                }
+                                            </del>
+                                        } else {
+                                            <span>
+                                                <span display-for="@comp.Name"></span>
+                                                @if (comp.ItemCount > 1) {
+                                                    @:x@(comp.ItemCount)
+                                                }
+                                            </span>
+                                        }
+                                    </div>
+                                }
                             }
-                        }
+                        </div>
                     </div>
                 </div>
             </div>
@@ -59,7 +60,7 @@
     </div>
 
     @if (Model.NeededRelics.Any()) {
-        <a href="#" class="btn btn-link" data-toggle="collapse" data-target="#needed-relics">Show Needed Relics</a>
+        <a href="#" class="btn btn-link" data-toggle="collapse" data-target="#needed-relics">Show/Hide Needed Relics</a>
         <ul id="needed-relics" class="collapse p-2">
             @foreach (var relicGroup in Model.NeededRelics.GroupBy(x => x.Name.Substring(0, 4))) {
                 <li>

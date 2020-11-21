@@ -3,6 +3,13 @@
     ViewBag.Title = "Manage Manual Item Data";
 }
 
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home" asp-area=""><span class="mdi mdi-home mdi-lg"></span></a></li>
+    <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home" asp-area="Admin">Site Management</a></li>
+    <li class="breadcrumb-item active"><span>@ViewData["Title"]</span></li>
+</ol>
+
+<div class="clearfix"></div>
 <a asp-action="Edit" class="btn btn-link float-right">
     <span class="mdi mdi-fw mdi-plus-box-outline"></span>Add New Manual Item Data
 </a>
@@ -10,9 +17,9 @@
 <h3>@ViewBag.Title</h3>
 <hr />
 
-<div class="form-inline">
+<div class="form-inline mb-2">
     <div class="form-group">
-        <input type="text" class="twr-input twr-searcher w-auto" placeholder="Filter Items" data-target="table tbody tr" data-min-length="2" />
+        <input type="text" class="form-control twr-searcher w-auto" placeholder="Filter Items" data-target="table tbody tr" data-min-length="2" />
     </div>
     <div class="form-group">
         <button type="button" class="btn btn-secondary btn-sm twr-search-clear">

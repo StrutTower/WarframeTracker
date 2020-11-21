@@ -1,0 +1,59 @@
+﻿@model AmpComponent
+@{
+    bool editing = false;
+    if (Model != null && Model.ID != 0) {
+        ViewData["title"] = "Edit Amp Component";
+    } else {
+        ViewData["Title"] = "New Amp Component";
+    }
+    var ampComponentTypes = Enum.GetValues(typeof(AmpComponentType));
+}
+
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home" asp-area=""><span class="mdi mdi-home mdi-lg"></span></a></li>
+    <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home" asp-area="Admin">Site Management</a></li>
+    <li class="breadcrumb-item"><a asp-action="Index" asp-controller="AmpComponent" asp-area="Admin">Manage Amp Components</a></li>
+    <li class="breadcrumb-item active"><span>@ViewData["Title"]</span></li>
+</ol>
+
+<h3>@ViewData["Title"]</h3>
+<hr />
+
+<form action="" method="post" class="row">
+    @if (editing) {
+        @Html.HiddenFor(x => x.ID)
+    }
+    <div class="col-md-6">
+        <div class="form-group">
+
+            @foreach (var type in ampComponentTypes) {
+                <label class="form-check form-check-inline">
+                    @Html.RadioButtonFor(x => x.AmpComponentType, type, new { @class = "form-check-input" }) <span class="form-check-label">@type.ToString()</span>
+                </label>
+            }
+            <span asp-validation-for="AmpComponentType"></span>
+        </div>
+
+        @Html.FormGroupEditorFor(x => x.Tier)
+        @Html.FormGroupEditorFor(x => x.Name)
+        @Html.FormGroupEditorFor(x => x.Description)
+        @Html.FormGroupEditorFor(x => x.ImageUrl)
+        @Html.FormGroupEditorFor(x => x.TriggerType)
+        @Html.FormGroupEditorFor(x => x.MaximumRange)
+        @Html.FormGroupEditorFor(x => x.RoundsPerSecond)
+        @Html.FormGroupEditorFor(x => x.Accuracy)
+        @Html.FormGroupEditorFor(x => x.DirectDamage)
+        @Html.FormGroupEditorFor(x => x.AreaDamage)
+        @Html.FormGroupEditorFor(x => x.CritChance)
+        @Html.FormGroupEditorFor(x => x.CritMultiplier)
+        @Html.FormGroupEditorFor(x => x.StatusChance)
+        @Html.FormGroupEditorFor(x => x.AmmoPerShot)
+        @Html.FormGroupEditorFor(x => x.EnergyConsumptionPerSecond)
+        @Html.FormGroupEditorFor(x => x.RechargeDelay)
+        @Html.FormGroupEditorFor(x => x.RechargePerSecond)
+
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+    </div>
+</form>

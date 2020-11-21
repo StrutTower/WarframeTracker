@@ -6,13 +6,13 @@ using TowerSoft.Repository;
 using WarframeTrackerLib.Domain;
 
 namespace WarframeTrackerLib.Repository {
-    public class ItemAcquisitionRepository : Repository<ItemAcquisition> {
+    public class ItemAcquisitionRepository : DbRepository<ItemAcquisition> {
         public ItemAcquisitionRepository(UnitOfWork unitOfWork) : base(unitOfWork.DbAdapter) { }
 
         public ItemAcquisition GetByPrimaryKeys(int userID, string itemUniqueName) {
             return GetSingleEntity(new[] {
-                new WhereCondition("UserID", userID),
-                new WhereCondition("ItemUniqueName", itemUniqueName)
+                WhereEqual(x => x.UserID, userID),
+                WhereEqual(x => x.ItemUniqueName, itemUniqueName)
             });
         }
 

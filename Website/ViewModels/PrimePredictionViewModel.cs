@@ -22,6 +22,8 @@ namespace Website.ViewModels {
 
         public int PrimeIndex { get; set; }
 
+        public int AverageDaysBetweenPrimes { get; set; }
+
         public PrimePredictionViewModel Load(UnitOfWork uow, WarframeItemUtilities itemUtils, AppSettings appSettings) {
             List<WarframeItem> frames = itemUtils.GetByCategoryID(appSettings.WarframeItemCategoryID);
 
@@ -49,6 +51,24 @@ namespace Website.ViewModels {
                 else if (PrimeIndex % 4 == 2)
                     Gender = "Female";
             }
+
+            List<int> daysBetweenReleases = new List<int>();
+            for(int i = 0; i < PrimeWarframes.Count; i++) {
+                if (i == 0) continue;
+
+                WarframeItem current = PrimeWarframes[i];
+                WarframeItem previous = PrimeWarframes[i - 1];
+
+                bool currentParsed = DateTime.TryParse(current.ReleaseDate, out DateTime currentRelease);
+                bool prevParsed = DateTime.TryParse(previous.ReleaseDate, out DateTime previousRelease);
+
+                if (currentParsed && prevParsed) {
+                    TimeSpan diff = currentRelease - previousRelease;
+                    daysBetweenReleases.Add((int)Math.Round(diff.TotalDays));
+                }
+            }
+
+            AverageDaysBetweenPrimes = daysBetweenReleases.Sum() / daysBetweenReleases.Count;
 
             return this;
         }

@@ -1,0 +1,103 @@
+﻿@model List<AmpComponent>
+
+<div class="table-responsive">
+    <table class="table table-sm table-bordered table-transpose table-content-center hidden">
+        <tbody>
+            <tr>
+                <th></th>
+                <th>Tier</th>
+                <th>Name</th>
+                @if (Model.First().AmpComponentType == AmpComponentType.Brace) {
+                    <th>Description</th>
+                } else {
+                    <th>Direct Damage</th>
+                    <th>Area Damage</th>
+                    <th>Range</th>
+                    <th>Crit Change</th>
+                    <th>Crit Multiplier</th>
+                    <th>Status Chance</th>
+                    <th>Rounds/Sec</th>
+                    <th>Energy Usage/Shot</th>
+                    <th>Energy Usage/Sec<span class="mdi mdi-calculator text-muted" title="Calculated Field"></span></th>
+                    <th>Flat DPS<span class="mdi mdi-calculator text-muted" title="Calculated Field"></span></th>
+                    <th>Seconds Till Empty<span class="mdi mdi-calculator text-muted" title="Calculated Field"></span></th>
+                    <th>DPS Till Empty<span class="mdi mdi-calculator text-muted" title="Calculated Field"></span></th>
+                }
+            </tr>
+            @foreach (AmpComponent comp in Model) {
+                <tr>
+                    <td>
+                        <img src="@comp.ImageUrl" style="max-height:100px;max-width:100px;" title="@comp.Description" data-toggle="tooltip" />
+                    </td>
+                    <td>Tier @comp.Tier</td>
+                    <td display-for="@comp.Name"></td>
+                    @if (Model.First().AmpComponentType == AmpComponentType.Brace) {
+                        <td display-for="@comp.Description"></td>
+                    } else {
+                        <td display-for="@comp.DirectDamage"></td>
+                        <td display-for="@comp.AreaDamage"></td>
+                        <td>
+                            @if (comp.MaximumRange.HasValue) {
+                                <span display-for="@comp.MaximumRange">m</span>
+                            }
+                        </td>
+                        <td>
+                            @if (comp.CritChance.HasValue) {
+                                <span>@(Math.Round(comp.CritChance.Value * 100, 2))%</span>
+                            }
+                        </td>
+                        <td>
+                            @if (comp.CritMultiplier.HasValue) {
+                                <span display-for="@comp.CritMultiplier">x</span>
+                            }
+                        </td>
+                        <td>
+                            @if (comp.StatusChance.HasValue) {
+                                <span>@(Math.Round(comp.StatusChance.Value * 100, 2))%</span>
+                            }
+                        </td>
+                        <td display-for="@comp.RoundsPerSecond"></td>
+                        <td>
+                            @if (comp.TriggerType == "Held") {
+                                @Html.DisplayFor(x => comp.AmmoPerShot)@:/s
+                            } else if (comp.TriggerType == "Burst") {
+                                <abbr title="Individual Shots. Not the entire burst.">@Html.DisplayFor(x => comp.AmmoPerShot)</abbr>
+                            } else {
+                                @Html.DisplayFor(x => comp.AmmoPerShot)
+                            }
+                        </td>
+                        <td display-for="@comp.EnergyConsumptionPerSecond"></td>
+                        <td>
+                            @if (comp.RoundsPerSecond.HasValue && (comp.DirectDamage.HasValue || comp.AreaDamage.HasValue)) {
+                                int totalDamage = 0;
+                                if (comp.DirectDamage.HasValue) totalDamage += comp.DirectDamage.Value;
+                                if (comp.AreaDamage.HasValue) totalDamage += comp.AreaDamage.Value;
+
+                                double flatDps = totalDamage * comp.RoundsPerSecond.Value;
+                                @flatDps
+                            }
+                        </td>
+                        <td>
+                            @if (comp.EnergyConsumptionPerSecond.HasValue) {
+                                @Math.Round(100 / comp.EnergyConsumptionPerSecond.Value, 2)
+                            }
+                        </td>
+                        <td>
+                            @if (comp.EnergyConsumptionPerSecond.HasValue) {
+                                double seconds = 100 / comp.EnergyConsumptionPerSecond.Value;
+                                int totalDamage = 0;
+                                if (comp.DirectDamage.HasValue) totalDamage += comp.DirectDamage.Value;
+                                if (comp.AreaDamage.HasValue) totalDamage += comp.AreaDamage.Value;
+
+                                double flatDps = totalDamage * comp.RoundsPerSecond.Value;
+
+                                @Math.Round(flatDps * seconds, 1)
+                            }
+
+                        </td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

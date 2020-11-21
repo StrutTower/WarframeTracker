@@ -20,11 +20,17 @@ namespace Website.Controllers {
         }
 
         public IActionResult View(CodexSection id) {
+            if (id == CodexSection.Mods) {
+                return View("Mods", new CodexModsViewModel().Load(_uow, _itemUtils, User));
+            }
             CodexViewModel viewmodel = new CodexViewModel().Load(_uow, _itemUtils, User, id);
             return View(viewmodel);
         }
 
         public IActionResult ViewTab(CodexSection id, int tab) {
+            if (id == CodexSection.Mods) {
+                return View("Mods", new CodexModsViewModel().Load(_uow, _itemUtils, User, tab));
+            }
             return View("View", new CodexViewModel().Load(_uow, _itemUtils, User, id, tab));
         }
     }

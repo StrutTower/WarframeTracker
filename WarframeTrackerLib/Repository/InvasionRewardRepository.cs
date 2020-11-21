@@ -2,15 +2,15 @@
 using WarframeTrackerLib.Domain;
 
 namespace WarframeTrackerLib.Repository {
-    public class InvasionRewardRepository : Repository<InvasionReward> {
+    public class InvasionRewardRepository : DbRepository<InvasionReward> {
         public InvasionRewardRepository(UnitOfWork uow) : base(uow.DbAdapter) { }
 
         public InvasionReward GetByID(int id) {
-            return GetSingleEntity(new WhereCondition("ID", id));
+            return GetSingleEntity(WhereEqual(x => x.ID, id));
         }
 
         public InvasionReward GetByUniqueName(string uniqueName) {
-            return GetSingleEntity(new WhereCondition("UniqueName", uniqueName));
+            return GetSingleEntity(WhereEqual(x => x.UniqueName, uniqueName));
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -14,16 +15,26 @@ namespace WarframeTrackerLib.WarframeApi {
         public string Type { get; set; }
         public string ImageName { get; set; }
         public string Category { get; set; }
+
+        public string ProductCategory { get; set; }
         public bool? Tradable { get; set; }
         public string WikiaUrl { get; set; }
+        public string WikiaThumbnail { get; set; }
 
         public int ItemCategoryID { get; set; }
+
+        public string CompatName { get; set; }
+
+        public List<LevelStats> LevelStats { get; set; }
 
         //Mods
         public string Polarity { get; set; }
         public string Rarity { get; set; }
+        public string ModSet { get; set; }
         public int? BaseDrain { get; set; }
         public int? FusionLimit { get; set; }
+        public bool? IsAugment { get; set; }
+        public bool? Transmutable { get; set; }
 
         // Warframe
         public string PassiveDescription { get; set; }
@@ -69,10 +80,7 @@ namespace WarframeTrackerLib.WarframeApi {
         public int? Stamina { get; set; }
         public int? Power { get; set; }
 
-        // Research
         public int? Credits { get; set; }
-
-        //public List<Resource> Resources { get; set; }
 
         public bool IsExclusive { get; set; }
 

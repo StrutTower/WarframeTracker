@@ -1,0 +1,32 @@
+﻿@using System.Text.RegularExpressions 
+@model string
+@{
+    //Replace other placeholders with [] to prevent HTML encoding
+    string output = Regex.Replace(Model, "<(.*?)>", "[$1]");
+
+    Dictionary<string, string> placeholders = new Dictionary<string, string> {
+        { "[DT_POISON]", "damage-type-toxin" },
+        { "[DT_FREEZE]", "damage-type-cold" },
+        { "[DT_ELECTRICITY]", "damage-type-electricity" },
+        { "[DT_FIRE]", "damage-type-heat" },
+        { "[DT_CORROSIVE]", "damage-type-corrosive" },
+        { "[DT_EXPLOSION]", "damage-type-blast" },
+        { "[DT_IMPACT]", "damage-type-impact" },
+        { "[DT_MAGNETIC]", "damage-type-magnetic" },
+        { "[DT_PUNCTURE]", "damage-type-puncture" },
+        { "[DT_RADIATION]", "damage-type-radiation" },
+        { "[DT_SENTIENT]", "damage-type-tau" },
+        { "[DT_SLASH]", "damage-type-slash" },
+        { "[DT_VIRAL]", "damage-type-viral" },
+        { "[SECONDARY_FIRE]", "middle-mouse" },
+        { "[ENERGY]", "energy-icon" },
+        { "[AMMO_MUTATION]", "ammo-mutation" }
+    };
+
+    foreach(KeyValuePair<string, string> kvp in placeholders) {
+        output = output.Replace(kvp.Key, "<span class=\"mod-stats-icon " + kvp.Value + "\"></span>");
+    }
+
+    output = output.Replace("[LINE_SEPARATOR]", "<br />");
+}
+@Html.Raw(output)

@@ -1,8 +1,4 @@
-﻿using Newtonsoft.Json;
-using System.IO;
-using System.Reflection;
-
-namespace WarframeTrackerLib.Config {
+﻿namespace WarframeTrackerLib.Config {
     public class ApplicationSecrets {
         public string ConnectionString { get; set; }
 
@@ -12,11 +8,12 @@ namespace WarframeTrackerLib.Config {
 
         public string InvasionRewardChannel { get; set; }
 
-        public static ApplicationSecrets Get() {
-            FileInfo fi = new FileInfo(Assembly.GetEntryAssembly().Location);
-            
-            string json = File.ReadAllText(Path.Combine(fi.Directory.FullName, "applicationSecrets.json"));
-            return JsonConvert.DeserializeObject<ApplicationSecrets>(json);
-        }
+        public string TaskTriggerPassphrase { get; set; }
+
+        public string TwitterApiKey { get; set; }
+
+        public string TwitterSecretKey { get; set; }
+
+        public string TwitterBearerToken { get; set; }
     }
 }

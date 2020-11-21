@@ -6,13 +6,16 @@ using WarframeTrackerLib.Repository;
 
 namespace Website.ViewModels {
     public class RegistrationViewModel : IValidatableObject {
-
+        [Required, RegularExpression("^[a-zA-Z0-9_]+$", ErrorMessage = "This username contains invalid characters.")]
         public string Username { get; set; }
 
+        [Required, DataType(DataType.EmailAddress), Display(Name = "Email Address")]
         public string EmailAddress { get; set; }
 
+        [Required, DataType(DataType.Password), Display(Name = "Password")]
         public string Password { get; set; }
 
+        [Required, DataType(DataType.Password), Display(Name = "Confirm Password")]
         public string ConfirmPassword { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext) {
@@ -28,10 +31,9 @@ namespace Website.ViewModels {
                 yield return new ValidationResult("Username is not valid", new[] { "Username" });
             }
 
-            user = null;
-            user = uow.GetRepo<UserRepository>().GetByEmailAddress(EmailAddress);
+            User user2 = uow.GetRepo<UserRepository>().GetByEmailAddress(EmailAddress);
 
-            if (user != null) {
+            if (user2 != null) {
                 yield return new ValidationResult("Email address is not valid", new[] { "EmailAddress" });
             }
         }

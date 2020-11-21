@@ -4,9 +4,9 @@
 <head>
     <title>
         @if (ViewBag.Title == null) {
-        @AppSettings.Value.AppName
+            @AppSettings.Value.AppName
         } else {
-        @ViewBag.Title  @: - @AppSettings.Value.AppName
+            @ViewBag.Title @: - @AppSettings.Value.AppName
         }
     </title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -18,10 +18,14 @@
     <meta name="robots" content="noodp" />
     <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
     <meta http-equiv="content-language" content="en" />
+    <link rel="apple-touch-icon" sizes="180x180" href="~/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="~/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="~/favicon-16x16.png">
     <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <link rel="manifest" href="~/site.webmanifest">
 
     <link rel="stylesheet" href="~/lib/bundle.min.css" asp-append-version="true" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Audiowide|Exo+2">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Audiowide&family=Exo+2:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&display=swap">
     <link rel="stylesheet" href="//cdn.materialdesignicons.com/3.6.95/css/materialdesignicons.min.css">
 </head>
 <body>
@@ -33,11 +37,18 @@
         Most of this site will not function properly without JavaScript enabled.
     </noscript>
 
-    <main class="container">
+    <partial name="_Sidebar" />
+
+    <div id="page-loader" class="hidden">
+        <span class="mdi mdi-loading mdi-2x mdi-spin-fast"></span>
+    </div>
+
+    <main class="container sidebar-padding">
         @RenderBody()
     </main>
 
-    <footer class="container">
+    <footer class="container sidebar-padding">
+        <hr />
         <p class="text-center">
             <environment include="Development">
                 <span class="text-danger font-weight-bold">Development Server</span> -
@@ -47,11 +58,12 @@
                 - @AppSettings.Value.AppName &copy; @DateTime.Now.Year -
             </span>
             <a asp-action="ReleaseNotes" asp-controller="Home">
-                Version @Html.WebsiteVersion()
+                Version @ViewUtilities.GetWebsiteVersion()
             </a>
+            <span id="testing"></span>
         </p>
         @if (TempData["message"] != null) {
-        <input type="hidden" id="tempDataMessage" value="@TempData["message"]" />
+            <input type="hidden" id="tempDataMessage" value="@TempData["message"]" />
         }
     </footer>
 

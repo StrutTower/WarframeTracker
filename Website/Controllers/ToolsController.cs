@@ -13,14 +13,14 @@ using Website.ViewModels;
 
 namespace Website.Controllers {
     public class ToolsController : Controller {
-        private readonly AppSettings _appSettings;
-        private readonly UnitOfWork _uow;
-        private readonly WarframeItemUtilities _itemUtils;
+        private readonly AppSettings appSettings;
+        private readonly UnitOfWork uow;
+        private readonly WarframeItemUtilities itemUtils;
 
         public ToolsController(IOptions<AppSettings> appSettings, UnitOfWork uow, WarframeItemUtilities itemUtils) {
-            _appSettings = appSettings.Value;
-            _uow = uow;
-            _itemUtils = itemUtils;
+            this.appSettings = appSettings.Value;
+            this.uow = uow;
+            this.itemUtils = itemUtils;
         }
 
         public IActionResult Index() {
@@ -30,14 +30,14 @@ namespace Website.Controllers {
         [Authorize, HttpGet]
         public IActionResult UpdateDaysLoggedIn() {
             int userID = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
-            UserData userData = _uow.GetRepo<UserDataRepository>().GetByUserID(userID);
+            UserData userData = uow.GetRepo<UserDataRepository>().GetByUserID(userID);
             return View(userData);
         }
 
         [HttpPost, ValidateAntiForgeryToken]
         public IActionResult UpdateDaysLoggedIn(int? daysLoggedIn) {
             int userID = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
-            UserDataRepository repo = _uow.GetRepo<UserDataRepository>();
+            UserDataRepository repo = uow.GetRepo<UserDataRepository>();
             UserData userData = repo.GetByUserID(userID);
             userData.DaysLoggedIn = daysLoggedIn;
             userData.DaysLoggedInUtcStartDate = DateTime.UtcNow.Date;
@@ -47,13 +47,11 @@ namespace Website.Controllers {
         }
 
         public IActionResult PrimePrediction() {
-            return View(new PrimePredictionViewModel().Load(_uow, _itemUtils, _appSettings));
+            return View(new PrimePredictionViewModel().Load(uow, itemUtils, appSettings));
         }
 
-        public IActionResult ValenceCalculator() {
-            List<WarframeItem> items = _itemUtils.GetByCodexSection(CodexSection.Equipment);
-            items = items.Where(x => x.Name.StartsWith("Kuva ")).ToList();
-            return View(items);
+        public IActionResult AmpInfo() {
+            return View(new AmpInfoViewModel().Load(uow));
         }
     }
 }

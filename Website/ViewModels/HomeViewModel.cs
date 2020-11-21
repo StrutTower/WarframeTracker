@@ -23,10 +23,19 @@ namespace Website.ViewModels {
 
         public List<ActiveMission> ExcavationFissureMissions { get; set; }
 
+        public CetusCycle CetusCycle { get; set; }
+
+        public long CetusDayMilliseconds { get; set; } = 6000000;
+
+        public long CetusNightMilliseconds { get; set; } = 3000000;
+
         public HomeViewModel Load(UnitOfWork uow, ClaimsPrincipal user, AppSettings appSettings) {
-            WorldState = new WorldStateUtilities().GetWorldState();
+            WorldStateUtilities worldStateUtilities = new WorldStateUtilities();
+            WorldState = worldStateUtilities.GetWorldState();
 
             WorldStateHelper worldStateHelper = new WorldStateHelper();
+
+            CetusCycle = worldStateUtilities.GetCetusCycle();
 
             Baro = worldStateHelper.GetBaro(WorldState);
 
@@ -45,7 +54,7 @@ namespace Website.ViewModels {
 
             var voidMissions = worldStateHelper.GetVoidMissions(WorldState);
 
-            CellFissureMissions = voidMissions.Where(x => x.SolNode.Name.Contains("Saturn") || x.SolNode.Name.Contains("Ceres")).ToList();
+            //CellFissureMissions = voidMissions.Where(x => x.SolNode.Name.Contains("Saturn") || x.SolNode.Name.Contains("Ceres")).ToList();
             ExcavationFissureMissions = voidMissions.Where(x => x.MissionType == "Excavation").ToList();
 
             return this;

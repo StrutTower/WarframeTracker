@@ -25,16 +25,16 @@ namespace Website.Areas.Admin.ViewModels {
                 SelectedItemName = item.Name;
             }
 
-            string[] maps = new[] { "Plains of Eidolon", "Orb Vallis" };
+            string[] maps = new[] { "Plains of Eidolon", "Orb Vallis", "Cambion Drift" };
             MapSelectList = new SelectList(maps);
 
             string[] rarity = new[] { "Common", "Uncommon", "Rare", "Legendary" };
             RaritySelectList = new SelectList(rarity);
 
-            string[] biomes = new[] { "Ocean", "Lake", "Pond", "Cave", "River", "Pond, River" };
+            string[] biomes = new[] { "Ocean", "Lake", "Pond", "Cave", "River", "Pond, River", "Surface" };
             BiomeSelectList = new SelectList(biomes);
 
-            string[] actity = new[] { "Day and Night", "Day", "Night", "Cold and Ward", "Cold", "Warm" };
+            string[] actity = new[] { "Day and Night", "Day", "Night", "Cold and Ward", "Cold", "Warm", "Fass/Vome", "Fass", "Vome" };
             ActiveTimeSelectList = new SelectList(actity);
 
             return this;

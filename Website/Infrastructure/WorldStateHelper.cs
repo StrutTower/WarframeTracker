@@ -1,22 +1,24 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using WarframeTrackerLib.Domain;
 using WarframeTrackerLib.Repository;
 using WarframeTrackerLib.Utilities;
 using WarframeTrackerLib.WarframeApi.WorldState;
+using WesternStateHospital.WSHUtilities;
 
 namespace Website.Infrastructure {
     public class WorldStateHelper {
-        private WorldStateUtilities _worldStateUtilities;
-        private Dictionary<string, string> _factions;
-        private Dictionary<string, string> _missionTypes;
-        private Dictionary<string, SolNode> _solNodes;
+        private readonly WorldStateUtilities worldStateUtilities;
+        private readonly Dictionary<string, string> factions;
+        private readonly Dictionary<string, string> missionTypes;
+        private readonly Dictionary<string, SolNode> solNodes;
 
         public WorldStateHelper() {
-            _worldStateUtilities = new WorldStateUtilities();
-            _factions = _worldStateUtilities.GetFactionDictionary();
-            _solNodes = _worldStateUtilities.GetSolNodeDictionary();
-            _missionTypes = _worldStateUtilities.GetMissionTypeDictionary();
+            worldStateUtilities = new WorldStateUtilities();
+            factions = worldStateUtilities.GetFactionDictionary();
+            solNodes = worldStateUtilities.GetSolNodeDictionary();
+            missionTypes = worldStateUtilities.GetMissionTypeDictionary();
         }
 
 
@@ -43,9 +45,9 @@ namespace Website.Infrastructure {
                     }
                 }
 
-                invasion.AttackerFaction = _factions[invasion.AttackerFaction];
-                invasion.DefenderFaction = _factions[invasion.DefenderFaction];
-                invasion.SolNode = _solNodes[invasion.Node];
+                invasion.AttackerFaction = factions[invasion.AttackerFaction];
+                invasion.DefenderFaction = factions[invasion.DefenderFaction];
+                invasion.SolNode = solNodes[invasion.Node];
 
                 importantInavsions.Add(invasion);
             }
@@ -56,18 +58,18 @@ namespace Website.Infrastructure {
             List<ActiveMission> output = new List<ActiveMission>();
 
             foreach (ActiveMission mission in worldState.ActiveMissions) {
-                mission.SolNode = _solNodes[mission.Node];
-                mission.MissionType = _missionTypes[mission.MissionType];
+                mission.SolNode = solNodes[mission.Node];
+                mission.MissionType = missionTypes[mission.MissionType];
                 output.Add(mission);
             }
 
-            return output.OrderBy(x => x.StartedOnUtc).ToList();
+            return output.OrderBy(x => x.StartDateUtc).ToList();
         }
 
         public VoidTrader GetBaro(WorldState worldState) {
             VoidTrader trader = worldState.VoidTraders.Where(x => x.Name.StartsWith("Baro")).FirstOrDefault();
             if (trader != null) {
-                trader.SolNode = _solNodes[trader.Node];
+                trader.SolNode = solNodes[trader.Node];
             }
             return trader;
         }

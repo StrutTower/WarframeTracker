@@ -3,16 +3,22 @@
     ViewData["Title"] = "API Explorer";
 }
 
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home" asp-area=""><span class="mdi mdi-home mdi-lg"></span></a></li>
+    <li class="breadcrumb-item"><a asp-action="Index" asp-controller="Home" asp-area="Admin">Site Management</a></li>
+    <li class="breadcrumb-item active"><span>@ViewData["Title"]</span></li>
+</ol>
+
 <div id="api-explorer">
     <div class="form-group">
-        <select class="twr-input" id="category-select"></select>
+        <select class="form-control" id="category-select"></select>
     </div>
 
     <form id="name-search-form" class="form-group">
         <div class="input-group">
-            <input type="text" class="form-control form-control-sm" id="name-search-input" placeholder="Name Search" />
+            <input type="text" class="form-control" id="name-search-input" placeholder="Name Search" autocomplete="off" />
             <div class="input-group-append">
-                <button type="submit" class="btn btn-secondary btn-sm">
+                <button type="submit" class="btn btn-secondary">
                     <span class="mdi mdi-fw mdi-lg mdi-magnify"></span>
                 </button>
             </div>
@@ -28,6 +34,7 @@
                     <th style="width:1%;"></th>
                     <th>Name</th>
                     <th>Category</th>
+                    <th>Product Category</th>
                     <th>Unique Name</th>
                 </tr>
             </thead>
@@ -38,7 +45,7 @@
 </div>
 
 <div class="modal fade" id="api-item-details-modal">
-    <div class="modal-dialog">
+    <div class="modal-dialog" style="max-width:800px;">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Item Details</h5>
@@ -47,7 +54,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <div id="api-item-details-body" style="white-space:pre-line; overflow-x:auto;"></div>
+                <div id="api-item-details-body" style="white-space:pre; overflow-x:auto;"></div>
             </div>
         </div>
     </div>

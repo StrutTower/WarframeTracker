@@ -5,15 +5,15 @@ using TowerSoft.Repository;
 using WarframeTrackerLib.Domain;
 
 namespace WarframeTrackerLib.Repository {
-    public class CodexTabRepository : Repository<CodexTab> {
+    public class CodexTabRepository : DbRepository<CodexTab> {
         public CodexTabRepository(UnitOfWork unitOfWork) : base(unitOfWork.DbAdapter) { }
 
         public CodexTab GetByID(int id) {
-            return GetSingleEntity(new WhereCondition("ID", id));
+            return GetSingleEntity(WhereEqual(x => x.ID, id));
         }
 
         public List<CodexTab> GetByCodexSection(CodexSection codexSection) {
-            return GetEntities(new WhereCondition("CodexSectionID", codexSection));
+            return GetEntities(WhereEqual(x => x.CodexSectionID, codexSection));
         }
     }
 }

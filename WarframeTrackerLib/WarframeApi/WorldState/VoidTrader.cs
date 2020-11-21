@@ -1,28 +1,25 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Diagnostics.CodeAnalysis;
+using System.Runtime.Serialization;
 using WarframeTrackerLib.Utilities;
 
 namespace WarframeTrackerLib.WarframeApi.WorldState {
-    [JsonConverter(typeof(JsonPathConverter<VoidTrader>))]
     public class VoidTrader {
-        [JsonDeserializeProperty("Character")]
+        [JsonProperty("Character")]
         public string Name { get; set; }
 
         public string Node { get; set; }
 
         public SolNode SolNode { get; set; }
 
-        [JsonDeserializeProperty("Activation.$date.$numberLong")]
-        public long StartEpoch { get; set; }
-
-        [JsonDeserializeProperty("Expiry.$date.$numberLong")]
-        public long EndEpoch { get; set; }
-
         public List<VoidTraderManifestItem> Manifest { get; set; }
+
+        public DateTime StartDateUtc { get; set; }
+
+        public DateTime EndDateUtc { get; set; }
 
         public int ItemCount {
             get {
@@ -31,37 +28,11 @@ namespace WarframeTrackerLib.WarframeApi.WorldState {
             }
         }
 
-        public DateTime UtcStartDate {
-            get {
-                DateTime date = new DateTime(1970, 1, 1).AddMilliseconds(StartEpoch);
-                return date;
-            }
-        }
-
-        public DateTime LocalStartDate {
-            get {
-                return UtcStartDate.ToLocalTime();
-            }
-        }
-
-        public DateTime UtcEndDate {
-            get {
-                DateTime date = new DateTime(1970, 1, 1).AddMilliseconds(EndEpoch);
-                return date;
-            }
-        }
-
-        public DateTime LocalEndDate {
-            get {
-                return UtcEndDate.ToLocalTime();
-            }
-        }
-
         public string TimeTillDisplay {
             get {
                 if (IsHere) return "Currently Here.";
                 string output = string.Empty;
-                TimeSpan time = UtcStartDate.Subtract(DateTime.UtcNow);
+                TimeSpan time = StartDateUtc.Subtract(DateTime.UtcNow);
                 if (time.TotalDays >= 1) {
                     int days = (int)Math.Floor(time.TotalDays);
                     output += days + "d";
@@ -79,12 +50,28 @@ namespace WarframeTrackerLib.WarframeApi.WorldState {
 
         public bool IsHere {
             get {
-                if (DateTime.UtcNow.IsBetween(UtcStartDate, UtcEndDate)) {
+                if (DateTime.UtcNow.IsBetween(StartDateUtc, EndDateUtc)) {
                     return true;
                 }
                 return false;
             }
         }
-    }
 
+        #region Manual Deserialization
+        [JsonExtensionData]
+        [SuppressMessage("Style", "IDE0044", Justification = "Readonly prevents Newtonsoft.Json from setting the data.")]
+#pragma warning disable 0649
+        private IDictionary<string, JToken> _additionalData;
+#pragma warning restore 0649
+
+        [OnDeserialized]
+        private void OnDeserialized(StreamingContext context) {
+            long startMilliseconds = JsonHelper.ConvertPath<long>(_additionalData, "Activation.$date.$numberLong");
+            StartDateUtc = JsonHelper.MillisecondsToDateTimeUtc(startMilliseconds);
+
+            long endMilliseconds = JsonHelper.ConvertPath<long>(_additionalData, "Expiry.$date.$numberLong");
+            EndDateUtc = JsonHelper.MillisecondsToDateTimeUtc(endMilliseconds);
+        }
+        #endregion
+    }
 }
